@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- 暫定版のあいだは検索結果に出さない。正式版で外す -->
+<meta name="robots" content="noindex, nofollow">
+<title>美yond AIカウンセリング</title>
+<meta name="description" content="二子玉川の肌管理サロン美yond（ビヨンド）の来店前AIカウンセリング。お悩みとご予算から、あなたに合うメニューの候補をご提案します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#0ABAB5;
+  --brand-deep:#078F8B;
+  --brand-dark:#0A6F6C;
+  --brand-soft:#E7F8F7;
+  --brand-line:#BFEDEB;
+  --ink:#23211F;
+  --ink-sub:#6B6B6B;
+  --line:#E3ECEB;
+  --bg:#F3F7F7;
+  --card:#FFFFFF;
+  --warn:#B4473C;
+  --warn-soft:#FBEDEB;
+  --price:#C2475E;
+  --shadow:0 8px 28px rgba(16,80,78,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;color:var(--ink);background:var(--bg);
+  line-height:1.75;font-size:15px;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.serif{font-family:"Noto Serif JP","Hiragino Mincho ProN",serif;font-weight:600}
+[hidden]{display:none!important}
+
+/* ヘッダー */
+header{background:#fff;border-bottom:1px solid var(--line)}
+.head{max-width:620px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.logo{font-family:"Noto Serif JP",serif;font-weight:600;font-size:21px;letter-spacing:.06em;line-height:1}
+.logo small{display:block;font-family:"Noto Sans JP",sans-serif;font-size:8.5px;letter-spacing:.28em;color:var(--brand-deep);margin-top:4px;font-weight:500}
+.head .sep{width:1px;height:22px;background:var(--line)}
+.head .tag{font-size:10.5px;letter-spacing:.16em;color:var(--ink-sub)}
+.head a{margin-left:auto;font-size:12.5px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.head a span{color:var(--brand-deep)}
+
+main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
+
+/* ヒーロー */
+.hero{background:linear-gradient(150deg,var(--brand-deep) 0%,var(--brand-dark) 100%);color:#fff;border-radius:22px 22px 0 0;
+  padding:30px 24px 46px;position:relative;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.18)}
+.hero:before{width:260px;height:260px;right:-120px;top:-40px}
+.hero:after{width:200px;height:200px;right:-60px;top:10px}
+.eyebrow{font-size:11px;letter-spacing:.22em;display:flex;align-items:center;gap:10px;opacity:.9}
+.eyebrow:before{content:"";width:26px;height:1px;background:#fff}
+.hero h1{font-size:25px;line-height:1.6;margin-top:14px;letter-spacing:.04em;position:relative}
+.hero p{font-size:13px;opacity:.9;margin-top:10px;position:relative}
+
+/* フォーム */
+.form{background:var(--card);border-radius:22px;margin-top:-22px;position:relative;padding:28px 20px 24px;box-shadow:var(--shadow)}
+.form>h2{font-size:22px;color:var(--brand-dark);margin-bottom:6px;letter-spacing:.04em}
+.form>.intro{font-size:12.5px;color:var(--ink-sub);margin-bottom:8px}
+.field{padding:22px 0 0}
+.field+.field{border-top:1px solid var(--line);margin-top:22px}
+.label{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;margin-bottom:12px}
+.req,.opt-tag{font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:4px}
+.req{background:var(--warn-soft);color:var(--warn)}
+.opt-tag{background:var(--bg);color:var(--ink-sub)}
+.label small{font-weight:400;font-size:11.5px;color:var(--ink-sub)}
+.field.err .label{color:var(--warn)}
+.field.err .errmsg{display:block}
+.errmsg{display:none;font-size:12px;color:var(--warn);margin-top:8px}
+
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:999px;padding:4px;margin-bottom:14px}
+.tabs button{padding:9px 6px;border-radius:999px;font-size:13.5px;color:var(--ink-sub);transition:background .2s,color .2s}
+.tabs button[aria-selected="true"]{background:#fff;color:var(--brand-dark);font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:11px 9px 11px 12px;min-height:58px;text-align:left;
+  display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:13.5px;line-height:1.45;transition:border-color .15s,background .15s}
+.chip .mk{flex:0 0 20px;height:20px;border-radius:50%;background:var(--bg);color:var(--ink-sub);display:flex;align-items:center;justify-content:center;font-size:14px}
+.chip.on{border-color:var(--brand);background:var(--brand-soft)}
+.chip.on .mk{background:var(--brand);color:#fff}
+.chip.wide{grid-column:1/-1}
+#checks{grid-template-columns:1fr}
+#checks .chip{min-height:50px}
+.chips.one{grid-template-columns:1fr}
+#life .chip{min-height:52px}
+.life-intro{font-size:12.5px;color:var(--ink-sub);margin:-4px 0 4px}
+.ptype{font-size:11px;font-weight:700;border-radius:999px;padding:2px 10px}
+.ptype.skin{background:var(--brand-soft);color:var(--brand-dark)}
+.ptype.inner{background:#F4EBDD;color:#7A5A2B}
+.pbrand{font-size:11.5px;color:var(--ink-sub)}
+.pprice{font-size:15px;font-weight:700;color:var(--price);margin:8px 0}
+.pprice small{display:block;font-size:11.5px;font-weight:500;color:var(--ink-sub)}
+.caution-s{font-size:11.5px;color:var(--ink-sub);margin-top:6px}
+.disclaimer{font-size:11px;color:var(--ink-sub);margin:2px 2px 0;line-height:1.7}
+.chip small{display:block;font-size:11px;color:var(--ink-sub)}
+.chip>span:first-child{word-break:keep-all;overflow-wrap:anywhere}
+.cat-h{font-size:12px;font-weight:700;color:var(--brand-deep);margin:14px 0 8px;letter-spacing:.06em}
+.cat-h:first-child{margin-top:0}
+
+textarea{width:100%;min-height:96px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;resize:vertical;background:var(--bg);font-size:15px}
+textarea:focus,.yen:focus-within{outline:none;border-color:var(--brand);background:#fff}
+.hint{font-size:11.5px;color:var(--ink-sub);margin-top:6px}
+
+.radios{display:grid;gap:9px}
+.radio{border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;text-align:left;font-size:14.5px;background:#fff}
+.radio .dot{flex:0 0 20px;height:20px;border-radius:50%;border:1.5px solid #B9C7C6;position:relative}
+.radio.on{border-color:var(--brand);background:var(--brand-soft)}
+.radio.on .dot{border-color:var(--brand)}
+.radio.on .dot:after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--brand)}
+.radio small{display:block;font-size:11.5px;color:var(--ink-sub)}
+.radios.row{grid-template-columns:1fr 1fr}
+
+.yen{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:14px 16px}
+.yen span{font-size:20px;color:var(--ink-sub)}
+.yen input{border:0;background:none;font-size:20px;width:100%;outline:none}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pill{border:1.5px solid var(--line);border-radius:999px;padding:7px 14px;font-size:13px;background:#fff}
+.pill.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-dark);font-weight:700}
+
+details{border-top:1px solid var(--line);margin-top:22px;padding-top:18px}
+summary{list-style:none;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary:before{content:"";width:7px;height:7px;border-right:2px solid var(--brand-deep);border-bottom:2px solid var(--brand-deep);transform:rotate(-45deg);transition:transform .2s;margin-right:2px}
+details[open] summary:before{transform:rotate(45deg)}
+details .field{border-top:0;margin-top:0;padding-top:18px}
+.sub-label{font-size:13px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+
+.notice{background:var(--bg);border-radius:14px;padding:16px 16px 14px;margin-bottom:14px}
+.notice h3{font-size:13.5px;color:var(--brand-dark);margin-bottom:6px}
+.notice ul{padding-left:1.2em;font-size:13px;line-height:1.75}
+
+.privacy{background:var(--brand-soft);border-radius:14px;padding:14px 16px;font-size:12.5px;margin-top:22px;display:flex;gap:10px}
+.privacy b{color:var(--brand-dark)}
+
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.act{border-radius:16px;padding:14px 10px;text-align:center;line-height:1.4}
+.act small{display:block;font-size:11px;opacity:.85;margin-bottom:2px}
+.act strong{font-size:16px;letter-spacing:.04em}
+.act-main{background:var(--brand-deep);color:#fff;box-shadow:0 6px 18px rgba(7,143,139,.3)}
+.act-main:hover{background:var(--brand-dark)}
+.act-sub{background:#fff;color:var(--brand-dark);border:1.5px solid var(--brand)}
+.form-err{display:none;background:var(--warn-soft);color:var(--warn);font-size:13px;border-radius:12px;padding:10px 14px;margin-top:16px}
+.form-err.on{display:block}
+.fine{font-size:11px;color:var(--ink-sub);margin-top:16px;line-height:1.7}
+
+/* 結果 */
+.result-top{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:24px 20px;margin-bottom:14px}
+.result-top .eyebrow{color:var(--brand-deep)}
+.result-top .eyebrow:before{background:var(--brand-deep)}
+.result-top h2{font-size:22px;margin:10px 0 12px;color:var(--brand-dark)}
+.conds{display:flex;flex-wrap:wrap;gap:6px}
+.cond{font-size:11.5px;background:var(--bg);border-radius:999px;padding:3px 10px;color:var(--ink)}
+.cond b{color:var(--ink-sub);font-weight:400;margin-right:4px}
+.change{margin-top:12px;font-size:13px;color:var(--brand-deep);text-decoration:underline}
+.alert{background:var(--warn-soft);border-radius:16px;padding:16px 18px;margin-bottom:14px}
+.alert h3{font-size:15px;color:var(--warn);margin-bottom:4px}
+.alert p{font-size:13px}
+.alert.plain{background:var(--card);box-shadow:var(--shadow)}
+.alert.plain h3{color:var(--ink);font-size:14px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:24px 2px 10px}
+.sec-h h3{font-size:16px;display:flex;align-items:center;gap:8px}
+.sec-h h3:before{content:"";width:4px;height:17px;border-radius:2px;background:var(--brand)}
+.sec-h span{font-size:11.5px;color:var(--ink-sub)}
+.sec-note{font-size:12.5px;color:var(--ink-sub);margin:-4px 2px 10px}
+.mcard{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:18px 18px 14px;margin-bottom:12px;border:1.5px solid transparent}
+.mcard.first{border-color:var(--brand)}
+.mtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.rank{font-size:11px;font-weight:700;color:#fff;background:var(--brand-deep);border-radius:999px;padding:2px 10px}
+.rank.sub{background:#7FAFAD}
+.mcat{font-size:11px;color:var(--brand-dark);background:var(--brand-soft);border-radius:999px;padding:2px 10px}
+.picked{font-size:11px;color:var(--ink);background:#F4EBDD;border-radius:999px;padding:2px 10px}
+.mname{font-size:17.5px;line-height:1.5}
+.mprice{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:10px 0 8px}
+.mprice .p{font-size:22px;color:var(--price);font-family:"Noto Serif JP",serif;font-weight:600}
+.mprice .p small{font-size:12px;font-family:"Noto Sans JP",sans-serif;color:var(--ink);font-weight:500;margin-right:4px}
+.mprice .reg{font-size:12px;color:var(--ink-sub)}
+.mprice .budget{margin-left:auto;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
+.budget.in{background:var(--brand-soft);color:var(--brand-dark)}
+.budget.out{background:var(--warn-soft);color:var(--warn)}
+.reasons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.reasons span{font-size:11.5px;border:1px solid var(--brand-line);color:var(--brand-dark);border-radius:999px;padding:2px 9px}
+.mwhy{font-size:13.5px}
+.more{margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
+.more summary{font-size:12.5px;font-weight:500;color:var(--brand-deep)}
+.more summary:before{width:6px;height:6px}
+.more dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:12.5px;margin-top:8px}
+.more dt{color:var(--ink-sub)}
+.empty{background:var(--card);border-radius:18px;padding:18px;font-size:13.5px;box-shadow:var(--shadow)}
+
+.memo{background:var(--card);border-radius:22px;box-shadow:var(--shadow);padding:22px 20px;margin-top:24px}
+.memo h3{font-size:17px;margin-bottom:4px}
+.memo>p{font-size:12.5px;color:var(--ink-sub);margin-bottom:12px}
+.memo pre{white-space:pre-wrap;font-family:inherit;font-size:13px;background:var(--bg);border-radius:14px;padding:14px 16px;line-height:1.8;max-height:260px;overflow:auto}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;padding:15px 16px;border-radius:999px;font-weight:700;font-size:15px;
+  text-decoration:none;margin-top:10px;letter-spacing:.04em}
+.btn-line{background:#06C755;color:#fff;box-shadow:0 6px 16px rgba(6,199,85,.25)}
+.btn-sub{background:#fff;color:var(--brand-dark);border:1.5px solid var(--brand)}
+.copied{font-size:12px;color:var(--brand-deep);min-height:18px;margin-top:6px;text-align:center}
+.foot{font-size:11px;color:var(--ink-sub);margin-top:22px;line-height:1.8}
+
+@media (max-width:360px){
+  .hero h1{font-size:23px}
+  .chips{grid-template-columns:1fr}
+  .actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="head">
+    <div class="logo">美yond<small>BEYOND</small></div>
+    <div class="sep"></div>
+    <div class="tag">AI COUNSELING</div>
+    <a href="https://beyond-essential.jp/" target="_blank" rel="noopener">サロンについて <span>↗</span></a>
+  </div>
+</header>
+
+<main>
+<!-- ===== 入力 ===== -->
+<section id="v-form">
+  <div class="hero">
+    <div class="eyebrow">BEFORE YOUR VISIT</div>
+    <h1 class="serif">あなたの希望から<br>合うメニューを見つける</h1>
+    <p>お悩みとご予算から、美yondの18メニューの中で<br>合いそうな候補を比べられます。</p>
+  </div>
+
+  <div class="form">
+    <h2 class="serif">ご来店前カウンセリング</h2>
+    <p class="intro">約2分で入力できます。お名前・ご連絡先の入力は不要です。</p>
+
+    <div class="field" id="f-wish">
+      <div class="label">ご希望 <span class="req">必須</span></div>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-tab="concern">お悩みから選ぶ</button>
+        <button type="button" role="tab" aria-selected="false" data-tab="menu">メニューから選ぶ</button>
+      </div>
+      <div id="tab-concern" class="chips"></div>
+      <div id="tab-menu" hidden></div>
+      <p class="errmsg">お悩み・メニューを選ぶか、下の欄にご希望を入力してください。</p>
+    </div>
+
+    <div class="field">
+      <div class="label">もう少し詳しく伝える <span class="opt-tag">任意</span></div>
+      <textarea id="free" placeholder="例：鼻の角栓がずっと詰まっています。初めてなので、まずは相談したいです。"></textarea>
+      <p class="hint">お名前・ご連絡先は書かないでください。</p>
+    </div>
+
+    <div class="field" id="f-visit">
+      <div class="label">美yondへのご来店 <span class="req">必須</span></div>
+      <div class="radios row" data-name="visit">
+        <button type="button" class="radio" data-v="first"><span class="dot"></span><span>はじめて<small>ご新規様価格でご案内</small></span></button>
+        <button type="button" class="radio" data-v="repeat"><span class="dot"></span><span>来店したことがある</span></button>
+      </div>
+      <p class="errmsg">はじめてのご来店かどうかを選んでください。</p>
+    </div>
+
+    <div class="field" id="f-budget">
+      <div class="label">1回あたりのご予算 <small>税込</small> <span class="req">必須</span></div>
+      <label class="yen"><span>¥</span><input id="budget" inputmode="numeric" autocomplete="off" placeholder="10,000"></label>
+      <div class="pills" id="budgetPills"></div>
+      <p class="errmsg">1回あたりのご予算を入力してください。</p>
+    </div>
+
+    <div class="field" id="f-life">
+      <div class="label">体調・生活習慣 <span class="opt-tag">任意</span></div>
+      <p class="life-intro">ご自宅でのホームケアや、食事・サプリなど内側からのケア（インナーケア）のご提案に使います。当てはまるものをいくつでも選んでください。</p>
+      <div id="life"></div>
+    </div>
+
+    <details id="more">
+      <summary>予定・ダウンタイム・肌のタイプを指定する（任意）</summary>
+      <div class="field">
+        <div class="sub-label">施術後の赤みや皮むけ（ダウンタイム）</div>
+        <div class="radios" data-name="dt">
+          <button type="button" class="radio on" data-v="any"><span class="dot"></span><span>指定しない</span></button>
+          <button type="button" class="radio" data-v="none"><span class="dot"></span><span>できるだけ当日から普段どおり<small>メイクや予定を変えたくない</small></span></button>
+          <button type="button" class="radio" data-v="some"><span class="dot"></span><span>少しの赤み・皮むけなら大丈夫</span></button>
+          <button type="button" class="radio" data-v="ok"><span class="dot"></span><span>特に制限はない<small>実感を重視したい</small></span></button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="sub-label">施術を考えている時期</div>
+        <div class="radios" data-name="when">
+          <button type="button" class="radio on" data-v="any"><span class="dot"></span><span>指定しない</span></button>
+          <button type="button" class="radio" data-v="soon"><span class="dot"></span><span>なるべく早め</span></button>
+          <button type="button" class="radio" data-v="event"><span class="dot"></span><span>1か月以内に特別な予定がある<small>結婚式・撮影・同窓会など</small></span></button>
+          <button type="button" class="radio" data-v="info"><span class="dot"></span><span>まずは情報を知りたい</span></button>
+        </div>
+      </div>
+      <div class="field">
+        <div class="sub-label">お肌のタイプ</div>
+        <div class="radios" data-name="skin">
+          <button type="button" class="radio on" data-v="any"><span class="dot"></span><span>指定しない・よくわからない</span></button>
+          <button type="button" class="radio" data-v="dry"><span class="dot"></span><span>乾燥しやすい</span></button>
+          <button type="button" class="radio" data-v="oily"><span class="dot"></span><span>皮脂が多い・テカりやすい</span></button>
+          <button type="button" class="radio" data-v="sensitive"><span class="dot"></span><span>敏感・ゆらぎやすい<small>赤みやかゆみが出やすい</small></span></button>
+        </div>
+      </div>
+    </details>
+
+    <div class="field" id="f-check" style="border-top:1px solid var(--line);margin-top:22px">
+      <div class="notice">
+        <h3>サロンからの確認事項</h3>
+        <ul>
+          <li>小麦・パイナップル・ステンレスのアレルギーがある方は、レッドショット・レモンボトルを受けられません</li>
+          <li>亜鉛アレルギー・酒さの方は、esV10を受けられません</li>
+          <li>18歳未満の方の施術には、保護者の同意が必要です</li>
+          <li>妊娠中の方、持病や服薬のある方、肌に炎症がある方などは、施術できるかどうかを事前にスタッフが確認します</li>
+        </ul>
+      </div>
+      <div class="label">当てはまるものはありますか？ <span class="req">必須</span></div>
+      <div class="chips" id="checks"></div>
+      <p class="errmsg">当てはまるものを選んでください（なければ「特にない」）。</p>
+    </div>
+
+    <div class="privacy"><span>🔒</span><span><b>入力内容は送信・保存されません。</b>この画面の中だけで候補を計算し、ページを閉じると消えます。</span></div>
+
+    <div class="form-err" id="formErr">未入力の必須項目を確認してください。</div>
+    <div class="actions">
+      <button type="button" class="act act-main" id="seeBtn"><small>ご自分のペースで</small><strong>候補を見る</strong></button>
+      <button type="button" class="act act-sub" id="talkBtn"><small>言葉で相談する</small><strong>LINEで相談</strong></button>
+    </div>
+    <p class="fine">こちらは美yondの公開メニューを比べるためのご案内です。施術の内容・最終的な料金は、ご来店時のカウンセリングで肌状態を確認してから決めます。感じ方や変化には個人差があります。</p>
+  </div>
+</section>
+
+<!-- ===== 結果 ===== -->
+<section id="v-result" hidden>
+  <div class="result-top">
+    <div class="eyebrow">YOUR PLAN</div>
+    <h2 class="serif">メニューのご提案</h2>
+    <div class="conds" id="conds"></div>
+    <button type="button" class="change" id="changeBtn">‹ 条件を変更する</button>
+  </div>
+  <div id="alertBox"></div>
+  <div id="list"></div>
+
+  <div class="memo">
+    <h3 class="serif">ご来店前の相談メモ</h3>
+    <p>LINEに貼り付けて送っていただくと、スタッフがスムーズにご案内できます。</p>
+    <pre id="memo"></pre>
+    <button type="button" class="btn btn-line" id="lineBtn">相談メモをコピーしてLINEで相談・予約</button>
+    <div class="copied" id="copied"></div>
+    <a class="btn btn-sub" href="https://1cs.jp/gcs/user/salons/beyondessential/reservation.do#/salons/beyondessential/reservations" target="_blank" rel="noopener">Web予約はこちら</a>
+    <a class="btn btn-sub" href="tel:07023220810">電話で予約する（070-2322-0810）</a>
+  </div>
+  <p class="foot">営業時間 10:30〜22:00（最終受付21:00）／価格はすべて税込です。ご新規様価格は初回のみの価格です。<br>
+  候補は入力内容をもとにした目安です。施術の内容は、ご来店時のカウンセリングで肌状態を確認したうえで決めます。感じ方や変化には個人差があります。</p>
+</section>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+var LINE_URL = "https://lin.ee/34Uuw1L";
+
+/* ===== お悩み ===== */
+var CONCERNS = [
+  {k:"pore",  t:"毛穴・黒ずみ"},
+  {k:"acne",  t:"ニキビ・肌荒れ"},
+  {k:"dull",  t:"くすみ・透明感"},
+  {k:"dry",   t:"乾燥・ハリ不足"},
+  {k:"aging", t:"たるみ・エイジング"},
+  {k:"face",  t:"小顔・フェイスライン"},
+  {k:"slim",  t:"部分痩せ・ボディライン"},
+  {k:"body",  t:"背中・デコルテの肌"},
+  {k:"brow",  t:"眉・顔の印象"},
+  {k:"relax", t:"疲れ・むくみ・コリ"},
+  {k:"consult", t:"何を選ぶか相談したい", wide:true}
+];
+/* 自由記入から拾う言葉 */
+var KEYWORDS = {
+  pore:["毛穴","黒ずみ","角栓","いちご"], acne:["ニキビ","にきび","肌荒れ","吹き出物"], dull:["くすみ","透明感","美白","トーン"],
+  dry:["乾燥","カサカサ","ハリ"], aging:["たるみ","シワ","しわ","エイジング","リフト"], face:["小顔","フェイスライン","輪郭","顔のむくみ","二重あご","二重顎"],
+  slim:["痩せ","やせ","ダイエット","お腹","おなか","太もも","二の腕","セルライト"], body:["背中","デコルテ","ヒップ","ブライダル","結婚式"],
+  brow:["眉","まゆ","アイブロウ"], relax:["疲れ","コリ","こり","マッサージ","むくみ","癒"]
+};
+var PLUG_WORDS = ["角栓","いちご","イチゴ","固い","かたい","慢性","ひどい詰まり","詰まりがひどい"];
+
+/* ===== メニュー（2026年10月 公式サイトのメニュー・料金） =====
+   s: お悩みとの相性（1〜3） / gentle: 肌へのやさしさ
+   dt: ダウンタイムの目安（0=当日から普段どおり、1=赤みなど、2=皮むけ・腫れ・内出血の可能性、null=サイトに記載なし）
+   ng: 受けられない条件 / energy: 電気・超音波の機器を使う / peel: ピーリング
+   moist: 保湿しながらの毛穴ケア（乾燥しやすい人の毛穴はこちらを優先）
+   plug: 頑固な角栓向け（ふだんは毛穴の候補の下位。角栓・詰まりが書かれたときだけ上げる） */
+var MENUS = [
+  {id:"esv10", energy:true, cat:"肌育・肌質改善", name:"esV10韓国式毛穴洗浄", time:"90分", price:15000, first:11000,
+   s:{pore:3,dull:2,acne:1}, gentle:2, dt:1, moist:true, ng:["zinc","rosacea"],
+   why:"吸引に頼らない毛穴ケア。肌への負担を抑えながら、毛穴に詰まった角質や皮脂汚れにアプローチします。うるおいを保ちながら毛穴ケアをしたい方に。",
+   dtText:"肌状態により赤みなどが出る場合があります", caution:"亜鉛アレルギー・酒さの方は受けられません"},
+  {id:"ruby", peel:true, cat:"肌育・肌質改善", name:"Rubyハーブピーリング", time:"60分", price:18000, first:9800,
+   s:{acne:3,pore:2,dull:1}, gentle:-1, dt:2, strong:true,
+   why:"拭き取り不要の長時間浸透型ハーブピーリング。剥離なし（Soft）と剥離あり（Hard）から選べます。",
+   dtText:"赤みや皮むけが出る場合があります（剥離なしSoftも選べます）"},
+  {id:"lactic", peel:true, cat:"肌育・肌質改善", name:"乳酸菌ピーリング【幹細胞白玉ピール】", time:"60分", price:18000, first:9800,
+   s:{dull:2,acne:1,dry:1,pore:1}, gentle:3, dt:0,
+   why:"古い角質や汚れにアプローチしながら肌環境を整え、美容成分がなじみやすい状態へ導きます。",
+   dtText:"ダウンタイムなしで当日からメイクできます"},
+  {id:"solaspa", cat:"肌育・肌質改善", name:"ソラスパ美白毛穴ケアフェイシャル", time:"60分", price:9800, first:null,
+   s:{pore:3,dull:3}, gentle:2, dt:1,
+   why:"きめ細かなオゾン泡でお顔全体を包み、毛穴まわりの汚れや古い角質にやさしくアプローチします。顔全体のざらつきや、毛穴の黒ずみが気になる方に。",
+   dtText:"肌状態により赤みなどが出る場合があります"},
+  {id:"exosome", peel:true, cat:"肌育・肌質改善", name:"エクソソームハーブピーリング【剥離なしSoft】", time:"60分", price:18000, first:15000,
+   s:{acne:3,dull:1}, gentle:2, dt:2,
+   why:"肌荒れが起きやすい状態にアプローチし、ゆらぎにくく安定した肌を目指す角質ケアです。",
+   dtText:"赤みや皮むけが出る場合があります"},
+  {id:"wiqo", peel:true, cat:"肌育・肌質改善", name:"WiQoピーリング", time:"60分", price:18000, first:15000,
+   s:{dull:2,aging:1,pore:1}, gentle:0, dt:1, strong:true,
+   why:"「エステ以上、クリニック未満」と称されるピーリング。ごわつきやくすみ、キメや化粧ノリが気になる肌に。",
+   dtText:"肌状態により赤みや乾燥を感じる場合があります"},
+  {id:"electro", energy:true, cat:"肌育・肌質改善", name:"エレクトロポレーション", time:"45分", price:9800, first:null,
+   s:{dry:3,aging:2,dull:1}, gentle:2, dt:1,
+   why:"美容液（トラネキサム酸 または EGF＋フラーレン）を角質層まで届け、乾燥やくすみ、ハリ不足をケアします。",
+   dtText:"肌状態により赤みなどが出る場合があります"},
+  {id:"carboxy", cat:"肌育・肌質改善", name:"カーボキシー（高濃度炭酸パック）", time:"60分", price:11000, first:7800,
+   s:{dull:2,pore:1}, gentle:1, dt:1,
+   why:"専用のジェルとシートで、肌をすっきりとした印象へ。ほかの施術との組み合わせにもおすすめです。",
+   dtText:"赤みやピリつきを感じる場合があります"},
+  {id:"hydra", cat:"肌育・肌質改善", name:"ハイドラ毛穴洗浄", time:"45分", price:9800, first:null,
+   s:{pore:1}, gentle:1, dt:2, plug:true,
+   why:"水流で毛穴汚れや皮脂詰まりを除去しながら美容成分を導入。長く続く固い角栓など、毛穴の詰まりがひどい方に。",
+   dtText:"肌状態により赤み・内出血などが出る場合があります"},
+  {id:"lemonF", cat:"小顔・リフトアップ", name:"レモンボトル小顔リフト", time:"75分", price:18000, first:null,
+   s:{face:3,aging:1}, gentle:0, dt:2, ng:["wheat"],
+   why:"フェイスラインやボリューム感が気になる部分に、シンプルにアプローチしていくケアです。",
+   dtText:"腫れや赤みが出る場合があります", caution:"小麦・パイナップル・ステンレスのアレルギーの方は受けられません"},
+  {id:"redF", cat:"小顔・リフトアップ", name:"レッドショット小顔リフト", time:"75分", price:18000, first:9800,
+   s:{face:3,aging:2}, gentle:0, dt:2, ng:["wheat"],
+   why:"状態に合わせて段階的にアプローチ。土台づくりから老廃物を流すケアまでセットで整えます。",
+   dtText:"赤みや腫れが出る場合があります", caution:"小麦・パイナップル・ステンレスのアレルギーの方は受けられません"},
+  {id:"hifu", energy:true, cat:"小顔・リフトアップ", name:"超音波小顔リフト", time:"60分", price:18000, first:null,
+   s:{face:2,aging:3}, gentle:1, dt:1,
+   why:"超音波を広範囲に分散して照射。フェイスラインのもたつきやハリ感が気になる方に。",
+   dtText:"赤みなどが出る場合があります"},
+  {id:"redB", cat:"痩身", name:"レッドショットボディ部分痩せ", time:"90分", price:25000, first:15000,
+   s:{slim:3}, gentle:0, dt:2, ng:["wheat"],
+   why:"ほぐす→温める→分解→流すの流れで、気になる部位のボディラインを段階的に整えていきます。",
+   dtText:"腫れや赤みが出る場合があります", caution:"小麦・パイナップル・ステンレスのアレルギーの方は受けられません"},
+  {id:"lemonB", cat:"痩身", name:"レモンボトルボディ部分痩せ", time:"90分", price:25000, first:null,
+   s:{slim:2}, gentle:0, dt:2, ng:["wheat"],
+   why:"お腹まわり・太もも・二の腕など、気になる部位にシンプルにアプローチするケアです。",
+   dtText:"腫れや赤みが出る場合があります", caution:"小麦・パイナップル・ステンレスのアレルギーの方は受けられません"},
+  {id:"rubyB", peel:true, cat:"ボディ肌質改善", name:"ボディRubyハーブピーリング【背中・二の腕・デコルテ・ヒップ】", time:"45分", price:22000, first:11000, from:true,
+   s:{body:3,acne:1}, gentle:0, dt:2, event:true,
+   why:"背中のニキビやざらつき、肌のごわつきが気になる方に。ブライダル前の背中のケアにも。",
+   dtText:"赤みや皮むけが出る場合があります", caution:"背中上下は25,000円（ご新規様15,000円）"},
+  {id:"esv10B", energy:true, cat:"ボディ肌質改善", name:"【背中】esV10韓国式毛穴洗浄", time:"90分", price:25000, first:22000,
+   s:{body:2}, gentle:2, dt:1, event:true, ng:["zinc","rosacea"],
+   why:"お顔で人気のesV10を背中（上）に。背中の開いた服を着る予定がある方におすすめです。",
+   dtText:"肌状態により赤みなどが出る場合があります", caution:"亜鉛アレルギー・酒さの方は受けられません"},
+  {id:"oil", cat:"リラクゼーション", name:"全身オイルマッサージ", time:"施術90分（全体で120分弱）", price:15000, first:null,
+   s:{relax:3,slim:1}, gentle:2, dt:null,
+   why:"深部までしっかりほぐし、疲労やむくみをケアして軽やかな身体へ導くオイルトリートメントです。",
+   dtText:null, caution:"カウンセリング・フットバス・お着替えを含めて120分弱です"},
+  {id:"brow", cat:"アイブロウ", name:"ハリウッドブロウリフト", time:"75分", price:7500, first:5500,
+   s:{brow:3}, gentle:1, dt:null, event:true,
+   why:"眉の毛流れを整え、左右差や生え癖を補正。自然で立体感のある眉で、垢抜けた印象に。",
+   dtText:null}
+];
+
+/* 確認事項
+   consultAll: すべてのメニューを個別相談に / move: その属性のメニューを候補から外して相談に回す
+   review: 施術前の確認が必要 / noInner: インナーケア商品を出さない */
+var CHECK_GROUPS = [
+  {h:"受けられないメニューがあるもの", items:[
+    {k:"wheat",   t:"小麦・パイナップル・ステンレスのアレルギーがある"},
+    {k:"zinc",    t:"亜鉛アレルギーがある"},
+    {k:"rosacea", t:"酒さと言われたことがある"}
+  ]},
+  {h:"施術の前に確認が必要なもの", items:[
+    {k:"preg",    t:"妊娠中・授乳中、または妊娠の可能性がある", consultAll:true, noInner:true},
+    {k:"metal",   t:"ペースメーカーなどの医療機器や、体内に金属（ボルト・プレートなど）が入っている", move:"energy"},
+    {k:"illness", t:"持病で治療中・服薬中", s:"心臓病・糖尿病・高血圧・てんかん・血液をサラサラにする薬など", review:true, noInner:true},
+    {k:"wound",   t:"施術したい部位に傷・炎症・湿疹がある、または強い日焼けの直後", review:true},
+    {k:"derm",    t:"アトピー性皮膚炎・ケロイド体質・光線過敏症など、肌の持病がある", move:"peel"},
+    {k:"infect",  t:"ヘルペス・とびひなどの感染症にかかっている", review:true},
+    {k:"medical", t:"最近、美容医療（注入・糸リフト・レーザーなど）を受けた", review:true},
+    {k:"allergy", t:"化粧品や金属で、かぶれやアレルギーが出たことがある", review:true},
+    {k:"unwell",  t:"最近、体調がすぐれない（発熱・強い疲れなど）", review:true}
+  ]},
+  {h:"そのほか", items:[
+    {k:"minor",   t:"18歳未満", noInner:true},
+    {k:"tell",    t:"ほかにも伝えておきたいことがある", review:true},
+    {k:"unsure",  t:"自分では判断できない", review:true},
+    {k:"nothing", t:"特にない"}
+  ]}
+];
+var CHECKS = [];
+CHECK_GROUPS.forEach(function(g){ CHECKS = CHECKS.concat(g.items); });
+
+/* 体調・生活習慣（ホームケア・インナーケアの提案に使う） */
+var LIFE_GROUPS = [
+  {h:"食事・お腹", items:[
+    {k:"veg",       t:"野菜不足・外食が多い", r:"野菜不足・外食"},
+    {k:"irregular", t:"食事が不規則", r:"食事が不規則"},
+    {k:"sweets",    t:"甘いもの・間食が多い", r:"甘いもの・間食"},
+    {k:"overeat",   t:"食べ過ぎ・飲み会が多い", r:"食べ過ぎ・飲み会"},
+    {k:"drink",     t:"甘い飲み物・コーヒーが多い", r:"飲み物の見直し"},
+    {k:"bowel",     t:"お通じが不規則", s:"お腹が張りやすい", r:"お通じ・お腹の張り"}
+  ]},
+  {h:"睡眠・からだ", items:[
+    {k:"sleep",  t:"睡眠不足・眠りが浅い", r:"睡眠"},
+    {k:"tired",  t:"疲れやすい", r:"疲れ"},
+    {k:"cold",   t:"冷えやすい", r:"冷え"},
+    {k:"swell",  t:"むくみやすい", r:"むくみ"},
+    {k:"weight", t:"体重が気になる", s:"ファスティングに興味がある方も", r:"体重・ファスティング"}
+  ]},
+  {h:"毎日の環境", items:[
+    {k:"sun",    t:"屋外が多い", s:"日差しを浴びやすい", r:"日差し"},
+    {k:"aircon", t:"エアコンの中", s:"乾燥した場所にいることが多い", r:"乾燥した環境"},
+    {k:"stress", t:"ストレスが多い", r:"ストレス"}
+  ]},
+  {h:"ホームケアで気になること", single:true, items:[
+    {k:"hc_basic",  t:"今のスキンケアが合っているかわからない", r:"スキンケア選び"},
+    {k:"hc_simple", t:"スキンケアはシンプルに済ませたい", r:"シンプルケア"},
+    {k:"hc_keep",   t:"サロンで整えた肌をキープしたい", r:"整えた肌をキープ"},
+    {k:"hc_aging",  t:"エイジングケアを取り入れたい", r:"エイジングケア"},
+    {k:"hc_pink",   t:"唇・デリケートゾーンのくすみが気になる", r:"唇・デリケートゾーン"},
+    {k:"hc_inner",  t:"食事やサプリなど、内側からのケアにも興味がある", r:"内側からのケア"}
+  ]}
+];
+var LIFE = [];
+LIFE_GROUPS.forEach(function(g){ LIFE = LIFE.concat(g.items); });
+
+/* ホームケア・インナーケア商品（2026年10月の価格）
+   life: 生活習慣との相性 / c: お悩みとの相性 / m: 一緒に受けると相性のよいメニュー
+   line: 同じシリーズ（提案に同じシリーズが並びすぎないようにする） / pick: スタッフおすすめ（推したい商品）
+   careful: 妊娠中・治療中などの人には出さない
+   説明文は公式サイトの情報をもとに、効果を約束しない書き方にする（サプリ・ドリンク・お茶は食品で、医薬品ではない） */
+var PRODUCTS = [
+  {id:"ye", line:"ye", name:"ペプチドリッチバリアローション・クリーム", brand:"Your Essential（美yondオリジナル）", inner:false,
+   price:"ローション 4,900円／クリーム 8,750円（税込）", priceNote:"サロン会員様は10%OFF",
+   desc:"施術後のデリケートな肌を想定して、美yondが成分から開発したスキンケア。ペプチドと保湿成分をたっぷり配合し、とろみのある質感なのにベタつきません。香りはホワイトリリーの微香性。サロンの攻めのケアで整えた肌を、ご自宅で守ります。",
+   life:{hc_basic:3, hc_simple:2, hc_keep:2, aircon:2}, c:{dry:2, acne:1, pore:1, dull:1}},
+  {id:"nightmask", line:"laesse", name:"グラススキン ナイトマスク（50g）", brand:"LAÉSSE（ラエッセ）", inner:false, pick:true,
+   price:"7,150円（税込）",
+   desc:"夜のスキンケアの最後に塗って眠るだけの高保湿ナイトマスク。7種の保湿成分に、ヒト幹細胞培養液などの美容成分を合わせています。クリームの代わりに使えて洗い流し不要、1本で約2か月使えます。",
+   life:{hc_aging:3, hc_keep:2, hc_simple:1, aircon:2}, c:{aging:2, dry:2}, m:{exosome:3}},
+  {id:"pink", line:"laesse", name:"ピンクトーンプログラム（3ステップセット）", brand:"LAÉSSE（ラエッセ）", inner:false, careful:true,
+   price:"15,950円（税込）",
+   desc:"唇などデリケートな部位のための3ステップのホームケア（ソフトクリアジェル→ピンクヴェールジェル→グローキーパー）。古い角質を整えてうるおいを与え、なめらかで健康的な印象へ。染料で色をつけるものではありません。1日10〜15分、毎日続けるケアです。",
+   life:{hc_pink:5}},
+  {id:"reset", line:"reset", name:"COSMOSTICS RESET（リセット）", brand:"コスモスティクス", inner:true,
+   price:"8,640円（税込）",
+   desc:"管理栄養士が開発した「食べる前」に取り入れる新習慣サプリ。長野県伊那地方の赤松炭に、α-リポ酸・ザクロ抽出物・クルクミン・マリアアザミなど7種の成分を組み合わせています。外食や会食が多い方、甘いものが好きな方の食事の時間に。",
+   caution:"お薬を飲んでいる方は、時間を30分以上あけてお召し上がりください。",
+   life:{overeat:3, sweets:2, veg:2, bowel:2, weight:1, hc_inner:1}},
+  {id:"lipo", line:"lipo", name:"LIPO PLUS（リポプラス）", brand:"東京サプリメントラボ", inner:true,
+   price:"通常 9,720円 → 初回 4,900円（税込）", priceNote:"縛りなしの定期便 7,500円（税込）",
+   desc:"1包にビタミンC 1,500mgを配合した、リポソーム型のビタミンCサプリ。レモン味の個包装で、水なしでも、お好みの飲み物に混ぜても。人工甘味料は使っていません。",
+   life:{sun:3, veg:2, stress:1, tired:1, hc_inner:1}, c:{dull:2}},
+  {id:"spirulina", line:"genmai", name:"ハイ・ゲンキ スピルリナ（90袋）", brand:"玄米酵素", inner:true, pick:true,
+   price:"5,832円（税込）", priceNote:"お試し30袋 2,160円（税込）",
+   desc:"玄米・胚芽・表皮を麹菌で発酵させた玄米酵素に、スピルリナをプラス。β-カロテン、ビタミンB群、鉄分、食物繊維などを含み、緑黄色野菜が不足しがちな方の毎日に。1日3袋で約190円、防腐剤・保存料・着色料は不使用です。",
+   life:{veg:3, irregular:2, sweets:1, overeat:1, tired:1, hc_inner:2}},
+  {id:"bifidus", line:"genmai", name:"ハイ・ゲンキ ビフィズス 乳酸菌プラス（90袋）", brand:"玄米酵素", inner:true, pick:true,
+   price:"11,664円（税込）",
+   desc:"玄米酵素に、ビフィズス菌・植物性乳酸菌・オリゴ糖をプラス。1袋にビフィズス菌17億個、食物繊維はごぼうの約4倍です。乳製品由来の菌ではないので、乳製品アレルギーの方も取り入れやすい処方です。",
+   life:{bowel:3, veg:1, irregular:1, hc_inner:2}, c:{acne:1}},
+  {id:"genmyo", line:"genmai", name:"玄妙茶（30袋）", brand:"玄米酵素", inner:true,
+   price:"5,400円（税込）",
+   desc:"ハトムギ・クコ・三七人参など27種類の和漢草をブレンドしたお茶。カフェインやタンニンは検出されておらず、添加物も使っていないので、夜やご家族とも飲みやすい一杯です。マイボトルで持ち歩くのもおすすめ。",
+   life:{drink:3, cold:2, sleep:1, hc_inner:1}},
+  {id:"kouso", line:"kouso", name:"酵素ドリンク 断食人間", brand:"発酵人間", inner:true,
+   price:"15,000円（税込）",
+   desc:"国産の野菜・果物106種類を発酵させた、ファスティング専用の酵素ドリンク。保存料・人工甘味料・白砂糖などは使っていません。オーナーもファスティングで愛用していて、進め方は美yondでもご相談いただけます。",
+   life:{weight:3, overeat:2, hc_inner:1}, c:{slim:1}}
+];
+var BUDGETS = [5000,10000,15000,20000,30000];
+
+/* ===== 状態 ===== */
+var state = {concerns:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
+var $ = function(id){ return document.getElementById(id); };
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function yen(n){ return n.toLocaleString("ja-JP")+"円"; }
+function toggle(arr, v){ var i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
+function menuById(id){ return MENUS.filter(function(m){ return m.id===id; })[0]; }
+function labelOf(k){ var c = CONCERNS.filter(function(x){ return x.k===k; })[0]; return c ? c.t : k; }
+function lifeLabel(k){ var l = LIFE.filter(function(x){ return x.k===k; })[0]; return l ? l.t : k; }
+function lifeShort(k){ var l = LIFE.filter(function(x){ return x.k===k; })[0]; return l ? (l.r || l.t) : k; }
+function has(k){ return state.life.indexOf(k)>=0; }
+function uniq(a){ return a.filter(function(t,i){ return a.indexOf(t)===i; }); }
+function groupsHTML(groups, wrap){
+  return groups.map(function(g){
+    var chips = g.items.map(function(i){ return chipHTML(i.k, i.t, i.s); }).join("");
+    return '<div class="cat-h">'+esc(g.h)+'</div>'+(wrap ? '<div class="chips'+(g.single?" one":"")+'">'+chips+'</div>' : chips);
+  }).join("");
+}
+
+function chipHTML(key, text, sub, wide){
+  return '<button type="button" class="chip'+(wide?" wide":"")+'" data-k="'+key+'"><span>'+wbr(text)+(sub?'<small>'+esc(sub)+'</small>':"")+'</span><span class="mk">＋</span></button>';
+}
+/* 「・」や「【」の位置で改行させる */
+function wbr(s){ return esc(s).replace(/・/g,"・<wbr>").replace(/【/g,"<wbr>【").replace(/（/g,"<wbr>（"); }
+function paint(container, selected){
+  Array.prototype.forEach.call(container.querySelectorAll(".chip"), function(c){
+    var on = selected.indexOf(c.dataset.k)>=0;
+    c.classList.toggle("on", on);
+    c.querySelector(".mk").textContent = on ? "✓" : "＋";
+  });
+}
+
+/* ===== フォームの組み立て ===== */
+$("tab-concern").innerHTML = CONCERNS.map(function(c){ return chipHTML(c.k, c.t, null, c.wide); }).join("");
+var cats = [];
+MENUS.forEach(function(m){ if(cats.indexOf(m.cat)<0) cats.push(m.cat); });
+$("tab-menu").innerHTML = cats.map(function(cat){
+  return '<div class="cat-h">'+esc(cat)+'</div><div class="chips">'+
+    MENUS.filter(function(m){ return m.cat===cat; }).map(function(m){
+      return chipHTML(m.id, m.name, yen(m.price)+(m.from?"〜":""));
+    }).join("")+'</div>';
+}).join("");
+$("checks").innerHTML = groupsHTML(CHECK_GROUPS, false);
+$("life").innerHTML = groupsHTML(LIFE_GROUPS, true);
+$("budgetPills").innerHTML = BUDGETS.map(function(b){ return '<button type="button" class="pill" data-v="'+b+'">¥'+b.toLocaleString("ja-JP")+'</button>'; }).join("");
+
+document.querySelectorAll(".tabs button").forEach(function(b){
+  b.addEventListener("click", function(){
+    var tab = b.dataset.tab;
+    document.querySelectorAll(".tabs button").forEach(function(x){ x.setAttribute("aria-selected", x===b ? "true" : "false"); });
+    $("tab-concern").hidden = tab!=="concern";
+    $("tab-menu").hidden = tab!=="menu";
+    postHeight();
+  });
+});
+$("tab-concern").addEventListener("click", function(e){
+  var c = e.target.closest(".chip"); if(!c) return;
+  toggle(state.concerns, c.dataset.k); paint($("tab-concern"), state.concerns); clearErr("f-wish");
+});
+$("tab-menu").addEventListener("click", function(e){
+  var c = e.target.closest(".chip"); if(!c) return;
+  toggle(state.menus, c.dataset.k); paint($("tab-menu"), state.menus); clearErr("f-wish");
+});
+$("checks").addEventListener("click", function(e){
+  var c = e.target.closest(".chip"); if(!c) return;
+  var k = c.dataset.k;
+  if(k==="nothing") state.checks = state.checks.indexOf("nothing")>=0 ? [] : ["nothing"];
+  else { state.checks = state.checks.filter(function(x){ return x!=="nothing"; }); toggle(state.checks, k); }
+  paint($("checks"), state.checks); clearErr("f-check");
+});
+$("life").addEventListener("click", function(e){
+  var c = e.target.closest(".chip"); if(!c) return;
+  toggle(state.life, c.dataset.k); paint($("life"), state.life);
+});
+document.querySelectorAll(".radios").forEach(function(group){
+  group.addEventListener("click", function(e){
+    var r = e.target.closest(".radio"); if(!r) return;
+    state[group.dataset.name] = r.dataset.v;
+    group.querySelectorAll(".radio").forEach(function(x){ x.classList.toggle("on", x===r); });
+    if(group.dataset.name==="visit") clearErr("f-visit");
+  });
+});
+$("budgetPills").addEventListener("click", function(e){
+  var p = e.target.closest(".pill"); if(!p) return;
+  $("budget").value = Number(p.dataset.v).toLocaleString("ja-JP");
+  syncPills(); clearErr("f-budget");
+});
+$("budget").addEventListener("input", function(){
+  var n = budgetValue();
+  this.value = n ? n.toLocaleString("ja-JP") : "";
+  syncPills(); clearErr("f-budget");
+});
+$("free").addEventListener("input", function(){ clearErr("f-wish"); });
+$("more").addEventListener("toggle", postHeight);
+
+function budgetValue(){
+  var d = $("budget").value.replace(/[０-９]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-65248); }).replace(/[^\d]/g,"");
+  var n = parseInt(d,10);
+  return isNaN(n) ? 0 : Math.min(n, 9999999);
+}
+function syncPills(){
+  var n = budgetValue();
+  document.querySelectorAll("#budgetPills .pill").forEach(function(p){ p.classList.toggle("on", Number(p.dataset.v)===n); });
+}
+function clearErr(id){ $(id).classList.remove("err"); }
+
+/* ===== 入力チェック ===== */
+function validate(){
+  var bad = [];
+  if(!state.concerns.length && !state.menus.length && !$("free").value.trim()) bad.push("f-wish");
+  if(!state.visit) bad.push("f-visit");
+  if(!budgetValue()) bad.push("f-budget");
+  if(!state.checks.length) bad.push("f-check");
+  ["f-wish","f-visit","f-budget","f-check"].forEach(function(id){ $(id).classList.toggle("err", bad.indexOf(id)>=0); });
+  $("formErr").classList.toggle("on", bad.length>0);
+  if(bad.length){ $(bad[0]).scrollIntoView({behavior:"smooth", block:"start"}); postHeight(); }
+  return !bad.length;
+}
+
+/* ===== 候補の計算 ===== */
+function concernsFromText(){
+  var text = $("free").value, found = [];
+  Object.keys(KEYWORDS).forEach(function(k){
+    if(KEYWORDS[k].some(function(w){ return text.indexOf(w)>=0; })) found.push(k);
+  });
+  return found;
+}
+function payFor(m){ return (state.visit==="first" && m.first) ? m.first : m.price; }
+
+function selectedChecks(){ return CHECKS.filter(function(c){ return state.checks.indexOf(c.k)>=0; }); }
+
+function compute(){
+  var budget = budgetValue();
+  var picked = state.concerns.filter(function(k){ return k!=="consult"; });
+  var fromText = concernsFromText().filter(function(k){ return picked.indexOf(k)<0; });
+  var consultOnly = !picked.length && !fromText.length && !state.menus.length;
+  var freeText = $("free").value;
+  var plugText = PLUG_WORDS.some(function(w){ return freeText.indexOf(w)>=0; });
+  var sel = selectedChecks();
+  var consultAll = sel.some(function(c){ return c.consultAll; });
+  var moveFlags = sel.map(function(c){ return c.move; }).filter(Boolean);
+  var review = sel.some(function(c){ return c.review || c.move || c.consultAll; });
+  var excluded = [], rows = [], consult = [];
+
+  MENUS.forEach(function(m){
+    if((m.ng||[]).some(function(x){ return state.checks.indexOf(x)>=0; })){ excluded.push(m.name); return; }
+    var sc = 0, tags = [];
+    picked.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*5; tags.push(labelOf(k)); } });
+    fromText.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*3; tags.push(labelOf(k)); } });
+    var isPicked = state.menus.indexOf(m.id)>=0;
+    if(isPicked) sc += 100;
+    if(consultOnly && m.cat==="肌育・肌質改善") sc += (m.first ? 4 : 2) + (m.gentle||0);
+    if(sc<=0) return;
+
+    if(state.skin==="sensitive"){ sc += (m.gentle||0)*2; if((m.gentle||0)>=2) tags.push("敏感肌の方にも"); }
+    if(state.skin==="dry" && m.s.dry) sc += m.s.dry*2;
+    if(state.skin==="oily" && (m.s.pore||m.s.acne)) sc += 2;
+
+    /* 毛穴ケアの使い分け */
+    var poreWish = picked.indexOf("pore")>=0 || fromText.indexOf("pore")>=0;
+    var dryish = state.skin==="dry" || state.skin==="sensitive" || picked.indexOf("dry")>=0 || has("aircon");
+    if(poreWish && m.moist){ sc += 1; if(dryish){ sc += 4; tags.push("うるおいを保ちながら毛穴ケア"); } }
+    if(poreWish && m.plug && plugText){ sc += 14; tags.push("頑固な角栓・詰まりに"); }
+
+    if(state.dt==="none"){
+      if(m.dt===0){ sc += 4; tags.push("当日からメイクOK"); }
+      else if(m.dt===2){ sc -= 8; tags.unshift("赤み・皮むけ等が出る場合あり"); }
+      else if(m.dt===1) sc -= 1;
+    }
+    if(state.dt==="ok" && m.strong){ sc += 3; tags.push("実感重視の方に"); }
+
+    if(state.when==="event"){
+      if(m.event){ sc += 4; tags.push("特別な日の前に"); }
+      if(m.dt===2) sc -= 3;
+    }
+
+    /* 生活習慣からのひと押し（すでに候補に入っているメニューだけ） */
+    if(has("swell") && (m.s.relax || m.s.face)){ sc += 2; tags.push("むくみやすい方に"); }
+    if((has("tired") || has("stress") || has("sleep")) && m.s.relax){ sc += 3; tags.push("疲れをためやすい方に"); }
+    if(has("weight") && m.s.slim) sc += 2;
+    if(has("aircon") && m.s.dry) sc += 1;
+    if(has("hc_aging") && m.s.aging) sc += 1;
+
+    if(state.visit==="first" && m.first) tags.push("ご新規様価格あり");
+    if(review) tags.unshift("施術前に要確認");
+
+    var pay = payFor(m);
+    var row = {m:m, sc:sc, pay:pay, inBudget:pay<=budget, picked:isPicked, tags:uniq(tags).slice(0,4)};
+    if(consultAll || moveFlags.some(function(f){ return m[f]; })) consult.push(row);
+    else rows.push(row);
+  });
+
+  rows.sort(function(a,b){ return b.sc-a.sc || a.pay-b.pay; });
+  var inB = rows.filter(function(r){ return r.inBudget && r.sc>0; }).slice(0,5);
+  var outB = rows.filter(function(r){ return !r.inBudget && r.sc>0; })
+    .sort(function(a,b){ return (b.picked-a.picked) || b.sc-a.sc || a.pay-b.pay; }).slice(0,3);
+  return {inB:inB, outB:outB, excluded:excluded, consult:consult, consultAll:consultAll, sel:sel,
+    budget:budget, consultOnly:consultOnly, picked:picked, fromText:fromText};
+}
+
+/* ===== ホームケア・インナーケアの提案 ===== */
+function computeProducts(res){
+  if(res.consultAll) return {list:[], note:"妊娠中・授乳中の方のホームケア・インナーケアは、スタッフが個別にご案内します。"};
+  var noInner = res.sel.some(function(c){ return c.noInner; });
+  var top = res.inB.concat(res.outB).slice(0,3);
+  var faceTop = top.some(function(r){ return r.m.cat==="肌育・肌質改善" || r.m.cat==="小顔・リフトアップ"; });
+  var peelTop = top.some(function(r){ return r.m.peel; });
+  var concerns = res.picked.concat(res.fromText);
+  var out = [];
+  PRODUCTS.forEach(function(p){
+    if(noInner && (p.inner || p.careful)) return;
+    var sc = 0, why = [];
+    Object.keys(p.life||{}).forEach(function(k){ if(has(k)){ sc += p.life[k]; why.push(lifeShort(k)); } });
+    Object.keys(p.c||{}).forEach(function(k){ if(concerns.indexOf(k)>=0){ sc += p.c[k]; why.push(labelOf(k)); } });
+    Object.keys(p.m||{}).forEach(function(id){ if(top.some(function(r){ return r.m.id===id; })){ sc += p.m[id]; why.unshift("おすすめの施術と同じシリーズ"); } });
+    if(p.id==="ye"){
+      if(peelTop){ sc += 2; why.unshift("ピーリング後の守りのケアに"); }
+      if(state.skin==="sensitive" || state.skin==="dry") sc += 1;
+    }
+    if(sc>=2 && p.pick) sc += 1;
+    if(sc>=2) out.push({p:p, sc:sc, why:uniq(why).slice(0,3)});
+  });
+  out.sort(function(a,b){ return b.sc-a.sc; });
+  /* 同じシリーズは2つまで */
+  var perLine = {};
+  out = out.filter(function(x){ perLine[x.p.line] = (perLine[x.p.line]||0)+1; return perLine[x.p.line]<=2; });
+  if(!out.length && faceTop) out.push({p:PRODUCTS[0], sc:1, why:["サロンで整えた肌の守りのケアに"]});
+  var note = "";
+  if(noInner) note = "サプリ・ドリンクなどのインナーケアは、体調やお薬などを確認してからご案内します。";
+  else if(!state.life.length) note = "「体調・生活習慣」を選ぶと、インナーケアのご提案も表示されます。";
+  return {list:out.slice(0,3), note:note};
+}
+
+function productHTML(x){
+  var p = x.p;
+  return '<article class="mcard">'+
+    '<div class="mtop"><span class="ptype '+(p.inner?"inner":"skin")+'">'+(p.inner?"インナーケア":"ホームケア")+'</span>'+
+      (p.pick?'<span class="picked">スタッフおすすめ</span>':"")+
+      (p.brand?'<span class="pbrand">'+esc(p.brand)+'</span>':"")+'</div>'+
+    '<div class="mname serif">'+esc(p.name)+'</div>'+
+    '<div class="pprice">'+esc(p.price)+(p.priceNote ? '<small>'+esc(p.priceNote)+'</small>' : "")+'</div>'+
+    (x.why.length ? '<div class="reasons">'+x.why.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
+    '<p class="mwhy">'+esc(p.desc)+'</p>'+
+    (p.caution ? '<p class="caution-s">※'+esc(p.caution)+'</p>' : "")+'</article>';
+}
+
+/* ===== 結果の表示 ===== */
+var lastMemo = "";
+
+function cardHTML(r, i, isTop, budget){
+  var m = r.m, newPrice = state.visit==="first" && m.first, from = m.from ? "〜" : "";
+  var price = '<span class="p">'+(newPrice ? '<small>ご新規様</small>' : "")+yen(r.pay)+from+'</span>'+
+    (newPrice ? '<span class="reg">通常 '+yen(m.price)+from+'</span>' : "")+
+    (r.inBudget ? '<span class="budget in">予算内</span>' : '<span class="budget out">予算より +'+yen(r.pay-budget)+'</span>');
+  var rank = isTop ? '<span class="rank">おすすめ No.1</span>' : (r.inBudget ? '<span class="rank sub">候補 '+(i+1)+'</span>' : "");
+  return '<article class="mcard'+(isTop?" first":"")+'">'+
+    '<div class="mtop">'+rank+'<span class="mcat">'+esc(m.cat)+'</span>'+(r.picked?'<span class="picked">選んだメニュー</span>':"")+'</div>'+
+    '<div class="mname serif">'+esc(m.name)+'</div>'+
+    '<div class="mprice">'+price+'</div>'+
+    (r.tags.length ? '<div class="reasons">'+r.tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
+    '<p class="mwhy">'+esc(m.why)+'</p>'+
+    '<details class="more"><summary>時間・ダウンタイム・注意点を見る</summary><dl>'+
+      '<dt>所要時間</dt><dd>'+esc(m.time)+'</dd>'+
+      '<dt>ダウンタイム</dt><dd>'+esc(m.dtText || "ご来店時にご確認ください")+'</dd>'+
+      (m.caution ? '<dt>注意点</dt><dd>'+esc(m.caution)+'</dd>' : "")+
+      '<dt>そのほか</dt><dd>感じ方には個人差があります。施術の内容はカウンセリングで決めます。</dd>'+
+    '</dl></details></article>';
+}
+
+function conditions(budget){
+  var conds = [];
+  var wish = state.concerns.map(labelOf).concat(state.menus.map(function(id){ return menuById(id).name; }));
+  if(wish.length) conds.push(["ご希望", wish.join("、")]);
+  if(state.visit) conds.push(["ご来店", state.visit==="first" ? "はじめて" : "来店したことがある"]);
+  if(budget) conds.push(["ご予算", "1回 "+yen(budget)]);
+  var DT = {none:"当日から普段どおり", some:"少しならOK", ok:"制限なし"},
+      WHEN = {soon:"なるべく早め", event:"1か月以内に予定あり", info:"まずは情報を知りたい"},
+      SKIN = {dry:"乾燥しやすい", oily:"皮脂が多い", sensitive:"敏感・ゆらぎやすい"};
+  if(DT[state.dt]) conds.push(["ダウンタイム", DT[state.dt]]);
+  if(WHEN[state.when]) conds.push(["時期", WHEN[state.when]]);
+  if(SKIN[state.skin]) conds.push(["肌", SKIN[state.skin]]);
+  return conds;
+}
+
+function showResult(){
+  var res = compute(), budget = res.budget;
+  var conds = conditions(budget);
+  $("conds").innerHTML = conds.map(function(c){ return '<span class="cond"><b>'+esc(c[0])+'</b>'+esc(c[1])+'</span>'; }).join("");
+
+  var alerts = "";
+  var reviewSel = res.sel.filter(function(c){ return c.review || c.move || c.consultAll; });
+  if(reviewSel.length){
+    alerts += '<div class="alert"><h3>まずは、LINEでご相談ください</h3><p>次に当てはまる方は、施術できるかどうかをご予約の前にスタッフが確認します。'+
+      (res.consultAll ? "" : "下の候補は参考としてご覧ください。")+'</p><ul style="padding-left:1.2em;font-size:12.5px;margin-top:6px">'+
+      reviewSel.map(function(c){ return '<li>'+esc(c.t)+'</li>'; }).join("")+'</ul></div>';
+  }
+  if(res.excluded.length){
+    alerts += '<div class="alert plain"><h3>安全のため候補から外したメニュー</h3><p>'+esc(res.excluded.join("、"))+'</p></div>';
+  }
+  if(state.checks.indexOf("minor")>=0){
+    alerts += '<div class="alert plain"><h3>18歳未満の方へ</h3><p>施術には保護者の同意が必要です。</p></div>';
+  }
+  $("alertBox").innerHTML = alerts;
+
+  var html = "";
+  if(res.consultAll){
+    html += '<div class="sec-h"><h3>ご希望に合うメニュー</h3></div>';
+    html += '<div class="empty">妊娠中・授乳中の方には、受けられるメニューをスタッフが個別にご案内します。下の相談メモを添えて、LINEでご相談ください。</div>';
+  }else if(res.inB.length){
+    html += '<div class="sec-h"><h3>'+(res.consultOnly ? "はじめての方に合う肌質改善" : "ご希望に合うメニュー")+'</h3><span>'+res.inB.length+'件</span></div>';
+    html += res.inB.map(function(r,i){ return cardHTML(r, i, i===0, budget); }).join("");
+  }else{
+    html += '<div class="sec-h"><h3>ご希望に合うメニュー</h3></div>';
+    html += '<div class="empty">'+(res.outB.length
+      ? "ご予算内の候補はありません。予算外の関連メニューをご覧いただくか、LINEでご相談ください。"
+      : "この条件に合う候補が見つかりませんでした。ご予算や条件を変えるか、LINEでご相談ください。")+'</div>';
+  }
+  if(res.outB.length){
+    html += '<div class="sec-h"><h3>予算外の関連メニュー</h3></div><p class="sec-note">ご予算は超えますが、ご希望に合うメニューです。</p>';
+    html += res.outB.map(function(r,i){ return cardHTML(r, i, false, budget); }).join("");
+  }
+  if(res.consult.length && !res.consultAll){
+    html += '<div class="sec-h"><h3>ご相談のうえで判断するメニュー</h3></div>';
+    html += '<div class="empty">'+esc(res.consult.map(function(r){ return r.m.name; }).join("、"))+
+      ' は、確認事項によっては受けられない場合があるため候補から外しています。ご希望の方はLINEでご相談ください。</div>';
+  }
+
+  var prods = computeProducts(res);
+  if(prods.list.length || prods.note){
+    html += '<div class="sec-h"><h3>ホームケア・インナーケアのご提案</h3></div>';
+    html += '<p class="sec-note">サロンの攻めのケアと、ご自宅の守りのケアの両輪で整えていきましょう。</p>';
+    html += prods.list.map(productHTML).join("");
+    if(prods.note) html += '<p class="disclaimer">'+esc(prods.note)+'</p>';
+    if(prods.list.some(function(x){ return x.p.inner; })){
+      html += '<p class="disclaimer">※サプリ・ドリンク・お茶は食品で、医薬品ではありません。感じ方には個人差があります。体調やお薬に不安のある方は、医師にご相談ください。取り入れ方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
+    }else if(prods.list.length){
+      html += '<p class="disclaimer">※使い方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
+    }
+  }
+  $("list").innerHTML = html;
+
+  lastMemo = buildMemo(conds, res.consultAll ? [] : (res.inB.length ? res.inB : res.outB), prods.list);
+  $("memo").textContent = lastMemo;
+  $("copied").textContent = "";
+
+  $("v-form").hidden = true;
+  $("v-result").hidden = false;
+  window.scrollTo({top:0, behavior:"smooth"});
+  postHeight();
+}
+
+function buildMemo(conds, cand, prods){
+  var lines = ["【美yond ご来店前の相談メモ】"];
+  conds.forEach(function(c){ lines.push(c[0]+"："+c[1]); });
+  var free = $("free").value.trim();
+  if(free) lines.push("詳しく："+free);
+  if(state.checks.length){
+    var chk = state.checks.filter(function(k){ return k!=="nothing"; }).map(function(k){ return CHECKS.filter(function(c){ return c.k===k; })[0].t; });
+    lines.push("確認事項："+(chk.length ? chk.join("、") : "特になし"));
+  }
+  if(state.life.length) lines.push("体調・生活習慣："+state.life.map(lifeLabel).join("、"));
+  if(cand && cand.length){
+    lines.push("気になる候補：");
+    cand.slice(0,3).forEach(function(r,i){ lines.push((i+1)+". "+r.m.name+"（"+yen(r.pay)+(r.m.from?"〜":"")+"）"); });
+  }
+  if(prods && prods.length) lines.push("気になるホームケア："+prods.map(function(x){ return x.p.name; }).join("、"));
+  if(lines.length===1) lines.push("どのメニューが合うか相談したいです。");
+  lines.push("", "この内容で相談・予約したいです。");
+  return lines.join("\n");
+}
+
+/* ===== コピーとLINE ===== */
+function copy(text){
+  if(navigator.clipboard && window.isSecureContext){
+    return navigator.clipboard.writeText(text).then(function(){ return true; }, function(){ return fallbackCopy(text); });
+  }
+  return Promise.resolve(fallbackCopy(text));
+}
+function fallbackCopy(text){
+  var ta = document.createElement("textarea");
+  ta.value = text; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  var ok = false;
+  try{ ok = document.execCommand("copy"); }catch(e){}
+  document.body.removeChild(ta);
+  return ok;
+}
+function openLine(text, out){
+  copy(text).then(function(ok){
+    if(out) out.textContent = ok ? "相談メモをコピーしました。LINEのトークに貼り付けて送ってください。" : "コピーできませんでした。メモを長押しで選んでコピーしてください。";
+  });
+  setTimeout(function(){ window.open(LINE_URL, "_blank"); }, 350);
+}
+
+/* iframe で埋め込んだとき、親ページに高さを伝える */
+function postHeight(){
+  if(window.parent === window) return;
+  setTimeout(function(){
+    try{ window.parent.postMessage({type:"beyond-counseling-height", height:document.documentElement.scrollHeight}, "*"); }catch(e){}
+  }, 80);
+}
+
+$("seeBtn").addEventListener("click", function(){ if(validate()) showResult(); });
+$("talkBtn").addEventListener("click", function(){ openLine(buildMemo(conditions(budgetValue()), null, null), null); });
+$("lineBtn").addEventListener("click", function(){ openLine(lastMemo, $("copied")); });
+$("changeBtn").addEventListener("click", function(){
+  $("v-result").hidden = true; $("v-form").hidden = false;
+  window.scrollTo({top:0, behavior:"smooth"}); postHeight();
+});
+window.addEventListener("resize", postHeight);
+postHeight();
+})();
+</script>
+</body>
+</html>
