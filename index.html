@@ -46,6 +46,9 @@ header{background:#fff;border-bottom:1px solid var(--line)}
 .head a span{color:var(--brand-deep)}
 
 main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
+/* ホームページに埋め込まれたときは、サイト側のヘッダーと重なるので自前のヘッダーを出さない */
+.embedded header{display:none}
+.embedded main{padding-top:8px}
 
 /* ヒーロー */
 .hero{background:linear-gradient(150deg,var(--brand-deep) 0%,var(--brand-dark) 100%);color:#fff;border-radius:22px 22px 0 0;
@@ -357,6 +360,7 @@ details .field{border-top:0;margin-top:0;padding-top:18px}
 <script>
 (function(){
 "use strict";
+if(window.parent !== window) document.documentElement.classList.add("embedded");
 
 var LINE_URL = "https://lin.ee/34Uuw1L";
 
