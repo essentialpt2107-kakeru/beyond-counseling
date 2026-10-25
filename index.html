@@ -922,7 +922,7 @@ function showResult(){
   $("v-form").hidden = true;
   $("v-result").hidden = false;
   window.scrollTo({top:0, behavior:"smooth"});
-  postHeight();
+  postHeight(); postTop();
 }
 
 function buildMemo(conds, cand, prods){
@@ -968,11 +968,16 @@ function openLine(text, out){
   setTimeout(function(){ window.open(LINE_URL, "_blank"); }, 350);
 }
 
+/* iframe で埋め込んだとき、画面が切り替わったことを親ページに伝える（親が枠の先頭までスクロールする） */
+function postTop(){
+  if(window.parent === window) return;
+  try{ window.parent.postMessage({type:"beyond-counseling-top"}, "*"); }catch(e){}
+}
 /* iframe で埋め込んだとき、親ページに高さを伝える */
 function postHeight(){
   if(window.parent === window) return;
   setTimeout(function(){
-    try{ window.parent.postMessage({type:"beyond-counseling-height", height:document.documentElement.scrollHeight}, "*"); }catch(e){}
+    try{ window.parent.postMessage({type:"beyond-counseling-height", height:document.body.scrollHeight}, "*"); }catch(e){}
   }, 80);
 }
 
@@ -981,7 +986,7 @@ $("talkBtn").addEventListener("click", function(){ openLine(buildMemo(conditions
 $("lineBtn").addEventListener("click", function(){ openLine(lastMemo, $("copied")); });
 $("changeBtn").addEventListener("click", function(){
   $("v-result").hidden = true; $("v-form").hidden = false;
-  window.scrollTo({top:0, behavior:"smooth"}); postHeight();
+  window.scrollTo({top:0, behavior:"smooth"}); postHeight(); postTop();
 });
 window.addEventListener("resize", postHeight);
 postHeight();
