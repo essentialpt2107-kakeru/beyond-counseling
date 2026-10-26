@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- 暫定版のあいだは検索結果に出さない。正式版で外す -->
 <meta name="robots" content="noindex, nofollow">
-<title>美yond AIカウンセリング</title>
-<meta name="description" content="二子玉川の肌管理サロン美yond（ビヨンド）の来店前AIカウンセリング。お悩みとご予算から、あなたに合うメニューの候補をご提案します。">
+<title>美yondメソッドカウンセリング</title>
+<meta name="description" content="二子玉川の肌管理サロン美yond（ビヨンド）の美yondメソッドカウンセリング。お悩みとご予算から、サロンのケアとホームケアを松竹梅の3つのプランでご提案します。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
@@ -88,6 +88,43 @@ main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
 .chip.on .mk{background:var(--brand);color:#fff}
 .chip.wide{grid-column:1/-1}
 #checks{grid-template-columns:1fr}
+/* お悩みの2段階 */
+.step{font-size:13.5px;font-weight:700;margin:4px 0 10px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.step b{font-size:10.5px;letter-spacing:.14em;color:#fff;background:var(--brand-deep);border-radius:999px;padding:2px 10px}
+.step small{font-weight:400;font-size:11.5px;color:var(--ink-sub)}
+#subsWrap{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+.cats{display:grid;grid-template-columns:1fr;gap:8px}
+.cat{border:1.5px solid var(--line);background:#fff;border-radius:16px;padding:12px 14px;text-align:left;display:flex;gap:12px;align-items:center;min-height:60px;transition:border-color .15s,background .15s}
+.cat .ci{flex:0 0 30px;height:30px;border-radius:50%;background:var(--brand-soft);color:var(--brand-dark);display:flex;align-items:center;justify-content:center;font-size:15px}
+.cat .ct{font-size:15px;font-weight:700;line-height:1.45;word-break:keep-all;overflow-wrap:anywhere}
+.cat .ct small{display:block;font-weight:400;font-size:11px;color:var(--ink-sub);margin-top:2px}
+.cat.on{border-color:var(--brand);background:var(--brand-soft)}
+.cat.on .ci{background:var(--brand);color:#fff}
+.cat.wide{grid-column:1/-1;min-height:0}
+#subs .chips{grid-template-columns:1fr}
+#subs .chip{min-height:50px}
+/* 松竹梅 */
+.tier{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px 18px 14px;margin-bottom:12px;border:1.5px solid transparent;position:relative}
+.tier.take{border-color:var(--brand)}
+.tier-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.tier-badge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Noto Serif JP",serif;font-weight:600;font-size:17px;color:#fff}
+.tier-badge.matsu{background:#2F5D50}
+.tier-badge.take{background:var(--brand-deep)}
+.tier-badge.ume{background:#B5707E}
+.tier-label{font-size:14px;font-weight:700;flex:1;min-width:0}
+.tier-label small{display:block;font-size:11px;font-weight:400;color:var(--ink-sub)}
+.tier .budget{margin-left:auto;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
+.combo{font-size:12px;color:var(--ink-sub);margin:2px 0 4px}
+.feel{background:var(--bg);border-radius:12px;padding:10px 12px;margin:8px 0}
+.feel-types{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.feel-type{font-size:11px;font-weight:700;border-radius:999px;padding:2px 9px}
+.feel-type.quick{background:#FFF1D6;color:#8A5A00}
+.feel-type.base{background:var(--brand-soft);color:var(--brand-dark)}
+.feel p{font-size:12.5px;line-height:1.7}
+.feel p+p{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line)}
+.feel p b{font-weight:700}
+.method{background:var(--brand-soft);border-radius:16px;padding:14px 16px;font-size:12.5px;margin:4px 0 12px}
+.method b{color:var(--brand-dark)}
 #checks .chip{min-height:50px}
 .chips.one{grid-template-columns:1fr}
 #life .chip{min-height:52px}
@@ -218,7 +255,7 @@ details .field{border-top:0;margin-top:0;padding-top:18px}
   <div class="head">
     <div class="logo">美yond<small>BEYOND</small></div>
     <div class="sep"></div>
-    <div class="tag">AI COUNSELING</div>
+    <div class="tag">BEYOND METHOD</div>
     <a href="https://beyond-essential.jp/" target="_blank" rel="noopener">サロンについて <span>↗</span></a>
   </div>
 </header>
@@ -228,12 +265,12 @@ details .field{border-top:0;margin-top:0;padding-top:18px}
 <section id="v-form">
   <div class="hero">
     <div class="eyebrow">BEFORE YOUR VISIT</div>
-    <h1 class="serif">あなたの希望から<br>合うメニューを見つける</h1>
-    <p>お悩みとご予算から、美yondの18メニューの中で<br>合いそうな候補を比べられます。</p>
+    <h1 class="serif">美yondメソッド<br>カウンセリング</h1>
+    <p>サロンの「攻めのケア」、ご自宅の「守りのケア」、食事などの「内側からのケア」。美yondがふだんのカウンセリングで大切にしている考え方で、あなたに合うプランを3つに絞ってご提案します。</p>
   </div>
 
   <div class="form">
-    <h2 class="serif">ご来店前カウンセリング</h2>
+    <h2 class="serif">ご来店前のカウンセリング</h2>
     <p class="intro">約2分で入力できます。お名前・ご連絡先の入力は不要です。</p>
 
     <div class="field" id="f-wish">
@@ -242,9 +279,16 @@ details .field{border-top:0;margin-top:0;padding-top:18px}
         <button type="button" role="tab" aria-selected="true" data-tab="concern">お悩みから選ぶ</button>
         <button type="button" role="tab" aria-selected="false" data-tab="menu">メニューから選ぶ</button>
       </div>
-      <div id="tab-concern" class="chips"></div>
+      <div id="tab-concern">
+        <p class="step"><b>STEP 1</b>どんなことが気になっていますか？<small>いくつでも選べます</small></p>
+        <div id="cats" class="cats"></div>
+        <div id="subsWrap" hidden>
+          <p class="step"><b>STEP 2</b>いちばん近いものを選んでください<small>いくつでも選べます</small></p>
+          <div id="subs"></div>
+        </div>
+      </div>
       <div id="tab-menu" hidden></div>
-      <p class="errmsg">お悩み・メニューを選ぶか、下の欄にご希望を入力してください。</p>
+      <p class="errmsg">気になることを選ぶか（メニューから選ぶ・下の欄への入力でも大丈夫です）、ご希望を教えてください。</p>
     </div>
 
     <div class="field">
@@ -336,7 +380,7 @@ details .field{border-top:0;margin-top:0;padding-top:18px}
 <section id="v-result" hidden>
   <div class="result-top">
     <div class="eyebrow">YOUR PLAN</div>
-    <h2 class="serif">メニューのご提案</h2>
+    <h2 class="serif">美yondメソッドのご提案</h2>
     <div class="conds" id="conds"></div>
     <button type="button" class="change" id="changeBtn">‹ 条件を変更する</button>
   </div>
@@ -364,26 +408,70 @@ if(window.parent !== window) document.documentElement.classList.add("embedded");
 
 var LINE_URL = "https://lin.ee/34Uuw1L";
 
-/* ===== お悩み ===== */
-var CONCERNS = [
-  {k:"pore",  t:"毛穴・黒ずみ"},
-  {k:"acne",  t:"ニキビ・肌荒れ"},
-  {k:"dull",  t:"くすみ・透明感"},
-  {k:"dry",   t:"乾燥・ハリ不足"},
-  {k:"aging", t:"たるみ・エイジング"},
-  {k:"face",  t:"小顔・フェイスライン"},
-  {k:"slim",  t:"部分痩せ・ボディライン"},
-  {k:"body",  t:"背中・デコルテの肌"},
-  {k:"brow",  t:"眉・顔の印象"},
-  {k:"relax", t:"疲れ・むくみ・コリ"},
-  {k:"consult", t:"何を選ぶか相談したい", wide:true}
+/* ===== お悩み（STEP 1: 大きな分類 → STEP 2: 具体的なイメージ） =====
+   c: そのお悩みが効くメニュー側のキー（先頭がいちばん強い） / plug: 頑固な角栓 / event: 特別な日の前 / life: 生活習慣としても扱う */
+var CATS = [
+  {k:"skin",  ic:"✦", t:"肌の悩みがある", s:"毛穴・ニキビ・くすみ・乾燥など", def:["pore","acne","dull","dry"]},
+  {k:"face",  ic:"◇", t:"顔まわりをすっきりさせたい", s:"小顔・たるみ・むくみ", def:["face"]},
+  {k:"slim",  ic:"○", t:"痩せたい・体型を整えたい", s:"お腹・太もも・二の腕など", def:["slim"]},
+  {k:"body",  ic:"◌", t:"背中や体の肌が気になる", s:"ブツブツ・ざらつき", def:["body"]},
+  {k:"brow",  ic:"〰", t:"眉・第一印象を変えたい", s:"眉の形・清潔感", def:["brow"]},
+  {k:"relax", ic:"❀", t:"疲れを取りたい・癒やされたい", s:"コリ・だるさ・むくみ", def:["relax"]},
+  {k:"consult", ic:"？", t:"まだ決まっていない", s:"何を選べばいいか相談したい", wide:true, def:[]}
 ];
+var SUBS = {
+  skin:[
+    {k:"s_pore",  t:"小鼻やあごの黒ずみ・ざらつき", r:"毛穴の黒ずみ", c:["pore"]},
+    {k:"s_plug",  t:"鼻の角栓が固く詰まっている", r:"頑固な角栓", c:["pore"], plug:true},
+    {k:"s_shine", t:"夕方の化粧崩れ・テカりが気になる", r:"化粧崩れ・テカり", c:["shine","pore"]},
+    {k:"s_acne",  t:"ニキビ・肌荒れをくり返す", r:"ニキビ・肌荒れ", c:["acne"]},
+    {k:"s_dull",  t:"顔色が暗く、くすんで見える", r:"くすみ", c:["dull"]},
+    {k:"s_dry",   t:"乾燥してつっぱる・粉をふく", r:"乾燥", c:["dry"]},
+    {k:"s_tired", t:"ハリがなく、疲れた顔に見られる", r:"ハリ不足", c:["aging","dry"]}
+  ],
+  face:[
+    {k:"f_blank", t:"顔の余白（頬〜あご）が間延びして見える", r:"顔の余白", c:["face"]},
+    {k:"f_line",  t:"フェイスラインのもたつき・二重あご", r:"フェイスライン", c:["face","aging"]},
+    {k:"f_sag",   t:"ほうれい線・口元のたるみ", r:"口元のたるみ", c:["aging","face"]},
+    {k:"f_swell", t:"朝の顔のむくみが抜けない", r:"顔のむくみ", c:["face"]},
+    {k:"f_photo", t:"写真に写ると顔が大きく見える", r:"写真写り", c:["face"]}
+  ],
+  slim:[
+    {k:"b_belly",  t:"お腹まわりのぽっこり", r:"お腹まわり", c:["slim"]},
+    {k:"b_thigh",  t:"太もも・お尻", r:"太もも・お尻", c:["slim"]},
+    {k:"b_arm",    t:"二の腕・背中のお肉", r:"二の腕・背中", c:["slim"]},
+    {k:"b_weight", t:"体重そのものを落としたい", s:"ファスティングに興味がある方も", r:"体重", c:["slim"], life:"weight"},
+    {k:"b_legs",   t:"脚のむくみ・だるさ", r:"脚のむくみ", c:["relax","slim"]}
+  ],
+  body:[
+    {k:"y_back",  t:"背中のブツブツ・ニキビ", r:"背中のニキビ", c:["body","acne"]},
+    {k:"y_rough", t:"二の腕・デコルテのざらつき", r:"二の腕・デコルテ", c:["body"]},
+    {k:"y_event", t:"背中の開いた服・結婚式の前に整えたい", r:"特別な日の前に", c:["body"], event:true}
+  ],
+  brow:[
+    {k:"e_shape", t:"眉の形が決まらない・左右差がある", r:"眉の形", c:["brow"]},
+    {k:"e_thin",  t:"眉が薄い・まばら", r:"眉の薄さ", c:["brow"]},
+    {k:"e_clean", t:"清潔感・垢抜けた印象がほしい", r:"清潔感", c:["brow","pore"]},
+    {k:"e_work",  t:"人に見られる仕事なので、第一印象を整えたい", r:"第一印象", c:["brow","dull"]}
+  ],
+  relax:[
+    {k:"r_stiff", t:"肩・首・背中のコリ", r:"コリ", c:["relax"]},
+    {k:"r_tired", t:"全身がだるい・疲れが抜けない", r:"全身の疲れ", c:["relax"]},
+    {k:"r_heal",  t:"ゆっくり癒やされたい", r:"癒やし", c:["relax"]}
+  ]
+};
+var ALL_SUBS = [];
+Object.keys(SUBS).forEach(function(k){ SUBS[k].forEach(function(x){ x.cat = k; ALL_SUBS.push(x); }); });
+/* 結果の理由に出す、お悩みキーの呼び名 */
+var KEY_LABEL = {pore:"毛穴", shine:"化粧崩れ・テカり", acne:"ニキビ・肌荒れ", dull:"くすみ", dry:"乾燥", aging:"たるみ・ハリ",
+  face:"フェイスライン", slim:"部分痩せ", body:"背中・体の肌", brow:"眉", relax:"疲れ・むくみ"};
 /* 自由記入から拾う言葉 */
 var KEYWORDS = {
   pore:["毛穴","黒ずみ","角栓","いちご"], acne:["ニキビ","にきび","肌荒れ","吹き出物"], dull:["くすみ","透明感","美白","トーン"],
   dry:["乾燥","カサカサ","ハリ"], aging:["たるみ","シワ","しわ","エイジング","リフト"], face:["小顔","フェイスライン","輪郭","顔のむくみ","二重あご","二重顎"],
   slim:["痩せ","やせ","ダイエット","お腹","おなか","太もも","二の腕","セルライト"], body:["背中","デコルテ","ヒップ","ブライダル","結婚式"],
-  brow:["眉","まゆ","アイブロウ"], relax:["疲れ","コリ","こり","マッサージ","むくみ","癒"]
+  brow:["眉","まゆ","アイブロウ"], relax:["疲れ","コリ","こり","マッサージ","むくみ","癒"],
+  shine:["化粧崩れ","化粧くずれ","テカ","皮脂"]
 };
 var PLUG_WORDS = ["角栓","いちご","イチゴ","固い","かたい","慢性","ひどい詰まり","詰まりがひどい"];
 
@@ -471,6 +559,44 @@ var MENUS = [
 /* 確認事項
    consultAll: すべてのメニューを個別相談に / move: その属性のメニューを候補から外して相談に回す
    review: 施術前の確認が必要 / noInner: インナーケア商品を出さない */
+/* 化粧崩れ・テカりとの相性（メニュー本体に足す） */
+/* 松の組み合わせで、同じ種類のケアを2つ重ねないための分類 */
+var FAMILY = {esv10:"pore", hydra:"pore", solaspa:"pore", ruby:"peel", lactic:"peel", exosome:"peel", wiqo:"peel",
+  electro:"boost", carboxy:"boost", lemonF:"faceslim", redF:"faceslim", hifu:"lift", redB:"bodyslim", lemonB:"bodyslim",
+  rubyB:"bodypeel", esv10B:"bodypore", oil:"relax", brow:"brow"};
+/* 顔のケアか体のケアか（松の組み合わせを、選んだお悩みの範囲にとどめる） */
+var BODY_CATS = ["痩身","ボディ肌質改善","リラクゼーション"];
+function areaOf(m){ return BODY_CATS.indexOf(m.cat)>=0 ? "body" : "face"; }
+var CAT_AREA = {skin:"face", face:"face", brow:"face", consult:"face", slim:"body", body:"body", relax:"body"};
+var EXTRA_S = {esv10:{shine:2}, wiqo:{shine:3}, solaspa:{shine:2}, hydra:{shine:1}, carboxy:{shine:1}, lactic:{shine:1}};
+Object.keys(EXTRA_S).forEach(function(id){ var m = MENUS.filter(function(x){ return x.id===id; })[0]; Object.assign(m.s, EXTRA_S[id]); });
+
+/* 実感の目安（開かなくても見えるように、カードに必ず出す）
+   quick: その日に実感しやすい / base: 続けて土台から整える
+   通い方の目安は、かけるの「段階的ゴール」（1回目: 直後のつるつる感・トーンアップ／3回目: 肌トーン／6回目: 化粧崩れ／半年が目安）にそろえる */
+var SKIN_STEPS = "1回目は施術直後のつるつる感・明るさ、3回目に肌のトーン、6回目に化粧崩れの変化が目安。半年ほど続けるのがおすすめです。";
+var FEEL = {
+  esv10:   {t:["quick","base"], x:"1回目から毛穴のすっきり感を感じやすい施術です。土台から変えるなら、3回目に肌のトーン、6回目に化粧崩れの変化が目安。半年ほど続けるのがおすすめです。"},
+  ruby:    {t:["base"], x:"肌の生まれ変わりに合わせて整えていく、土台づくりのケアです。"+SKIN_STEPS},
+  lactic:  {t:["quick","base"], x:"ダウンタイムがなく、当日からメイクできます。"+SKIN_STEPS},
+  solaspa: {t:["quick"], x:"その日のうちに、毛穴まわりのすっきり感や明るさを感じやすいケアです。単品でも、ほかの施術との組み合わせでも。"},
+  exosome: {t:["base"], x:"ゆらぎにくい肌を目指す、土台づくりのケアです。"+SKIN_STEPS},
+  wiqo:    {t:["base"], x:"キメや化粧ノリを土台から整えていくケアです。"+SKIN_STEPS},
+  electro: {t:["quick"], x:"その日のうちに、うるおいやハリ感を感じやすいケアです。ほかの施術との組み合わせにも。"},
+  carboxy: {t:["quick"], x:"その日のうちに、すっきりした印象を感じやすいケアです。ほかの施術との組み合わせにも。"},
+  hydra:   {t:["quick"], x:"固く詰まった角栓を、その日のうちに取り出すケアです。"},
+  lemonF:  {t:["quick"], x:"1回でも変化を感じやすく、はじめの一歩に向いたケアです。40代以降は月1回のペースで続ける方が多いです。"},
+  redF:    {t:["quick","base"], x:"1回でも変化を感じやすく、段階的に整えるので続けるほど安定しやすいケアです。40代以降は月1回のペースで続ける方が多いです。"},
+  hifu:    {t:["quick"], x:"1回でも変化を感じやすく、はじめの一歩に向いたケアです。40代以降は月1回のペースで続ける方が多いです。"},
+  redB:    {t:["base"], x:"続けて通うことで、ボディラインを段階的に整えていくケアです。通う回数は、気になる部位と目標に合わせてカウンセリングでご提案します。"},
+  lemonB:  {t:["base"], x:"続けて通うことで、ボディラインを整えていくケアです。通う回数は、気になる部位と目標に合わせてカウンセリングでご提案します。"},
+  rubyB:   {t:["base"], x:"背中など体の肌も、生まれ変わりに合わせて続けるほど整っていく土台づくりのケアです。特別な日に合わせるなら、早めのスタートがおすすめです。"},
+  esv10B:  {t:["quick","base"], x:"1回目から背中の毛穴のすっきり感を感じやすく、続けるほど整っていきます。特別な日に合わせるなら、早めのスタートがおすすめです。"},
+  oil:     {t:["quick"], x:"その日のうちに体の軽さを感じやすいケアです。疲れをためないよう、定期的なメンテナンスにも。"},
+  brow:    {t:["quick"], x:"施術当日から眉の印象が変わります。次回の目安は、毛の伸び方を見てご案内します。"}
+};
+var FEEL_LABEL = {quick:"その日に実感しやすい", base:"続けて土台から整える"};
+
 var CHECK_GROUPS = [
   {h:"受けられないメニューがあるもの", items:[
     {k:"wheat",   t:"小麦・パイナップル・ステンレスのアレルギーがある"},
@@ -576,19 +702,23 @@ var PRODUCTS = [
    desc:"国産の野菜・果物106種類を発酵させた、ファスティング専用の酵素ドリンク。保存料・人工甘味料・白砂糖などは使っていません。オーナーもファスティングで愛用していて、進め方は美yondでもご相談いただけます。",
    life:{weight:3, overeat:2, hc_inner:1}, c:{slim:1}}
 ];
+/* 松竹梅の「梅」を決めるための、いちばん手軽に始められる価格 */
+var ENTRY = {ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900, spirulina:2160, bifidus:11664, genmyo:5400, kouso:15000};
 var BUDGETS = [5000,10000,15000,20000,30000];
 
 /* ===== 状態 ===== */
-var state = {concerns:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
+var state = {cats:[], subs:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
 var $ = function(id){ return document.getElementById(id); };
 function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
 function yen(n){ return n.toLocaleString("ja-JP")+"円"; }
 function toggle(arr, v){ var i = arr.indexOf(v); if(i>=0) arr.splice(i,1); else arr.push(v); }
 function menuById(id){ return MENUS.filter(function(m){ return m.id===id; })[0]; }
-function labelOf(k){ var c = CONCERNS.filter(function(x){ return x.k===k; })[0]; return c ? c.t : k; }
+function labelOf(k){ return KEY_LABEL[k] || k; }
+function subById(k){ return ALL_SUBS.filter(function(x){ return x.k===k; })[0]; }
+function catById(k){ return CATS.filter(function(x){ return x.k===k; })[0]; }
 function lifeLabel(k){ var l = LIFE.filter(function(x){ return x.k===k; })[0]; return l ? l.t : k; }
 function lifeShort(k){ var l = LIFE.filter(function(x){ return x.k===k; })[0]; return l ? (l.r || l.t) : k; }
-function has(k){ return state.life.indexOf(k)>=0; }
+function has(k){ return state.life.indexOf(k)>=0 || state.subs.some(function(id){ var x = subById(id); return x && x.life===k; }); }
 function uniq(a){ return a.filter(function(t,i){ return a.indexOf(t)===i; }); }
 function groupsHTML(groups, wrap){
   return groups.map(function(g){
@@ -611,7 +741,19 @@ function paint(container, selected){
 }
 
 /* ===== フォームの組み立て ===== */
-$("tab-concern").innerHTML = CONCERNS.map(function(c){ return chipHTML(c.k, c.t, null, c.wide); }).join("");
+$("cats").innerHTML = CATS.map(function(c){
+  return '<button type="button" class="cat'+(c.wide?" wide":"")+'" data-k="'+c.k+'"><span class="ci">'+c.ic+'</span><span class="ct">'+wbr(c.t)+'<small>'+esc(c.s)+'</small></span></button>';
+}).join("");
+function renderSubs(){
+  var cs = state.cats.filter(function(k){ return SUBS[k]; });
+  $("subsWrap").hidden = !cs.length;
+  state.subs = state.subs.filter(function(id){ return cs.indexOf(subById(id).cat)>=0; });
+  $("subs").innerHTML = cs.map(function(k){
+    return '<div class="cat-h">'+esc(catById(k).t)+'</div><div class="chips">'+SUBS[k].map(function(x){ return chipHTML(x.k, x.t, x.s); }).join("")+'</div>';
+  }).join("");
+  paint($("subs"), state.subs);
+  postHeight();
+}
 var cats = [];
 MENUS.forEach(function(m){ if(cats.indexOf(m.cat)<0) cats.push(m.cat); });
 $("tab-menu").innerHTML = cats.map(function(cat){
@@ -633,9 +775,15 @@ document.querySelectorAll(".tabs button").forEach(function(b){
     postHeight();
   });
 });
-$("tab-concern").addEventListener("click", function(e){
+$("cats").addEventListener("click", function(e){
+  var c = e.target.closest(".cat"); if(!c) return;
+  toggle(state.cats, c.dataset.k);
+  Array.prototype.forEach.call($("cats").querySelectorAll(".cat"), function(x){ x.classList.toggle("on", state.cats.indexOf(x.dataset.k)>=0); });
+  renderSubs(); clearErr("f-wish");
+});
+$("subs").addEventListener("click", function(e){
   var c = e.target.closest(".chip"); if(!c) return;
-  toggle(state.concerns, c.dataset.k); paint($("tab-concern"), state.concerns); clearErr("f-wish");
+  toggle(state.subs, c.dataset.k); paint($("subs"), state.subs); clearErr("f-wish");
 });
 $("tab-menu").addEventListener("click", function(e){
   var c = e.target.closest(".chip"); if(!c) return;
@@ -687,7 +835,7 @@ function clearErr(id){ $(id).classList.remove("err"); }
 /* ===== 入力チェック ===== */
 function validate(){
   var bad = [];
-  if(!state.concerns.length && !state.menus.length && !$("free").value.trim()) bad.push("f-wish");
+  if(!state.cats.length && !state.menus.length && !$("free").value.trim()) bad.push("f-wish");
   if(!state.visit) bad.push("f-visit");
   if(!budgetValue()) bad.push("f-budget");
   if(!state.checks.length) bad.push("f-check");
@@ -711,11 +859,21 @@ function selectedChecks(){ return CHECKS.filter(function(c){ return state.checks
 
 function compute(){
   var budget = budgetValue();
-  var picked = state.concerns.filter(function(k){ return k!=="consult"; });
+  /* STEP 2 で選んだ具体的なお悩み → メニュー側のキーと重み。STEP 2 を選んでいない分類は、その分類の代表的なお悩みで軽く見る */
+  var weights = {}, keyLabel = {};
+  var subsSel = state.subs.map(subById).filter(Boolean);
+  subsSel.forEach(function(x){ x.c.forEach(function(k,i){ var w = i===0 ? 5 : 3; if((weights[k]||0) < w){ weights[k] = w; } if(!keyLabel[k]) keyLabel[k] = x.r; }); });
+  state.cats.forEach(function(ck){
+    var cat = catById(ck);
+    if(!cat || !SUBS[ck] || subsSel.some(function(x){ return x.cat===ck; })) return;
+    cat.def.forEach(function(k){ if(!weights[k]){ weights[k] = 2; keyLabel[k] = labelOf(k); } });
+  });
+  var picked = Object.keys(weights);
   var fromText = concernsFromText().filter(function(k){ return picked.indexOf(k)<0; });
   var consultOnly = !picked.length && !fromText.length && !state.menus.length;
   var freeText = $("free").value;
-  var plugText = PLUG_WORDS.some(function(w){ return freeText.indexOf(w)>=0; });
+  var plugText = PLUG_WORDS.some(function(w){ return freeText.indexOf(w)>=0; }) || subsSel.some(function(x){ return x.plug; });
+  var eventWish = state.when==="event" || subsSel.some(function(x){ return x.event; });
   var sel = selectedChecks();
   var consultAll = sel.some(function(c){ return c.consultAll; });
   var moveFlags = sel.map(function(c){ return c.move; }).filter(Boolean);
@@ -725,7 +883,7 @@ function compute(){
   MENUS.forEach(function(m){
     if((m.ng||[]).some(function(x){ return state.checks.indexOf(x)>=0; })){ excluded.push(m.name); return; }
     var sc = 0, tags = [];
-    picked.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*5; tags.push(labelOf(k)); } });
+    picked.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*weights[k]; tags.push(keyLabel[k] || labelOf(k)); } });
     fromText.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*3; tags.push(labelOf(k)); } });
     var isPicked = state.menus.indexOf(m.id)>=0;
     if(isPicked) sc += 100;
@@ -737,7 +895,7 @@ function compute(){
     if(state.skin==="oily" && (m.s.pore||m.s.acne)) sc += 2;
 
     /* 毛穴ケアの使い分け */
-    var poreWish = picked.indexOf("pore")>=0 || fromText.indexOf("pore")>=0;
+    var poreWish = picked.indexOf("pore")>=0 || picked.indexOf("shine")>=0 || fromText.indexOf("pore")>=0;
     var dryish = state.skin==="dry" || state.skin==="sensitive" || picked.indexOf("dry")>=0 || has("aircon");
     if(poreWish && m.moist){ sc += 1; if(dryish){ sc += 4; tags.push("うるおいを保ちながら毛穴ケア"); } }
     if(poreWish && m.plug && plugText){ sc += 14; tags.push("頑固な角栓・詰まりに"); }
@@ -749,7 +907,7 @@ function compute(){
     }
     if(state.dt==="ok" && m.strong){ sc += 3; tags.push("実感重視の方に"); }
 
-    if(state.when==="event"){
+    if(eventWish){
       if(m.event){ sc += 4; tags.push("特別な日の前に"); }
       if(m.dt===2) sc -= 3;
     }
@@ -770,19 +928,40 @@ function compute(){
     else rows.push(row);
   });
 
-  rows.sort(function(a,b){ return b.sc-a.sc || a.pay-b.pay; });
-  var inB = rows.filter(function(r){ return r.inBudget && r.sc>0; }).slice(0,5);
-  var outB = rows.filter(function(r){ return !r.inBudget && r.sc>0; })
-    .sort(function(a,b){ return (b.picked-a.picked) || b.sc-a.sc || a.pay-b.pay; }).slice(0,3);
-  return {inB:inB, outB:outB, excluded:excluded, consult:consult, consultAll:consultAll, sel:sel,
+  rows.sort(function(a,b){ return (b.picked-a.picked) || b.sc-a.sc || a.pay-b.pay; });
+  return {rows:rows, tiers:menuTiers(rows, picked), excluded:excluded, consult:consult, consultAll:consultAll, sel:sel,
     budget:budget, consultOnly:consultOnly, picked:picked, fromText:fromText};
+}
+
+/* ===== 松竹梅（迷わないよう、3つに絞る） =====
+   竹: いちばん合うメニュー（予算内を優先） / 梅: 竹より手軽に始められるメニュー / 松: 竹に、別の角度のメニューを組み合わせたプラン */
+function menuTiers(rows, picked){
+  if(!rows.length) return null;
+  var max = rows[0].sc;
+  var cand = rows.filter(function(r){ return r.picked || r.sc >= max*0.5; });
+  var take = rows.filter(function(r){ return r.picked; })[0] || cand.filter(function(r){ return r.inBudget; })[0] || cand[0];
+  var ume = cand.filter(function(r){ return r!==take && r.pay < take.pay; })
+    .sort(function(a,b){ return a.pay-b.pay || b.sc-a.sc; })[0] || null;
+  /* 松の相方: 竹と違う種類のケア。候補の中になければ、少し相性が下がるものまで広げる */
+  var areas = state.cats.map(function(k){ return CAT_AREA[k]; }).concat(state.menus.map(function(id){ return areaOf(menuById(id)); }));
+  var diff = function(r){ return r!==take && FAMILY[r.m.id]!==FAMILY[take.m.id] && (!areas.length || areas.indexOf(areaOf(r.m))>=0); };
+  /* 竹がカバーしていないお悩みに効くものを優先する（例: 毛穴＋顔の余白なら、小顔のメニューを組み合わせる） */
+  var uncovered = (picked||[]).filter(function(k){ return !take.m.s[k]; });
+  var gain = function(r){ return uncovered.filter(function(k){ return r.m.s[k]; }).length; };
+  var pool = rows.filter(function(r){ return diff(r) && r.sc >= max*0.3; })
+    .sort(function(a,b){ return gain(b)-gain(a) || (cand.indexOf(b)>=0)-(cand.indexOf(a)>=0) || (a===ume)-(b===ume) || b.sc-a.sc; });
+  var partner = pool[0] || null;
+  /* いちばん合うメニューが予算を超えて竹に入らなかったときは、それを松として見せる */
+  var best = rows[0];
+  if(best!==take && !take.picked) return {take:take, ume:ume, matsu:[best]};
+  return {take:take, ume:ume, matsu: partner ? [take, partner] : null};
 }
 
 /* ===== ホームケア・インナーケアの提案 ===== */
 function computeProducts(res){
   if(res.consultAll) return {list:[], note:"妊娠中・授乳中の方のホームケア・インナーケアは、スタッフが個別にご案内します。"};
   var noInner = res.sel.some(function(c){ return c.noInner; });
-  var top = res.inB.concat(res.outB).slice(0,3);
+  var t = res.tiers, top = t ? uniq([t.take].concat(t.matsu || []).concat(t.ume ? [t.ume] : [])) : [];
   var faceTop = top.some(function(r){ return r.m.cat==="肌育・肌質改善" || r.m.cat==="小顔・リフトアップ"; });
   var peelTop = top.some(function(r){ return r.m.peel; });
   var concerns = res.picked.concat(res.fromText);
@@ -808,48 +987,97 @@ function computeProducts(res){
   var note = "";
   if(noInner) note = "サプリ・ドリンクなどのインナーケアは、体調やお薬などを確認してからご案内します。";
   else if(!state.life.length) note = "「体調・生活習慣」を選ぶと、インナーケアのご提案も表示されます。";
-  return {list:out.slice(0,3), note:note};
+  /* 松竹梅: 竹=いちばん合うもの、梅=竹より手軽に始められるもの、松=竹＋別の種類（スキンケア⇔インナーケア）の組み合わせ */
+  var tiers = null;
+  if(out.length){
+    var take = out[0];
+    var ume = out.filter(function(x){ return x!==take && ENTRY[x.p.id] < ENTRY[take.p.id]; })
+      .sort(function(a,b){ return ENTRY[a.p.id]-ENTRY[b.p.id]; })[0] || null;
+    var partner = out.filter(function(x){ return x!==take && x!==ume && x.p.inner!==take.p.inner; })[0]
+      || out.filter(function(x){ return x!==take && x!==ume; })[0] || null;
+    tiers = {take:take, ume:ume, matsu: partner ? [take, partner] : null};
+  }
+  return {list:out.slice(0,3), tiers:tiers, note:note};
 }
 
-function productHTML(x){
+function productLine(x){
   var p = x.p;
-  return '<article class="mcard">'+
-    '<div class="mtop"><span class="ptype '+(p.inner?"inner":"skin")+'">'+(p.inner?"インナーケア":"ホームケア")+'</span>'+
-      (p.pick?'<span class="picked">スタッフおすすめ</span>':"")+
-      (p.brand?'<span class="pbrand">'+esc(p.brand)+'</span>':"")+'</div>'+
+  return '<div class="mtop" style="margin-top:6px"><span class="ptype '+(p.inner?"inner":"skin")+'">'+(p.inner?"インナーケア":"ホームケア")+'</span>'+
+      (p.pick?'<span class="picked">スタッフおすすめ</span>':"")+(p.brand?'<span class="pbrand">'+esc(p.brand)+'</span>':"")+'</div>'+
     '<div class="mname serif">'+esc(p.name)+'</div>'+
-    '<div class="pprice">'+esc(p.price)+(p.priceNote ? '<small>'+esc(p.priceNote)+'</small>' : "")+'</div>'+
-    (x.why.length ? '<div class="reasons">'+x.why.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
-    '<p class="mwhy">'+esc(p.desc)+'</p>'+
-    (p.caution ? '<p class="caution-s">※'+esc(p.caution)+'</p>' : "")+'</article>';
+    '<div class="pprice">'+esc(p.price)+(p.priceNote ? '<small>'+esc(p.priceNote)+'</small>' : "")+'</div>';
+}
+var PTIER_TEXT = {
+  matsu:{n:"松", label:"しっかりケア", sub:"ご自宅の守りのケアと、内側からのケアを組み合わせて"},
+  take: {n:"竹", label:"いちばんのおすすめ", sub:"今回のお悩みと生活習慣にいちばん合うもの"},
+  ume:  {n:"梅", label:"まずはお試し", sub:"手軽に始めたい方に"}
+};
+function productTierHTML(kind, xs){
+  var tx = PTIER_TEXT[kind];
+  var why = uniq([].concat.apply([], xs.map(function(x){ return x.why; }))).slice(0,4);
+  return '<article class="tier '+kind+'">'+
+    '<div class="tier-head"><span class="tier-badge '+kind+'">'+tx.n+'</span><span class="tier-label">'+tx.label+'<small>'+tx.sub+'</small></span></div>'+
+    xs.map(productLine).join("")+
+    (why.length ? '<div class="reasons" style="margin-top:6px">'+why.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
+    xs.map(function(x){ return '<p class="mwhy" style="margin-top:6px">'+(xs.length>1 ? '<b>'+esc(x.p.name)+'</b>：' : "")+esc(x.p.desc)+'</p>'+(x.p.caution ? '<p class="caution-s">※'+esc(x.p.caution)+'</p>' : ""); }).join("")+
+    '</article>';
 }
 
 /* ===== 結果の表示 ===== */
 var lastMemo = "";
 
-function cardHTML(r, i, isTop, budget){
+function priceLine(r){
   var m = r.m, newPrice = state.visit==="first" && m.first, from = m.from ? "〜" : "";
-  var price = '<span class="p">'+(newPrice ? '<small>ご新規様</small>' : "")+yen(r.pay)+from+'</span>'+
-    (newPrice ? '<span class="reg">通常 '+yen(m.price)+from+'</span>' : "")+
-    (r.inBudget ? '<span class="budget in">予算内</span>' : '<span class="budget out">予算より +'+yen(r.pay-budget)+'</span>');
-  var rank = isTop ? '<span class="rank">おすすめ No.1</span>' : (r.inBudget ? '<span class="rank sub">候補 '+(i+1)+'</span>' : "");
-  return '<article class="mcard'+(isTop?" first":"")+'">'+
-    '<div class="mtop">'+rank+'<span class="mcat">'+esc(m.cat)+'</span>'+(r.picked?'<span class="picked">選んだメニュー</span>':"")+'</div>'+
-    '<div class="mname serif">'+esc(m.name)+'</div>'+
-    '<div class="mprice">'+price+'</div>'+
-    (r.tags.length ? '<div class="reasons">'+r.tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
-    '<p class="mwhy">'+esc(m.why)+'</p>'+
-    '<details class="more"><summary>時間・ダウンタイム・注意点を見る</summary><dl>'+
-      '<dt>所要時間</dt><dd>'+esc(m.time)+'</dd>'+
-      '<dt>ダウンタイム</dt><dd>'+esc(m.dtText || "ご来店時にご確認ください")+'</dd>'+
-      (m.caution ? '<dt>注意点</dt><dd>'+esc(m.caution)+'</dd>' : "")+
-      '<dt>そのほか</dt><dd>感じ方には個人差があります。施術の内容はカウンセリングで決めます。</dd>'+
-    '</dl></details></article>';
+  return '<span class="p">'+(newPrice ? '<small>ご新規様</small>' : "")+yen(r.pay)+from+'</span>'+
+    (newPrice ? '<span class="reg">通常 '+yen(m.price)+from+'</span>' : "");
+}
+function budgetBadge(pay, budget){
+  return pay<=budget ? '<span class="budget in">予算内</span>' : '<span class="budget out">予算より +'+yen(pay-budget)+'</span>';
+}
+function feelHTML(list){
+  var types = [];
+  list.forEach(function(m){ (FEEL[m.id]||{t:[]}).t.forEach(function(t){ if(types.indexOf(t)<0) types.push(t); }); });
+  return '<div class="feel"><div class="feel-types">'+types.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div>'+
+    list.map(function(m){ var f = FEEL[m.id]; return f ? '<p>'+(list.length>1 ? '<b>'+esc(m.name)+'</b>：' : "")+esc(f.x)+'</p>' : ""; }).join("")+'</div>';
+}
+function detailsHTML(list){
+  return '<details class="more"><summary>時間・ダウンタイム・注意点を見る</summary><dl>'+
+    list.map(function(m){
+      var pre = list.length>1 ? esc(m.name)+'：' : "";
+      return '<dt>所要時間</dt><dd>'+pre+esc(m.time)+'</dd>'+
+        '<dt>ダウンタイム</dt><dd>'+pre+esc(m.dtText || "ご来店時にご確認ください")+'</dd>'+
+        (m.caution ? '<dt>注意点</dt><dd>'+pre+esc(m.caution)+'</dd>' : "");
+    }).join("")+
+    '<dt>そのほか</dt><dd>感じ方には個人差があります。施術の内容はカウンセリングで決めます。</dd></dl></details>';
+}
+var TIER_TEXT = {
+  matsu:{n:"松", label:"しっかり変えたい方へ", sub:"いちばん合うメニューに、別の角度のケアを組み合わせたプラン"},
+  take: {n:"竹", label:"いちばんのおすすめ", sub:"今回のご希望にいちばん合うメニュー"},
+  ume:  {n:"梅", label:"まずはお試し", sub:"手軽に始めたい方に"}
+};
+function tierHTML(kind, rows, budget){
+  var tx = TIER_TEXT[kind], ms = rows.map(function(r){ return r.m; });
+  if(kind==="matsu" && rows.length===1) tx = {n:"松", label:"しっかり変えたい方へ", sub:"ご予算を少し超えますが、ご希望にいちばん合うメニュー"};
+  var pay = rows.reduce(function(a,r){ return a+r.pay; }, 0);
+  var tags = uniq([].concat.apply([], rows.map(function(r){ return r.tags; }))).slice(0,4);
+  var priceHTML = rows.length===1 ? priceLine(rows[0])
+    : '<span class="p"><small>合計</small>'+yen(pay)+(rows.some(function(r){ return r.m.from; })?"〜":"")+'</span>';
+  return '<article class="tier '+kind+'">'+
+    '<div class="tier-head"><span class="tier-badge '+kind+'">'+tx.n+'</span><span class="tier-label">'+tx.label+'<small>'+tx.sub+'</small></span>'+budgetBadge(pay, budget)+'</div>'+
+    '<div class="mname serif">'+ms.map(function(m){ return esc(m.name); }).join('<br>＋ ')+'</div>'+
+    (rows.length>1 ? '<p class="combo">'+rows.map(function(r){ return esc(r.m.name)+' '+yen(r.pay)+(r.m.from?"〜":""); }).join(' ／ ')+'。同じ日に受けるか、別の日に分けるかはカウンセリングで決めます。</p>' : "")+
+    '<div class="mprice">'+priceHTML+'</div>'+
+    feelHTML(ms)+
+    (tags.length ? '<div class="reasons">'+tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
+    (rows.length===1 ? '<p class="mwhy">'+esc(ms[0].why)+'</p>' : "")+
+    detailsHTML(ms)+'</article>';
 }
 
 function conditions(budget){
   var conds = [];
-  var wish = state.concerns.map(labelOf).concat(state.menus.map(function(id){ return menuById(id).name; }));
+  var wish = state.subs.map(function(id){ return subById(id).t; })
+    .concat(state.cats.filter(function(k){ return !SUBS[k] || !state.subs.some(function(id){ return subById(id).cat===k; }); }).map(function(k){ return catById(k).t; }))
+    .concat(state.menus.map(function(id){ return menuById(id).name; }));
   if(wish.length) conds.push(["ご希望", wish.join("、")]);
   if(state.visit) conds.push(["ご来店", state.visit==="first" ? "はじめて" : "来店したことがある"]);
   if(budget) conds.push(["ご予算", "1回 "+yen(budget)]);
@@ -882,34 +1110,32 @@ function showResult(){
   }
   $("alertBox").innerHTML = alerts;
 
-  var html = "";
+  var html = "", t = res.tiers;
+  html += '<div class="sec-h"><h3>サロンでのケア</h3><span>松竹梅の3プラン</span></div>';
   if(res.consultAll){
-    html += '<div class="sec-h"><h3>ご希望に合うメニュー</h3></div>';
     html += '<div class="empty">妊娠中・授乳中の方には、受けられるメニューをスタッフが個別にご案内します。下の相談メモを添えて、LINEでご相談ください。</div>';
-  }else if(res.inB.length){
-    html += '<div class="sec-h"><h3>'+(res.consultOnly ? "はじめての方に合う肌質改善" : "ご希望に合うメニュー")+'</h3><span>'+res.inB.length+'件</span></div>';
-    html += res.inB.map(function(r,i){ return cardHTML(r, i, i===0, budget); }).join("");
+  }else if(!t){
+    html += '<div class="empty">この条件に合う候補が見つかりませんでした。ご予算や条件を変えるか、LINEでご相談ください。</div>';
   }else{
-    html += '<div class="sec-h"><h3>ご希望に合うメニュー</h3></div>';
-    html += '<div class="empty">'+(res.outB.length
-      ? "ご予算内の候補はありません。予算外の関連メニューをご覧いただくか、LINEでご相談ください。"
-      : "この条件に合う候補が見つかりませんでした。ご予算や条件を変えるか、LINEでご相談ください。")+'</div>';
-  }
-  if(res.outB.length){
-    html += '<div class="sec-h"><h3>予算外の関連メニュー</h3></div><p class="sec-note">ご予算は超えますが、ご希望に合うメニューです。</p>';
-    html += res.outB.map(function(r,i){ return cardHTML(r, i, false, budget); }).join("");
+    if(res.consultOnly) html += '<p class="sec-note">はじめての方には、美yondがいちばん力を入れている肌質改善からご提案します。</p>';
+    if(t.matsu) html += tierHTML("matsu", t.matsu, budget);
+    html += tierHTML("take", [t.take], budget);
+    if(t.ume) html += tierHTML("ume", [t.ume], budget);
   }
   if(res.consult.length && !res.consultAll){
-    html += '<div class="sec-h"><h3>ご相談のうえで判断するメニュー</h3></div>';
-    html += '<div class="empty">'+esc(res.consult.map(function(r){ return r.m.name; }).join("、"))+
+    html += '<div class="empty" style="margin-top:4px">'+esc(res.consult.map(function(r){ return r.m.name; }).join("、"))+
       ' は、確認事項によっては受けられない場合があるため候補から外しています。ご希望の方はLINEでご相談ください。</div>';
   }
 
   var prods = computeProducts(res);
-  if(prods.list.length || prods.note){
-    html += '<div class="sec-h"><h3>ホームケア・インナーケアのご提案</h3></div>';
-    html += '<p class="sec-note">サロンの攻めのケアと、ご自宅の守りのケアの両輪で整えていきましょう。</p>';
-    html += prods.list.map(productHTML).join("");
+  if(prods.tiers || prods.note){
+    html += '<div class="sec-h"><h3>ご自宅でのケア</h3><span>松竹梅の3プラン</span></div>';
+    html += '<p class="sec-note">サロンの攻めのケアで整えた状態を、ご自宅の守りのケアと内側からのケアで保ちます。</p>';
+    if(prods.tiers){
+      if(prods.tiers.matsu) html += productTierHTML("matsu", prods.tiers.matsu);
+      html += productTierHTML("take", [prods.tiers.take]);
+      if(prods.tiers.ume) html += productTierHTML("ume", [prods.tiers.ume]);
+    }
     if(prods.note) html += '<p class="disclaimer">'+esc(prods.note)+'</p>';
     if(prods.list.some(function(x){ return x.p.inner; })){
       html += '<p class="disclaimer">※サプリ・ドリンク・お茶は食品で、医薬品ではありません。感じ方には個人差があります。体調やお薬に不安のある方は、医師にご相談ください。取り入れ方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
@@ -919,7 +1145,7 @@ function showResult(){
   }
   $("list").innerHTML = html;
 
-  lastMemo = buildMemo(conds, res.consultAll ? [] : (res.inB.length ? res.inB : res.outB), prods.list);
+  lastMemo = buildMemo(conds, res.consultAll ? null : t, prods.tiers);
   $("memo").textContent = lastMemo;
   $("copied").textContent = "";
 
@@ -929,8 +1155,8 @@ function showResult(){
   postHeight(); postTop();
 }
 
-function buildMemo(conds, cand, prods){
-  var lines = ["【美yond ご来店前の相談メモ】"];
+function buildMemo(conds, tiers, ptiers){
+  var lines = ["【美yondメソッドカウンセリング 相談メモ】"];
   conds.forEach(function(c){ lines.push(c[0]+"："+c[1]); });
   var free = $("free").value.trim();
   if(free) lines.push("詳しく："+free);
@@ -939,11 +1165,20 @@ function buildMemo(conds, cand, prods){
     lines.push("確認事項："+(chk.length ? chk.join("、") : "特になし"));
   }
   if(state.life.length) lines.push("体調・生活習慣："+state.life.map(lifeLabel).join("、"));
-  if(cand && cand.length){
-    lines.push("気になる候補：");
-    cand.slice(0,3).forEach(function(r,i){ lines.push((i+1)+". "+r.m.name+"（"+yen(r.pay)+(r.m.from?"〜":"")+"）"); });
+  var rowText = function(rs){ return rs.map(function(r){ return r.m.name; }).join("＋")+"（"+yen(rs.reduce(function(a,r){ return a+r.pay; },0))+"）"; };
+  if(tiers){
+    lines.push("サロンでのケアの候補：");
+    if(tiers.matsu) lines.push("　松："+rowText(tiers.matsu));
+    lines.push("　竹："+rowText([tiers.take]));
+    if(tiers.ume) lines.push("　梅："+rowText([tiers.ume]));
   }
-  if(prods && prods.length) lines.push("気になるホームケア："+prods.map(function(x){ return x.p.name; }).join("、"));
+  if(ptiers){
+    var pText = function(xs){ return xs.map(function(x){ return x.p.name; }).join("＋"); };
+    lines.push("ご自宅でのケアの候補：");
+    if(ptiers.matsu) lines.push("　松："+pText(ptiers.matsu));
+    lines.push("　竹："+pText([ptiers.take]));
+    if(ptiers.ume) lines.push("　梅："+pText([ptiers.ume]));
+  }
   if(lines.length===1) lines.push("どのメニューが合うか相談したいです。");
   lines.push("", "この内容で相談・予約したいです。");
   return lines.join("\n");
