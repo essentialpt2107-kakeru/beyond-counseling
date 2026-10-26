@@ -6,7 +6,7 @@
 <!-- 暫定版のあいだは検索結果に出さない。正式版で外す -->
 <meta name="robots" content="noindex, nofollow">
 <title>美yondメソッドカウンセリング</title>
-<meta name="description" content="二子玉川の肌管理サロン美yond（ビヨンド）の美yondメソッドカウンセリング。お悩みとご予算から、サロンのケアとホームケアを松竹梅の3つのプランでご提案します。">
+<meta name="description" content="二子玉川の肌管理サロン美yond（ビヨンド）の美yondメソッドカウンセリング。お悩みとご予算から、サロンのケアとホームケアを、お悩みの深さとご予算に合わせた3つのプランでご提案します。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;600&display=swap" rel="stylesheet">
@@ -103,15 +103,15 @@ main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
 .cat.wide{grid-column:1/-1;min-height:0}
 #subs .chips{grid-template-columns:1fr}
 #subs .chip{min-height:50px}
-/* 松竹梅 */
+/* 3つのプラン（しっかり／おすすめ／お試し。お悩みの深さとご予算で選んでもらう） */
 .tier{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px 18px 14px;margin-bottom:12px;border:1.5px solid transparent;position:relative}
 .tier.take{border-color:var(--brand)}
 .tier-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.tier-badge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Noto Serif JP",serif;font-weight:600;font-size:17px;color:#fff}
+.tier-badge{border-radius:999px;padding:3px 12px;font-size:12px;font-weight:700;letter-spacing:.06em;color:#fff;white-space:nowrap}
 .tier-badge.matsu{background:#2F5D50}
 .tier-badge.take{background:var(--brand-deep)}
 .tier-badge.ume{background:#B5707E}
-.tier-label{font-size:14px;font-weight:700;flex:1;min-width:0}
+.tier-label{font-size:14.5px;font-weight:700;flex-basis:100%;order:3;margin-top:2px}
 .tier-label small{display:block;font-size:11px;font-weight:400;color:var(--ink-sub)}
 .tier .budget{margin-left:auto;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
 .combo{font-size:12px;color:var(--ink-sub);margin:2px 0 4px}
@@ -221,7 +221,7 @@ details .field{border-top:0;margin-top:0;padding-top:18px}
 .alert p{font-size:13px}
 .alert.plain{background:var(--card);box-shadow:var(--shadow)}
 .alert.plain h3{color:var(--ink);font-size:14px}
-.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:24px 2px 10px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:2px 10px;margin:24px 2px 10px}
 .sec-h h3{font-size:16px;display:flex;align-items:center;gap:8px}
 .sec-h h3:before{content:"";width:4px;height:17px;border-radius:2px;background:var(--brand)}
 .sec-h span{font-size:11.5px;color:var(--ink-sub)}
@@ -1031,9 +1031,9 @@ function productLine(x){
     '<div class="pprice">'+esc(p.price)+(p.priceNote ? '<small>'+esc(p.priceNote)+'</small>' : "")+'</div>';
 }
 var PTIER_TEXT = {
-  matsu:{n:"松", label:"しっかりケア", sub:"ご自宅の守りのケアと、内側からのケアを組み合わせて"},
-  take: {n:"竹", label:"いちばんのおすすめ", sub:"今回のお悩みと生活習慣にいちばん合うもの"},
-  ume:  {n:"梅", label:"まずはお試し", sub:"手軽に始めたい方に"}
+  matsu:{n:"しっかり", label:"しっかりケアしたい方に", sub:"ご自宅の守りのケアと、内側からのケアを組み合わせます"},
+  take: {n:"おすすめ", label:"今回のお悩みと生活習慣にいちばん合うもの", sub:"まずはこれひとつから"},
+  ume:  {n:"お試し", label:"まずは気軽に始めたい方に", sub:"手軽な価格で試せます"}
 };
 function productTierHTML(kind, xs){
   var tx = PTIER_TEXT[kind];
@@ -1074,13 +1074,13 @@ function detailsHTML(list){
     '<dt>そのほか</dt><dd>感じ方には個人差があります。施術の内容はカウンセリングで決めます。</dd></dl></details>';
 }
 var TIER_TEXT = {
-  matsu:{n:"松", label:"しっかり変えたい方へ", sub:"いちばん合うメニューに、別の角度のケアを組み合わせたプラン"},
-  take: {n:"竹", label:"いちばんのおすすめ", sub:"今回のご希望にいちばん合うメニュー"},
-  ume:  {n:"梅", label:"まずはお試し", sub:"手軽に始めたい方に"}
+  matsu:{n:"しっかり", label:"お悩みが深い方・本格的に変えたい方に", sub:"いちばん合うメニューに、別の角度のケアを組み合わせます"},
+  take: {n:"おすすめ", label:"今回のご希望にいちばん合うメニュー", sub:"お悩みとご予算のバランスで選んでいます"},
+  ume:  {n:"お試し", label:"まずは気軽に試したい方・ご予算を抑えたい方に", sub:"手軽に始められるメニューです"}
 };
 function tierHTML(kind, rows, budget){
   var tx = TIER_TEXT[kind], ms = rows.map(function(r){ return r.m; });
-  if(kind==="matsu" && rows.length===1) tx = {n:"松", label:"しっかり変えたい方へ", sub:"ご予算を少し超えますが、ご希望にいちばん合うメニュー"};
+  if(kind==="matsu" && rows.length===1) tx = {n:"しっかり", label:"お悩みが深い方・本格的に変えたい方に", sub:"ご予算を少し超えますが、ご希望にいちばん合うメニューです"};
   var pay = rows.reduce(function(a,r){ return a+r.pay; }, 0);
   var tags = uniq([].concat.apply([], rows.map(function(r){ return r.tags; }))).slice(0,4);
   var priceHTML = rows.length===1 ? priceLine(rows[0])
@@ -1140,7 +1140,7 @@ function showResult(){
   $("alertBox").innerHTML = alertsHTML(res.sel, res.excluded, res.consultAll);
 
   var html = "", t = res.tiers;
-  html += '<div class="sec-h"><h3>サロンでのケア</h3><span>松竹梅の3プラン</span></div>';
+  html += '<div class="sec-h"><h3>サロンでのケア</h3><span>お悩みの深さ・ご予算でお選びください</span></div>';
   if(res.consultAll){
     html += '<div class="empty">妊娠中・授乳中の方には、受けられるメニューをスタッフが個別にご案内します。下の相談メモを添えて、LINEでご相談ください。</div>';
   }else if(!t){
@@ -1173,7 +1173,7 @@ function showResult(){
 function productsSectionHTML(prods){
   var html = "";
   if(!(prods.tiers || prods.note)) return html;
-  html += '<div class="sec-h"><h3>ご自宅でのケア</h3><span>松竹梅の3プラン</span></div>';
+  html += '<div class="sec-h"><h3>ご自宅でのケア</h3><span>お悩みの深さ・ご予算でお選びください</span></div>';
   html += '<p class="sec-note">サロンの攻めのケアで整えた状態を、ご自宅の守りのケアと内側からのケアで保ちます。</p>';
   if(prods.tiers){
     if(prods.tiers.matsu) html += productTierHTML("matsu", prods.tiers.matsu);
@@ -1297,16 +1297,16 @@ function buildMemo(conds, tiers, ptiers){
   var rowText = function(rs){ return rs.map(function(r){ return r.m.name; }).join("＋")+"（"+yen(rs.reduce(function(a,r){ return a+r.pay; },0))+"）"; };
   if(tiers){
     lines.push("サロンでのケアの候補：");
-    if(tiers.matsu) lines.push("　松："+rowText(tiers.matsu));
-    lines.push("　竹："+rowText([tiers.take]));
-    if(tiers.ume) lines.push("　梅："+rowText([tiers.ume]));
+    if(tiers.matsu) lines.push("　しっかり："+rowText(tiers.matsu));
+    lines.push("　おすすめ："+rowText([tiers.take]));
+    if(tiers.ume) lines.push("　お試し："+rowText([tiers.ume]));
   }
   if(ptiers){
     var pText = function(xs){ return xs.map(function(x){ return x.p.name; }).join("＋"); };
     lines.push("ご自宅でのケアの候補：");
-    if(ptiers.matsu) lines.push("　松："+pText(ptiers.matsu));
-    lines.push("　竹："+pText([ptiers.take]));
-    if(ptiers.ume) lines.push("　梅："+pText([ptiers.ume]));
+    if(ptiers.matsu) lines.push("　しっかり："+pText(ptiers.matsu));
+    lines.push("　おすすめ："+pText([ptiers.take]));
+    if(ptiers.ume) lines.push("　お試し："+pText([ptiers.ume]));
   }
   if(lines.length===1) lines.push("どのメニューが合うか相談したいです。");
   lines.push("", "この内容で相談・予約したいです。");
