@@ -554,6 +554,11 @@ var MENUS = [
    s:{face:2,aging:3}, gentle:1, dt:1,
    why:"超音波を広範囲に分散して照射。フェイスラインのもたつきやハリ感が気になる方に。",
    dtText:"赤みなどが出る場合があります"},
+  /* 2026-10-26 追加（料金・時間・内容はかけるの説明より。お客様向けの文では「脂肪細胞を分解」「リピート率」は使わない） */
+  {id:"stamp", energy:true, cat:"小顔・リフトアップ", name:"スタンプ（あご下・フェイスライン）", time:"10分（5Push）", price:7500, first:null,
+   s:{face:3, aging:1}, gentle:1, dt:null,
+   why:"超音波を使って、あご下やフェイスラインのもたつき・コリにアプローチするケア。1回10分（5Push）なので、ほかの施術とも組み合わせやすいメニューです。50Push回数券（49,800円）もあります。",
+   dtText:null, caution:"1Push 1,500円。Push数は、気になる部位に合わせてカウンセリングで決めます"},
   {id:"redB", cat:"痩身", name:"レッドショットボディ部分痩せ", time:"90分", price:25000, first:15000,
    s:{slim:3}, gentle:0, dt:2, ng:["wheat"],
    why:"ほぐす→温める→分解→流すの流れで、気になる部位のボディラインを段階的に整えていきます。",
@@ -562,6 +567,10 @@ var MENUS = [
    s:{slim:2}, gentle:0, dt:2, ng:["wheat"],
    why:"お腹まわり・太もも・二の腕など、気になる部位にシンプルにアプローチするケアです。",
    dtText:"腫れや赤みが出る場合があります", caution:"小麦・パイナップル・ステンレスのアレルギーの方は受けられません"},
+  {id:"perfect", energy:true, cat:"痩身", name:"パーフェクト痩身", time:"120分", price:70000, first:39800,
+   s:{slim:3}, gentle:0, dt:2, ng:["wheat"],
+   why:"レッドショット・超音波ボディリフト・スタンプ（20Push）・ラジオ波・キャビテーションを120分で組み合わせる、本気で痩せたい方のための集中プランです。",
+   dtText:"腫れや赤みが出る場合があります", caution:"小麦・パイナップル・ステンレスのアレルギーの方は受けられません（レッドショットを含むため）"},
   {id:"rubyB", peel:true, cat:"ボディ肌質改善", name:"ボディRubyハーブピーリング【背中・二の腕・デコルテ・ヒップ】", time:"45分", price:22000, first:11000, from:true,
    s:{body:3,acne:1}, gentle:0, dt:2, event:true,
    why:"背中のニキビやざらつき、肌のごわつきが気になる方に。ブライダル前の背中のケアにも。",
@@ -634,7 +643,7 @@ function priorityBonus(id, keys, ctx){
 /* 松の組み合わせで、同じ種類のケアを2つ重ねないための分類 */
 var FAMILY = {esv10:"pore", hydra:"pore", solaspa:"pore", ruby:"peel", lactic:"peel", exosome:"peel", wiqo:"peel",
   electro:"boost", carboxy:"boost", lemonF:"faceslim", redF:"faceslim", hifu:"lift", redB:"bodyslim", lemonB:"bodyslim",
-  rubyB:"bodypeel", esv10B:"bodypore", bodySolaspa:"bodyfoam", oil:"relax", brow:"brow", meplus:"aging"};
+  rubyB:"bodypeel", esv10B:"bodypore", bodySolaspa:"bodyfoam", oil:"relax", brow:"brow", meplus:"aging", stamp:"stamp", perfect:"bodyslim"};
 /* 顔のケアか体のケアか（松の組み合わせを、選んだお悩みの範囲にとどめる） */
 var BODY_CATS = ["痩身","ボディ肌質改善","リラクゼーション"];
 function areaOf(m){ return BODY_CATS.indexOf(m.cat)>=0 ? "body" : "face"; }
@@ -656,6 +665,8 @@ var FEEL = {
   electro: {t:["quick"], x:"その日のうちに、うるおいやハリ感を感じやすいケアです。ほかの施術との組み合わせにも。"},
   carboxy: {t:["quick"], x:"その日のうちに、すっきりした印象を感じやすいケアです。ほかの施術との組み合わせにも。"},
   hydra:   {t:["quick"], x:"固く詰まった角栓を、その日のうちに取り出すケアです。"},
+  stamp:   {t:["quick"], x:"1回で変化を感じやすく、あご下・フェイスラインのケアとして続ける方がとても多いメニューです。"},
+  perfect: {t:["quick","base"], x:"5つのケアを一度に受けられるため、1回でも変化を感じやすい、美yondでいちばん本格的な痩身メニューです。通う回数は、目標に合わせてカウンセリングでご提案します。"},
   meplus:  {t:["base"], x:"針を使わないので、はじめてのエイジングケアにも取り入れやすいケアです。続けて通うことでハリやうるおいを育てていきます。通う回数はカウンセリングでご提案します。"},
   bodySolaspa: {t:["quick"], x:"その日のうちに、肌のすっきり感と体の軽さを感じやすいケアです。背中の開いた服を着る日や、特別な日の前にも。"},
   lemonF:  {t:["quick"], x:"1回でも変化を感じやすく、はじめの一歩に向いたケアです。40代以降は月1回のペースで続ける方が多いです。"},
