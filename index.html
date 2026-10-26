@@ -111,10 +111,40 @@ main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
 .tier-badge.matsu{background:#2F5D50}
 .tier-badge.take{background:var(--brand-deep)}
 .tier-badge.ume{background:#B5707E}
-.tier-badge.rank{background:var(--brand-deep)}
+.tier-badge.rk{background:var(--brand-deep)}
 .tier-badge.best{background:#2F5D50}
 .tier-badge.addon{background:#B5707E}
-.tier.rank1{border-color:var(--brand)}
+.tier.rk1{border-color:var(--brand)}
+/* 結果を読みやすく（2026-10-26） */
+.tier{padding:18px 18px 12px}
+.tier .pname{font-size:19px;line-height:1.45;margin:2px 0 8px}
+.prow{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;padding:10px 12px;background:var(--bg);border-radius:12px;margin-bottom:10px}
+.prow .big{font-size:24px;color:var(--price);font-family:"Noto Serif JP",serif;font-weight:600;line-height:1.2}
+.prow .big small{font-size:12px;color:var(--ink);font-family:"Noto Sans JP",sans-serif;font-weight:700;margin-right:4px}
+.prow .sm{font-size:12.5px;color:var(--ink-sub)}
+.prow .tm{margin-left:auto;font-size:13px;color:var(--ink);font-weight:700}
+.combo-list{list-style:none;margin:2px 0 8px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.combo-list li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 12px;font-size:15px;font-weight:700;font-family:"Noto Serif JP",serif}
+.combo-list li+li{border-top:1px dashed var(--line)}
+.combo-list li b{white-space:nowrap;color:var(--price);font-size:15px}
+.combo-list li span small{display:block;font-family:"Noto Sans JP",sans-serif;font-weight:400;font-size:11.5px;color:var(--ink-sub)}
+.checks{list-style:none;margin:8px 0 2px}
+.checks li{font-size:14px;padding:3px 0 3px 24px;position:relative;line-height:1.55}
+.checks li:before{content:"✓";position:absolute;left:4px;top:3px;color:var(--brand-deep);font-weight:700}
+.feel-short{font-size:14px;line-height:1.7;margin-top:8px}
+.feel-short b{color:var(--brand-dark)}
+.more summary{font-size:13.5px}
+.more .mm{margin-top:10px;font-size:13.5px;line-height:1.75}
+.more .mm h4{font-size:14px;margin:12px 0 4px;font-family:"Noto Serif JP",serif}
+.more .mm h4:first-child{margin-top:0}
+.more .mm dl{margin-top:6px}
+.summary{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px 18px;margin:4px 0 6px;border:1.5px solid var(--brand-line)}
+.summary h3{font-size:15px;margin-bottom:8px;color:var(--brand-dark)}
+.summary dl{display:grid;grid-template-columns:96px 1fr;gap:10px 10px;font-size:14px}
+.summary dt{font-size:12px;color:var(--ink-sub);font-weight:700;padding-top:2px}
+.summary dd{line-height:1.5}
+.summary dd b{display:block;color:var(--price);font-size:15px}
+.summary dd small{color:var(--ink-sub);font-size:11.5px}
 .tier-label{font-size:14.5px;font-weight:700;flex-basis:100%;order:3;margin-top:2px}
 .tier-label small{display:block;font-size:11px;font-weight:400;color:var(--ink-sub)}
 .tier .budget{margin-left:auto;font-size:11.5px;font-weight:700;border-radius:6px;padding:2px 8px}
@@ -1039,7 +1069,7 @@ function compute(){
 /* ===== サロンのケアの出し方 =====
    ご予算内: いちばん合う順に3つまで
    ご予算を超えても合うもの: 「いちばん効果を感じやすいプラン」（予算を考えず、いちばん合うメニュー＋別の種類のケア）と
-   「ちょい足しプラン」（ご予算内の1番目に、手軽なケアをひとつ足す） */
+   「プラスワンプラン」（ご予算内の1番目に、相性のよい手軽なケアをもうひとつ組み合わせる） */
 function menuPlans(rows, picked, subsSel){
   if(!rows.length) return null;
   var max = rows[0].sc;
@@ -1062,7 +1092,7 @@ function menuPlans(rows, picked, subsSel){
   var pool = cand.filter(function(r){ return diff(top, r); }).sort(function(a,b){ return gain(b)-gain(a) || b.sc-a.sc; });
   var best = pool[0] ? [top, pool[0]] : [top];
   if(best.length===1 && top.inBudget) best = null;
-  /* ちょい足しプラン: ご予算内の1番目に、いちばん手軽な別の種類のケアを足す */
+  /* プラスワンプラン: ご予算内の1番目に、いちばん手軽な別の種類のケアを足す */
   var addon = null, base = inB[0];
   if(base){
     var adds = rows.filter(function(r){ return diff(base, r) && r.sc >= max*0.15; })
@@ -1117,11 +1147,15 @@ function productLine(x){
 }
 function productCardHTML(x, i){
   var p = x.p;
-  return '<article class="tier rank'+(i===0 ? " rank1" : "")+'">'+
-    '<div class="tier-head"><span class="tier-badge rank">'+(i+1)+'</span><span class="tier-label">'+(i===0 ? "いちばん合うもの" : (i+1)+"番目に合うもの")+'</span></div>'+
-    productLine(x)+
-    (x.why.length ? '<div class="reasons" style="margin-top:6px">'+x.why.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
-    '<p class="mwhy" style="margin-top:6px">'+esc(p.desc)+'</p>'+(p.caution ? '<p class="caution-s">※'+esc(p.caution)+'</p>' : "")+
+  return '<article class="tier rk'+(i===0 ? " rk1" : "")+'">'+
+    '<div class="tier-head"><span class="tier-badge rk">'+(i+1)+'</span><span class="tier-label">'+(i===0 ? "いちばん合うもの" : (i+1)+"番目に合うもの")+'</span></div>'+
+    '<div class="mtop">'+'<span class="ptype '+(p.inner?"inner":"skin")+'">'+(p.inner?"インナーケア":"ホームケア")+'</span>'+
+      (p.pick?'<span class="picked">スタッフおすすめ</span>':"")+(p.brand?'<span class="pbrand">'+esc(p.brand)+'</span>':"")+'</div>'+
+    '<div class="pname serif">'+esc(p.name)+'</div>'+
+    '<div class="prow"><span class="big" style="font-size:19px">'+esc(p.price)+'</span>'+(p.priceNote ? '<span class="sm">'+esc(p.priceNote)+'</span>' : "")+'</div>'+
+    (x.why.length ? '<ul class="checks">'+x.why.slice(0,3).map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul>' : "")+
+    '<p class="feel-short">'+esc(firstSentence(p.desc))+'</p>'+
+    '<details class="more"><summary>くわしく見る</summary><div class="mm"><p>'+esc(p.desc)+'</p>'+(p.caution ? '<p class="caution-s">※'+esc(p.caution)+'</p>' : "")+'</div></details>'+
     '</article>';
 }
 
@@ -1152,22 +1186,53 @@ function detailsHTML(list){
     }).join("")+
     '<dt>そのほか</dt><dd>感じ方には個人差があります。施術の内容はカウンセリングで決めます。</dd></dl></details>';
 }
-/* プランのカード。badge: 左上の印、label/sub: 見出しと説明 */
+/* プランのカード（読みやすさ優先）
+   見える部分: 印・見出し／メニュー名と料金・時間／実感のタイプ／選んだ理由（✓）／実感の目安（1文目）
+   開いて見る部分: 施術の内容・実感の目安（全文）・ダウンタイム・注意点 */
+function firstSentence(t){ var i = String(t||"").indexOf("。"); return i>=0 ? t.slice(0,i+1) : (t||""); }
+function feelTypesHTML(ms){
+  var types = [];
+  ms.forEach(function(m){ (FEEL[m.id]||{t:[]}).t.forEach(function(t){ if(types.indexOf(t)<0) types.push(t); }); });
+  return types.length ? '<div class="feel-types">'+types.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div>' : "";
+}
+function moreHTML(ms){
+  return '<details class="more"><summary>施術の内容・通い方・ダウンタイムを詳しく見る</summary><div class="mm">'+
+    ms.map(function(m){
+      var f = FEEL[m.id] || {x:""};
+      return (ms.length>1 ? '<h4>'+esc(m.name)+'</h4>' : "")+
+        '<p>'+esc(m.why)+'</p>'+
+        (f.x ? '<p style="margin-top:6px"><b>実感・通い方の目安：</b>'+esc(f.x)+'</p>' : "")+
+        '<dl class="cmp"><dt>所要時間</dt><dd>'+esc(m.time)+'</dd>'+
+        '<dt>ダウン<br>タイム</dt><dd>'+esc(m.dtText || "ご来店時にご確認ください")+'</dd>'+
+        (m.caution ? '<dt>注意点</dt><dd>'+esc(m.caution)+'</dd>' : "")+'</dl>';
+    }).join("")+
+    '<p class="caution-s" style="margin-top:8px">感じ方には個人差があります。施術の内容はカウンセリングで決めます。</p></div></details>';
+}
 function planCardHTML(cls, badge, label, sub, rows, budget){
   var ms = rows.map(function(r){ return r.m; });
   var pay = rows.reduce(function(a,r){ return a+r.pay; }, 0);
-  var tags = uniq([].concat.apply([], rows.map(function(r){ return r.tags; }))).slice(0,4);
-  var priceHTML = rows.length===1 ? priceLine(rows[0])
-    : '<span class="p"><small>合計</small>'+yen(pay)+(rows.some(function(r){ return r.m.from; })?"〜":"")+'</span>';
+  var from = rows.some(function(r){ return r.m.from; }) ? "〜" : "";
+  var tags = uniq([].concat.apply([], rows.map(function(r){ return r.tags; }))).filter(function(t){ return t!=="ご新規様価格あり"; }).slice(0,3);
+  var body;
+  if(rows.length===1){
+    var r = rows[0], m = r.m, newP = state.visit==="first" && m.first;
+    body = '<div class="pname serif">'+esc(m.name)+'</div>'+
+      '<div class="prow"><span class="big">'+(newP ? '<small>ご新規様</small>' : "")+yen(r.pay)+(m.from?"〜":"")+'</span>'+
+      (newP ? '<span class="sm">通常 '+yen(m.price)+(m.from?"〜":"")+'</span>' : "")+'<span class="tm">'+esc(m.time)+'</span></div>';
+  }else{
+    body = '<ol class="combo-list">'+rows.map(function(r){
+        return '<li><span>'+esc(r.m.name)+'<small>'+esc(r.m.time)+'</small></span><b>'+yen(r.pay)+(r.m.from?"〜":"")+'</b></li>';
+      }).join("")+'</ol>'+
+      '<div class="prow"><span class="big"><small>合計</small>'+yen(pay)+from+'</span><span class="sm">同じ日か別の日かは、カウンセリングで決めます</span></div>';
+  }
+  var f0 = FEEL[ms[0].id];
   return '<article class="tier '+cls+'">'+
     '<div class="tier-head"><span class="tier-badge '+cls+'">'+badge+'</span><span class="tier-label">'+label+(sub ? '<small>'+sub+'</small>' : "")+'</span>'+budgetBadge(pay, budget)+'</div>'+
-    '<div class="mname serif">'+ms.map(function(m){ return esc(m.name); }).join('<br>＋ ')+'</div>'+
-    (rows.length>1 ? '<p class="combo">'+rows.map(function(r){ return esc(r.m.name)+' '+yen(r.pay)+(r.m.from?"〜":""); }).join(' ／ ')+'。同じ日に受けるか、別の日に分けるかはカウンセリングで決めます。</p>' : "")+
-    '<div class="mprice">'+priceHTML+'</div>'+
-    feelHTML(ms)+
-    (tags.length ? '<div class="reasons">'+tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div>' : "")+
-    (rows.length===1 ? '<p class="mwhy">'+esc(ms[0].why)+'</p>' : "")+
-    detailsHTML(ms)+'</article>';
+    body+
+    feelTypesHTML(ms)+
+    (tags.length ? '<ul class="checks">'+tags.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul>' : "")+
+    (f0 ? '<p class="feel-short"><b>実感の目安：</b>'+esc(firstSentence(f0.x))+'</p>' : "")+
+    moreHTML(ms)+'</article>';
 }
 
 function conditions(budget){
@@ -1225,7 +1290,7 @@ function showResult(){
     if(res.consultOnly) html += '<p class="sec-note">はじめての方には、美yondがいちばん力を入れている肌質改善からご提案します。</p>';
     if(t.inB.length){
       html += t.inB.map(function(r,i){
-        return planCardHTML(i===0 ? "rank rank1" : "rank", String(i+1), i===0 ? "ご予算内で、いちばん合うメニュー" : (i+1)+"番目に合うメニュー", "", [r], budget);
+        return planCardHTML(i===0 ? "rk rk1" : "rk", String(i+1), i===0 ? "ご予算内で、いちばん合うメニュー" : (i+1)+"番目に合うメニュー", "", [r], budget);
       }).join("");
     }else{
       html += '<div class="empty">ご予算内で合うメニューが見つかりませんでした。下の「ご予算を超えても、合うもの」をご覧ください。</div>';
@@ -1233,7 +1298,7 @@ function showResult(){
     if(t.best || t.addon){
       html += '<div class="sec-h"><h3>ご予算を超えても、合うもの</h3></div>';
       if(t.best) html += planCardHTML("best", "効果重視", "いちばん効果を感じやすいプラン", "ご予算は考えずに、今回のお悩みにいちばん効果的な組み合わせです", t.best, budget);
-      if(t.addon) html += planCardHTML("addon", "ちょい足し", "ちょい足しプラン", "ご予算内の1番目に、手軽なケアをひとつ足すなら", t.addon, budget);
+      if(t.addon) html += planCardHTML("addon", "プラスワン", "プラスワンプラン", "ご予算内の1番目に、相性のよいケアをもうひとつ組み合わせるなら", t.addon, budget);
     }
   }
   if(res.consult.length && !res.consultAll){
@@ -1243,7 +1308,7 @@ function showResult(){
 
   var prods = computeProducts(res);
   html += productsSectionHTML(prods);
-  $("list").innerHTML = html;
+  $("list").innerHTML = summaryHTML(t, prods.list, res.consultAll) + html;
 
   lastMemo = buildMemo(conds, res.consultAll ? null : t, prods.list);
   $("memo").textContent = lastMemo;
@@ -1253,6 +1318,20 @@ function showResult(){
   $("v-result").hidden = false;
   window.scrollTo({top:0, behavior:"smooth"});
   postHeight(); postTop();
+}
+
+/* いちばん上の早見表: 詳しいカードを読む前に、ご提案の全体が分かるように */
+function summaryHTML(t, plist, consultAll){
+  if(consultAll || !t) return "";
+  var name = function(rs){ return rs.map(function(r){ return esc(r.m.name); }).join("<br>＋ "); };
+  var price = function(rs){ return yen(rs.reduce(function(a,r){ return a+r.pay; },0))+(rs.some(function(r){ return r.m.from; })?"〜":""); };
+  var rows = [];
+  if(t.inB.length) rows.push(["ご予算内で<br>いちばん合う", name([t.inB[0]])+'<b>'+price([t.inB[0]])+'</b>']);
+  if(t.best) rows.push(["効果重視", name(t.best)+'<b>'+price(t.best)+'</b>']);
+  if(t.addon) rows.push(["プラスワン", name(t.addon)+'<b>'+price(t.addon)+'</b>']);
+  if(plist && plist.length) rows.push(["ご自宅で", esc(plist[0].p.name)+'<b>'+esc(plist[0].p.price)+'</b>']);
+  if(!rows.length) return "";
+  return '<div class="summary"><h3>ご提案の早見表</h3><dl>'+rows.map(function(r){ return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>'; }).join("")+'</dl></div>';
 }
 
 function productsSectionHTML(prods){
@@ -1382,7 +1461,7 @@ function buildMemo(conds, tiers, ptiers){
       tiers.inB.forEach(function(r,i){ lines.push("　"+(i+1)+". "+rowText([r])); });
     }
     if(tiers.best) lines.push("効果を重視するなら："+rowText(tiers.best));
-    if(tiers.addon) lines.push("ちょい足しするなら："+rowText(tiers.addon));
+    if(tiers.addon) lines.push("プラスワンなら："+rowText(tiers.addon));
   }
   if(ptiers && ptiers.length){
     lines.push("ご自宅でのケアの候補：");
