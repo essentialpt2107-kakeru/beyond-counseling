@@ -537,6 +537,11 @@ var MENUS = [
    s:{pore:1}, gentle:1, dt:2, plug:true,
    why:"水流で毛穴汚れや皮脂詰まりを除去しながら美容成分を導入。長く続く固い角栓など、毛穴の詰まりがひどい方に。",
    dtText:"肌状態により赤み・内出血などが出る場合があります"},
+  /* 2026-10-26 追加（料金・時間はかけるの指定。説明文はミプラスのチラシの内容をもとにした下書き） */
+  {id:"meplus", cat:"肌育・肌質改善", name:"ミプラス", time:"60分", price:18000, first:15000,
+   s:{aging:3, dry:2, dull:1, pore:1, shine:1}, gentle:2, dt:1,
+   why:"幹細胞培養上清液とヒト型コラーゲンを、針を使わず空気圧で肌に届けるエイジングケア。ハリやうるおい、化粧ノリが気になる方に。",
+   dtText:"施術後、一時的に赤みなどが出る場合があります"},
   {id:"lemonF", cat:"小顔・リフトアップ", name:"レモンボトル小顔リフト", time:"75分", price:18000, first:null,
    s:{face:3,aging:1}, gentle:0, dt:2, ng:["wheat"],
    why:"フェイスラインやボリューム感が気になる部分に、シンプルにアプローチしていくケアです。",
@@ -565,6 +570,10 @@ var MENUS = [
    s:{body:2}, gentle:2, dt:1, event:true, ng:["zinc","rosacea"],
    why:"お顔で人気のesV10を背中（上）に。背中の開いた服を着る予定がある方におすすめです。",
    dtText:"肌状態により赤みなどが出る場合があります", caution:"亜鉛アレルギー・酒さの方は受けられません"},
+  {id:"bodySolaspa", cat:"ボディ肌質改善", name:"ボディソラスパ リンパトリートメント", time:"60分", price:15000, first:12000,
+   s:{body:3, relax:2}, gentle:2, dt:1, event:true,
+   why:"きめ細かなオゾン泡で背中などの肌を包み、毛穴まわりの汚れや古い角質にやさしくアプローチ。リンパの流れに沿ったトリートメントで巡りも整えます。",
+   dtText:"肌状態により赤みなどが出る場合があります"},
   {id:"oil", cat:"リラクゼーション", name:"全身オイルマッサージ", time:"施術90分（全体で120分弱）", price:15000, first:null,
    s:{relax:3,slim:1}, gentle:2, dt:null,
    why:"深部までしっかりほぐし、疲労やむくみをケアして軽やかな身体へ導くオイルトリートメントです。",
@@ -579,10 +588,53 @@ var MENUS = [
    consultAll: すべてのメニューを個別相談に / move: その属性のメニューを候補から外して相談に回す
    review: 施術前の確認が必要 / noInner: インナーケア商品を出さない */
 /* 化粧崩れ・テカりとの相性（メニュー本体に足す） */
+/* お悩みごとの優先順位（2026-10-26 かけるの指示）。[ ] で囲んだものは同じ順位で、下の決め方で並べる
+   まだ診断に入っていないメニュー（ミプラス・スタンプ・ボディソラスパ・パーフェクト痩身）は、データを足すと自動でこの順番に入る */
+var PRIORITY = {
+  s_pore:  ["esv10","solaspa"],
+  s_plug:  ["hydra",["esv10","solaspa"]],
+  s_shine: ["ruby",["esv10","solaspa"],"wiqo"],      /* 化粧崩れ・テカりは原因（乾燥・インナードライ）を絶つ肌改善を最優先 */
+  s_acne:  ["ruby","exosome"],                       /* エイジング寄りならエクソソームを上にする */
+  s_tired: ["meplus","hifu","electro"],
+  f_blank: ["redF","lemonF"], f_swell: ["redF","lemonF"], f_photo: ["redF","lemonF"],
+  f_line:  ["stamp","redF","hifu","lemonF"],
+  f_sag:   ["meplus","hifu","redF"],
+  y_event: ["bodySolaspa","esv10B","rubyB"],
+  b_belly: ["perfect","redB","lemonB"], b_thigh: ["perfect","redB","lemonB"], b_arm: ["perfect","redB","lemonB"], b_weight: ["perfect","redB","lemonB"],
+  consult: [["solaspa","esv10"],["lactic","ruby"],"carboxy","exosome"]  /* まだ決まっていない（はじめての方） */
+};
+/* esV10とソラスパが同じ順位のとき: 乾燥を感じる・保湿しながらのプレミアムな毛穴ケアならesV10、時間やコストを抑えたいならソラスパ */
+function preferInTie(group, ctx){
+  if(group.indexOf("esv10")>=0 && group.indexOf("solaspa")>=0){
+    if(ctx.dry) return "esv10";
+    var e = menuById("esv10");
+    if(ctx.budget && e && payFor(e) > ctx.budget) return "solaspa";
+    return "esv10";
+  }
+  return group[0];
+}
+function priorityBonus(id, keys, ctx){
+  var bonus = 0;
+  keys.forEach(function(key){
+    var list = PRIORITY[key]; if(!list) return;
+    if(key==="s_acne" && ctx.aging) list = ["exosome","ruby"];
+    list = list.filter(function(x){ return [].concat(x).some(function(y){ return menuById(y); }); });
+    for(var i=0;i<list.length;i++){
+      var g = [].concat(list[i]);
+      if(g.indexOf(id)>=0){
+        bonus += (list.length - i) * 40;
+        if(g.length>1 && preferInTie(g, ctx)===id) bonus += 5;
+        break;
+      }
+    }
+  });
+  return bonus;
+}
+
 /* 松の組み合わせで、同じ種類のケアを2つ重ねないための分類 */
 var FAMILY = {esv10:"pore", hydra:"pore", solaspa:"pore", ruby:"peel", lactic:"peel", exosome:"peel", wiqo:"peel",
   electro:"boost", carboxy:"boost", lemonF:"faceslim", redF:"faceslim", hifu:"lift", redB:"bodyslim", lemonB:"bodyslim",
-  rubyB:"bodypeel", esv10B:"bodypore", oil:"relax", brow:"brow"};
+  rubyB:"bodypeel", esv10B:"bodypore", bodySolaspa:"bodyfoam", oil:"relax", brow:"brow", meplus:"aging"};
 /* 顔のケアか体のケアか（松の組み合わせを、選んだお悩みの範囲にとどめる） */
 var BODY_CATS = ["痩身","ボディ肌質改善","リラクゼーション"];
 function areaOf(m){ return BODY_CATS.indexOf(m.cat)>=0 ? "body" : "face"; }
@@ -604,6 +656,8 @@ var FEEL = {
   electro: {t:["quick"], x:"その日のうちに、うるおいやハリ感を感じやすいケアです。ほかの施術との組み合わせにも。"},
   carboxy: {t:["quick"], x:"その日のうちに、すっきりした印象を感じやすいケアです。ほかの施術との組み合わせにも。"},
   hydra:   {t:["quick"], x:"固く詰まった角栓を、その日のうちに取り出すケアです。"},
+  meplus:  {t:["base"], x:"針を使わないので、はじめてのエイジングケアにも取り入れやすいケアです。続けて通うことでハリやうるおいを育てていきます。通う回数はカウンセリングでご提案します。"},
+  bodySolaspa: {t:["quick"], x:"その日のうちに、肌のすっきり感と体の軽さを感じやすいケアです。背中の開いた服を着る日や、特別な日の前にも。"},
   lemonF:  {t:["quick"], x:"1回でも変化を感じやすく、はじめの一歩に向いたケアです。40代以降は月1回のペースで続ける方が多いです。"},
   redF:    {t:["quick","base"], x:"1回でも変化を感じやすく、段階的に整えるので続けるほど安定しやすいケアです。40代以降は月1回のペースで続ける方が多いです。"},
   hifu:    {t:["quick"], x:"1回でも変化を感じやすく、はじめの一歩に向いたケアです。40代以降は月1回のペースで続ける方が多いです。"},
@@ -897,6 +951,11 @@ function compute(){
   var freeText = $("free").value;
   var plugText = PLUG_WORDS.some(function(w){ return freeText.indexOf(w)>=0; }) || subsSel.some(function(x){ return x.plug; });
   var eventWish = state.when==="event" || subsSel.some(function(x){ return x.event; });
+  var prioCtx = {
+    dry: state.skin==="dry" || state.skin==="sensitive" || weights.dry>0 || has("aircon"),
+    aging: weights.aging>0 || has("hc_aging"),
+    budget: budget
+  };
   var sel = selectedChecks();
   var consultAll = sel.some(function(c){ return c.consultAll; });
   var moveFlags = sel.map(function(c){ return c.move; }).filter(Boolean);
@@ -912,6 +971,8 @@ function compute(){
     if(isPicked) sc += 100;
     if(consultOnly && m.cat==="肌育・肌質改善") sc += (m.first ? 4 : 2) + (m.gentle||0);
     if(sc<=0) return;
+    /* お悩みごとの優先順位 */
+    sc += priorityBonus(m.id, consultOnly ? ["consult"] : subsSel.map(function(x){ return x.k; }), prioCtx);
 
     if(state.skin==="sensitive"){ sc += (m.gentle||0)*2; if((m.gentle||0)>=2) tags.push("敏感肌の方にも"); }
     if(state.skin==="dry" && m.s.dry) sc += m.s.dry*2;
@@ -925,7 +986,7 @@ function compute(){
 
     if(state.dt==="none"){
       if(m.dt===0){ sc += 4; tags.push("当日からメイクOK"); }
-      else if(m.dt===2){ sc -= 8; tags.unshift("赤み・皮むけ等が出る場合あり"); }
+      else if(m.dt===2){ sc -= 150; tags.unshift("赤み・皮むけ等が出る場合あり"); }
       else if(m.dt===1) sc -= 1;
     }
     if(state.dt==="ok" && m.strong){ sc += 3; tags.push("実感重視の方に"); }
