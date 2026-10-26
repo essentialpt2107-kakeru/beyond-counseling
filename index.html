@@ -794,6 +794,10 @@ var PRODUCTS = [
    price:"7,150円（税込）",
    desc:"夜のスキンケアの最後に塗って眠るだけの高保湿ナイトマスク。7種の保湿成分に、ヒト幹細胞培養液などの美容成分を合わせています。クリームの代わりに使えて洗い流し不要、1本で約2か月使えます。",
    life:{hc_aging:3, hc_keep:2, hc_simple:1, aircon:2}, c:{aging:2, dry:2}, m:{exosome:3}},
+  {id:"uv", line:"laesse", name:"グラススキン UVセラム（50g）", brand:"LAÉSSE（ラエッセ）", inner:false,
+   price:"4,950円",
+   desc:"紫外線対策と日中のスキンケアを同時にかなえるUV美容液。白浮きしにくく、ベタつきにくい軽やかな仕上がりで、メイク下地としても使えます。朝の使用で約2か月分です。",
+   life:{sun:5}, c:{dull:1}},
   {id:"pink", line:"laesse", name:"ピンクトーンプログラム（3ステップセット）", brand:"LAÉSSE（ラエッセ）", inner:false, careful:true,
    price:"15,950円（税込）",
    desc:"唇などデリケートな部位のための3ステップのホームケア（ソフトクリアジェル→ピンクヴェールジェル→グローキーパー）。古い角質を整えてうるおいを与え、なめらかで健康的な印象へ。染料で色をつけるものではありません。1日10〜15分、毎日続けるケアです。",
@@ -825,7 +829,7 @@ var PRODUCTS = [
    life:{fasting:8, weight:4, overeat:2, hc_inner:1}, c:{slim:2}}
 ];
 /* 松竹梅の「梅」を決めるための、いちばん手軽に始められる価格 */
-var ENTRY = {ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900, spirulina:2160, bifidus:11664, genmyo:5400, kouso:15000};
+var ENTRY = {uv:4950, ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900, spirulina:2160, bifidus:11664, genmyo:5400, kouso:15000};
 var BUDGETS = [5000,10000,15000,20000,30000];
 
 /* ===== 状態 ===== */
@@ -1106,6 +1110,33 @@ function menuPlans(rows, picked, subsSel){
 }
 
 /* ===== ホームケア・インナーケアの提案 ===== */
+/* ホームケアの優先順位（2026-10-26 かけるの指示）。生活習慣ごとに、左ほど上に出す。[ ] は同じ順位 */
+var P_PRIORITY = {
+  veg:["spirulina","lipo"],
+  eatout:["reset","spirulina"],
+  irregular:["spirulina","bifidus"],
+  sweets:["reset","spirulina"],
+  overeat:["reset","kouso","spirulina"],
+  bowel:["bifidus","reset"],
+  weight:["kouso","reset"],
+  fasting:["kouso"],
+  hc_inner:[["bifidus","kouso"],"spirulina"],
+  aircon:["nightmask","ye"],
+  hc_keep:["ye","nightmask"],
+  sun:["uv"],
+  drink:["genmyo"], cold:["genmyo"]
+};
+function productPriorityBonus(id){
+  var bonus = 0, hit = [];
+  Object.keys(P_PRIORITY).forEach(function(k){
+    if(!has(k)) return;
+    var list = P_PRIORITY[k];
+    for(var i=0;i<list.length;i++){
+      if([].concat(list[i]).indexOf(id)>=0){ bonus += (list.length - i)*4; hit.push(k); break; }
+    }
+  });
+  return {bonus:bonus, hit:hit};
+}
 function computeProducts(res){
   if(res.consultAll) return {list:[], note:"妊娠中・授乳中の方のホームケア・インナーケアは、スタッフが個別にご案内します。"};
   var noInner = res.sel.some(function(c){ return c.noInner; });
@@ -1118,6 +1149,7 @@ function computeProducts(res){
     if(noInner && (p.inner || p.careful)) return;
     var sc = 0, why = [];
     Object.keys(p.life||{}).forEach(function(k){ if(has(k)){ sc += p.life[k]; why.push(lifeShort(k)); } });
+    var pb = productPriorityBonus(p.id); sc += pb.bonus; pb.hit.forEach(function(k){ why.push(lifeShort(k)); });
     Object.keys(p.c||{}).forEach(function(k){ if(concerns.indexOf(k)>=0){ sc += p.c[k]; why.push(labelOf(k)); } });
     Object.keys(p.m||{}).forEach(function(id){ if(top.some(function(r){ return r.m.id===id; })){ sc += p.m[id]; why.unshift("おすすめの施術と同じシリーズ"); } });
     if(p.id==="ye"){
