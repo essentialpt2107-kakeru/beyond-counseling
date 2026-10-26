@@ -138,6 +138,13 @@ main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
 .more .mm h4{font-size:14px;margin:12px 0 4px;font-family:"Noto Serif JP",serif}
 .more .mm h4:first-child{margin-top:0}
 .more .mm dl{margin-top:6px}
+.focus{background:var(--brand-soft);border-radius:16px;padding:14px 16px;margin:4px 0 10px}
+.focus h3{font-size:14.5px;color:var(--brand-dark)}
+.focus p{font-size:12.5px;color:var(--ink-sub);margin:2px 0 10px}
+.focus-chips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{border:1.5px solid var(--brand-line);background:#fff;border-radius:999px;padding:7px 14px;font-size:13.5px;color:var(--ink-sub)}
+.fchip.on{border-color:var(--brand);background:var(--brand);color:#fff;font-weight:700}
+.fall{margin-top:10px;font-size:12.5px;color:var(--brand-deep);text-decoration:underline}
 .summary{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:16px 18px;margin:4px 0 6px;border:1.5px solid var(--brand-line)}
 .summary h3{font-size:15px;margin-bottom:8px;color:var(--brand-dark)}
 .summary dl{display:grid;grid-template-columns:96px 1fr;gap:10px 10px;font-size:14px}
@@ -833,7 +840,7 @@ var ENTRY = {uv:4950, ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900
 var BUDGETS = [5000,10000,15000,20000,30000];
 
 /* ===== 状態 ===== */
-var state = {tab:"concern", cats:[], subs:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
+var state = {tab:"concern", focus:null, cats:[], subs:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
 var $ = function(id){ return document.getElementById(id); };
 function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
 function yen(n){ return n.toLocaleString("ja-JP")+"円"; }
@@ -987,13 +994,31 @@ function payFor(m){ return (state.visit==="first" && m.first) ? m.first : m.pric
 
 function selectedChecks(){ return CHECKS.filter(function(c){ return state.checks.indexOf(c.k)>=0; }); }
 
+/* 結果画面で「お悩みを絞って見る」ときの候補（STEP 2 で選んだお悩みと、STEP 2 を選ばなかった分類） */
+function focusItems(){
+  var items = state.subs.map(subById).filter(Boolean).map(function(x){ return {key:x.k, label:x.r}; });
+  state.cats.forEach(function(k){
+    if(SUBS[k] && !state.subs.some(function(id){ return subById(id).cat===k; })) items.push({key:"cat:"+k, label:catById(k).t});
+  });
+  return items;
+}
+function inFocus(key){ return !state.focus || state.focus.indexOf(key)>=0; }
+/* 絞り込みをかけたあとの、有効な分類 */
+function effectiveCats(){
+  return state.cats.filter(function(k){
+    if(!SUBS[k]) return true;
+    var subsOfCat = state.subs.filter(function(id){ return subById(id).cat===k; });
+    return subsOfCat.length ? subsOfCat.some(inFocus) : inFocus("cat:"+k);
+  });
+}
+
 function compute(){
   var budget = budgetValue();
   /* STEP 2 で選んだ具体的なお悩み → メニュー側のキーと重み。STEP 2 を選んでいない分類は、その分類の代表的なお悩みで軽く見る */
   var weights = {}, keyLabel = {};
-  var subsSel = state.subs.map(subById).filter(Boolean);
+  var subsSel = state.subs.filter(inFocus).map(subById).filter(Boolean);
   subsSel.forEach(function(x){ x.c.forEach(function(k,i){ var w = i===0 ? 5 : 3; if((weights[k]||0) < w){ weights[k] = w; } if(!keyLabel[k]) keyLabel[k] = x.r; }); });
-  state.cats.forEach(function(ck){
+  effectiveCats().forEach(function(ck){
     var cat = catById(ck);
     if(!cat || !SUBS[ck] || subsSel.some(function(x){ return x.cat===ck; })) return;
     cat.def.forEach(function(k){ if(!weights[k]){ weights[k] = 2; keyLabel[k] = labelOf(k); } });
@@ -1079,7 +1104,7 @@ function menuPlans(rows, picked, subsSel){
   var max = rows[0].sc;
   var cand = rows.filter(function(r){ return r.sc >= max*0.3; });
   var inB = cand.filter(function(r){ return r.inBudget; }).slice(0,3);
-  var areas = state.cats.map(function(k){ return CAT_AREA[k]; });
+  var areas = effectiveCats().map(function(k){ return CAT_AREA[k]; });
   var diff = function(a, r){ return r!==a && FAMILY[r.m.id]!==FAMILY[a.m.id] && (!areas.length || areas.indexOf(areaOf(r.m))>=0); };
   /* いちばん効果を感じやすいプラン: いちばん合うメニューに、まだ拾えていないお悩みに効く別の種類のケアを足す */
   var top = rows[0];
@@ -1180,7 +1205,7 @@ function productLine(x){
 function productCardHTML(x, i){
   var p = x.p;
   return '<article class="tier rk'+(i===0 ? " rk1" : "")+'">'+
-    '<div class="tier-head"><span class="tier-badge rk">'+(i+1)+'</span><span class="tier-label">'+(i===0 ? "いちばん合うもの" : (i+1)+"番目に合うもの")+'</span></div>'+
+    '<div class="tier-head"><span class="tier-badge rk">'+(i+1)+'</span></div>'+
     '<div class="mtop">'+'<span class="ptype '+(p.inner?"inner":"skin")+'">'+(p.inner?"インナーケア":"ホームケア")+'</span>'+
       (p.pick?'<span class="picked">スタッフおすすめ</span>':"")+(p.brand?'<span class="pbrand">'+esc(p.brand)+'</span>':"")+'</div>'+
     '<div class="pname serif">'+esc(p.name)+'</div>'+
@@ -1259,7 +1284,7 @@ function planCardHTML(cls, badge, label, sub, rows, budget){
   }
   var f0 = FEEL[ms[0].id];
   return '<article class="tier '+cls+'">'+
-    '<div class="tier-head"><span class="tier-badge '+cls+'">'+badge+'</span><span class="tier-label">'+label+(sub ? '<small>'+sub+'</small>' : "")+'</span>'+budgetBadge(pay, budget)+'</div>'+
+    '<div class="tier-head"><span class="tier-badge '+cls+'">'+badge+'</span>'+(label ? '<span class="tier-label">'+label+(sub ? '<small>'+sub+'</small>' : "")+'</span>' : "")+budgetBadge(pay, budget)+'</div>'+
     body+
     feelTypesHTML(ms)+
     (tags.length ? '<ul class="checks">'+tags.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul>' : "")+
@@ -1273,6 +1298,7 @@ function conditions(budget){
     .concat(state.cats.filter(function(k){ return !SUBS[k] || !state.subs.some(function(id){ return subById(id).cat===k; }); }).map(function(k){ return catById(k).t; }));
   if(state.tab==="menu" && state.menus.length) wish = state.menus.map(function(id){ return menuById(id).name; });
   if(wish.length) conds.push(["ご希望", wish.join("、")]);
+  if(state.focus && state.tab!=="menu") conds.push(["絞り込み", focusItems().filter(function(x){ return inFocus(x.key); }).map(function(x){ return x.label; }).join("、")]);
   if(state.visit) conds.push(["ご来店", state.visit==="first" ? "はじめて" : "来店したことがある"]);
   if(budget) conds.push(["ご予算", "1回 "+yen(budget)]);
   var DT = {none:"当日から普段どおり", some:"少しならOK", ok:"制限なし"},
@@ -1301,7 +1327,7 @@ function alertsHTML(sel, excluded, consultAll){
   return alerts;
 }
 
-function showResult(){
+function showResult(keepPlace){
   if(state.tab==="menu" && state.menus.length){ showCompare(); return; }
   document.querySelector("#v-result .result-top h2").textContent = "美yondメソッドのご提案";
   var res = compute(), budget = res.budget;
@@ -1322,7 +1348,7 @@ function showResult(){
     if(res.consultOnly) html += '<p class="sec-note">はじめての方には、美yondがいちばん力を入れている肌質改善からご提案します。</p>';
     if(t.inB.length){
       html += t.inB.map(function(r,i){
-        return planCardHTML(i===0 ? "rk rk1" : "rk", String(i+1), i===0 ? "ご予算内で、いちばん合うメニュー" : (i+1)+"番目に合うメニュー", "", [r], budget);
+        return planCardHTML(i===0 ? "rk rk1" : "rk", String(i+1), "", "", [r], budget);
       }).join("");
     }else{
       html += '<div class="empty">ご予算内で合うメニューが見つかりませんでした。下の「ご予算を超えても、合うもの」をご覧ください。</div>';
@@ -1340,7 +1366,7 @@ function showResult(){
 
   var prods = computeProducts(res);
   html += productsSectionHTML(prods);
-  $("list").innerHTML = summaryHTML(t, prods.list, res.consultAll) + html;
+  $("list").innerHTML = focusBarHTML() + summaryHTML(t, prods.list, res.consultAll) + html;
 
   lastMemo = buildMemo(conds, res.consultAll ? null : t, prods.list);
   $("memo").textContent = lastMemo;
@@ -1348,9 +1374,35 @@ function showResult(){
 
   $("v-form").hidden = true;
   $("v-result").hidden = false;
-  window.scrollTo({top:0, behavior:"smooth"});
-  postHeight(); postTop();
+  if(keepPlace){
+    var fb = document.querySelector("#list .focus"); if(fb) fb.scrollIntoView({block:"start"});
+    postHeight();
+  }else{
+    window.scrollTo({top:0, behavior:"smooth"});
+    postHeight(); postTop();
+  }
 }
+
+/* お悩みを2つ以上選んだときだけ出す、絞り込みのバー */
+function focusBarHTML(){
+  var items = focusItems();
+  if(items.length < 2) return "";
+  return '<div class="focus"><h3>お悩みを絞って見る</h3><p>タップで切り替えると、選んだお悩みに絞ってもう一度ご提案します（いくつでも）。</p><div class="focus-chips">'+
+    items.map(function(x){ var on = inFocus(x.key); return '<button type="button" class="fchip'+(on?" on":"")+'" data-k="'+esc(x.key)+'">'+(on?"✓ ":"")+esc(x.label)+'</button>'; }).join("")+
+    '</div>'+(state.focus ? '<button type="button" class="fall" data-k="__all">すべてのお悩みで見る</button>' : "")+'</div>';
+}
+$("list").addEventListener("click", function(e){
+  var b = e.target.closest(".fchip, .fall"); if(!b) return;
+  var all = focusItems().map(function(x){ return x.key; });
+  if(b.dataset.k==="__all"){ state.focus = null; }
+  else{
+    var cur = state.focus ? state.focus.slice() : all.slice();
+    toggle(cur, b.dataset.k);
+    if(!cur.length) return;              /* 1つは残す */
+    state.focus = cur.length===all.length ? null : cur;
+  }
+  showResult(true);
+});
 
 /* いちばん上の早見表: 詳しいカードを読む前に、ご提案の全体が分かるように */
 function summaryHTML(t, plist, consultAll){
@@ -1369,7 +1421,7 @@ function summaryHTML(t, plist, consultAll){
 function productsSectionHTML(prods){
   var html = "";
   if(!(prods.list.length || prods.note)) return html;
-  html += '<div class="sec-h"><h3>ご自宅でのケア</h3><span>合う順に3つまで</span></div>';
+  html += '<div class="sec-h"><h3>ご自宅でのケア</h3></div>';
   html += '<p class="sec-note">サロンの攻めのケアで整えた状態を、ご自宅の守りのケアと内側からのケアで保ちます。</p>';
   html += prods.list.map(productCardHTML).join("");
   if(prods.note) html += '<p class="disclaimer">'+esc(prods.note)+'</p>';
@@ -1540,7 +1592,7 @@ function postHeight(){
   }, 80);
 }
 
-$("seeBtn").addEventListener("click", function(){ if(validate()) showResult(); });
+$("seeBtn").addEventListener("click", function(){ if(validate()){ state.focus = null; showResult(); } });
 $("talkBtn").addEventListener("click", function(){ openLine(buildMemo(conditions(budgetValue()), null, null), null); });
 $("lineBtn").addEventListener("click", function(){ openLine(lastMemo, $("copied")); });
 $("changeBtn").addEventListener("click", function(){
