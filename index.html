@@ -125,6 +125,25 @@ main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
 .feel p b{font-weight:700}
 .method{background:var(--brand-soft);border-radius:16px;padding:14px 16px;font-size:12.5px;margin:4px 0 12px}
 .method b{color:var(--brand-dark)}
+/* メニューの比較・深掘り */
+.cmp{display:grid;grid-template-columns:76px 1fr;gap:8px 10px;font-size:13px;margin-top:10px}
+.cmp dt{color:var(--ink-sub);font-size:12px;padding-top:1px}
+.cmp dd{line-height:1.7}
+.cmp dd .p{font-size:18px;color:var(--price);font-family:"Noto Serif JP",serif;font-weight:600}
+.cmp dd .reg{font-size:11.5px;color:var(--ink-sub);margin-left:6px}
+.cmp dd .budget{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;border-radius:6px;padding:1px 7px}
+.cmp dd .feel-types{margin-bottom:2px}
+.cmp dd .reasons{margin:0}
+.warnline{background:var(--warn-soft);color:var(--warn);font-size:12.5px;border-radius:10px;padding:8px 10px;margin-top:8px}
+.guide ul{list-style:none;margin-top:6px}
+.guide li{padding:7px 0;border-top:1px dashed var(--brand-line);font-size:13px}
+.guide li:first-child{border-top:0}
+.guide li span{display:block;font-size:11.5px;color:var(--ink-sub)}
+.rel{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px dashed var(--line);font-size:13px}
+.rel:first-of-type{border-top:0}
+.rel b{font-weight:700}
+.rel .rp{white-space:nowrap;color:var(--price);font-weight:700}
+.menu-intro{font-size:12.5px;color:var(--ink-sub);margin:0 0 12px}
 #checks .chip{min-height:50px}
 .chips.one{grid-template-columns:1fr}
 #life .chip{min-height:52px}
@@ -707,7 +726,7 @@ var ENTRY = {ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900, spiruli
 var BUDGETS = [5000,10000,15000,20000,30000];
 
 /* ===== 状態 ===== */
-var state = {cats:[], subs:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
+var state = {tab:"concern", cats:[], subs:[], menus:[], visit:null, dt:"any", when:"any", skin:"any", checks:[], life:[]};
 var $ = function(id){ return document.getElementById(id); };
 function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
 function yen(n){ return n.toLocaleString("ja-JP")+"円"; }
@@ -756,7 +775,7 @@ function renderSubs(){
 }
 var cats = [];
 MENUS.forEach(function(m){ if(cats.indexOf(m.cat)<0) cats.push(m.cat); });
-$("tab-menu").innerHTML = cats.map(function(cat){
+$("tab-menu").innerHTML = '<p class="menu-intro">受けたいメニューが決まっている方、2〜3つで迷っている方へ。<b>1〜3つ</b>選ぶと、料金・実感のしかた・ダウンタイムなどを並べて、ご来店前に詳しく確認できます。</p><p class="errmsg" id="menuMax" style="display:none">比べられるのは3つまでです。</p>'+cats.map(function(cat){
   return '<div class="cat-h">'+esc(cat)+'</div><div class="chips">'+
     MENUS.filter(function(m){ return m.cat===cat; }).map(function(m){
       return chipHTML(m.id, m.name, yen(m.price)+(m.from?"〜":""));
@@ -768,7 +787,7 @@ $("budgetPills").innerHTML = BUDGETS.map(function(b){ return '<button type="butt
 
 document.querySelectorAll(".tabs button").forEach(function(b){
   b.addEventListener("click", function(){
-    var tab = b.dataset.tab;
+    var tab = b.dataset.tab; state.tab = tab;
     document.querySelectorAll(".tabs button").forEach(function(x){ x.setAttribute("aria-selected", x===b ? "true" : "false"); });
     $("tab-concern").hidden = tab!=="concern";
     $("tab-menu").hidden = tab!=="menu";
@@ -787,7 +806,10 @@ $("subs").addEventListener("click", function(e){
 });
 $("tab-menu").addEventListener("click", function(e){
   var c = e.target.closest(".chip"); if(!c) return;
-  toggle(state.menus, c.dataset.k); paint($("tab-menu"), state.menus); clearErr("f-wish");
+  var k = c.dataset.k, on = state.menus.indexOf(k)>=0;
+  $("menuMax").style.display = (!on && state.menus.length>=3) ? "block" : "none";
+  if(!on && state.menus.length>=3) return;
+  toggle(state.menus, k); paint($("tab-menu"), state.menus); clearErr("f-wish");
 });
 $("checks").addEventListener("click", function(e){
   var c = e.target.closest(".chip"); if(!c) return;
@@ -835,9 +857,10 @@ function clearErr(id){ $(id).classList.remove("err"); }
 /* ===== 入力チェック ===== */
 function validate(){
   var bad = [];
-  if(!state.cats.length && !state.menus.length && !$("free").value.trim()) bad.push("f-wish");
+  var menuMode = state.tab==="menu";
+  if(menuMode ? !state.menus.length : (!state.cats.length && !$("free").value.trim())) bad.push("f-wish");
   if(!state.visit) bad.push("f-visit");
-  if(!budgetValue()) bad.push("f-budget");
+  if(!menuMode && !budgetValue()) bad.push("f-budget");
   if(!state.checks.length) bad.push("f-check");
   ["f-wish","f-visit","f-budget","f-check"].forEach(function(id){ $(id).classList.toggle("err", bad.indexOf(id)>=0); });
   $("formErr").classList.toggle("on", bad.length>0);
@@ -870,7 +893,7 @@ function compute(){
   });
   var picked = Object.keys(weights);
   var fromText = concernsFromText().filter(function(k){ return picked.indexOf(k)<0; });
-  var consultOnly = !picked.length && !fromText.length && !state.menus.length;
+  var consultOnly = !picked.length && !fromText.length;
   var freeText = $("free").value;
   var plugText = PLUG_WORDS.some(function(w){ return freeText.indexOf(w)>=0; }) || subsSel.some(function(x){ return x.plug; });
   var eventWish = state.when==="event" || subsSel.some(function(x){ return x.event; });
@@ -885,7 +908,7 @@ function compute(){
     var sc = 0, tags = [];
     picked.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*weights[k]; tags.push(keyLabel[k] || labelOf(k)); } });
     fromText.forEach(function(k){ if(m.s[k]){ sc += m.s[k]*3; tags.push(labelOf(k)); } });
-    var isPicked = state.menus.indexOf(m.id)>=0;
+    var isPicked = false; /* メニューを選んだときは showCompare で別に扱う */
     if(isPicked) sc += 100;
     if(consultOnly && m.cat==="肌育・肌質改善") sc += (m.first ? 4 : 2) + (m.gentle||0);
     if(sc<=0) return;
@@ -943,7 +966,7 @@ function menuTiers(rows, picked){
   var ume = cand.filter(function(r){ return r!==take && r.pay < take.pay; })
     .sort(function(a,b){ return a.pay-b.pay || b.sc-a.sc; })[0] || null;
   /* 松の相方: 竹と違う種類のケア。候補の中になければ、少し相性が下がるものまで広げる */
-  var areas = state.cats.map(function(k){ return CAT_AREA[k]; }).concat(state.menus.map(function(id){ return areaOf(menuById(id)); }));
+  var areas = state.cats.map(function(k){ return CAT_AREA[k]; });
   var diff = function(r){ return r!==take && FAMILY[r.m.id]!==FAMILY[take.m.id] && (!areas.length || areas.indexOf(areaOf(r.m))>=0); };
   /* 竹がカバーしていないお悩みに効くものを優先する（例: 毛穴＋顔の余白なら、小顔のメニューを組み合わせる） */
   var uncovered = (picked||[]).filter(function(k){ return !take.m.s[k]; });
@@ -1076,8 +1099,8 @@ function tierHTML(kind, rows, budget){
 function conditions(budget){
   var conds = [];
   var wish = state.subs.map(function(id){ return subById(id).t; })
-    .concat(state.cats.filter(function(k){ return !SUBS[k] || !state.subs.some(function(id){ return subById(id).cat===k; }); }).map(function(k){ return catById(k).t; }))
-    .concat(state.menus.map(function(id){ return menuById(id).name; }));
+    .concat(state.cats.filter(function(k){ return !SUBS[k] || !state.subs.some(function(id){ return subById(id).cat===k; }); }).map(function(k){ return catById(k).t; }));
+  if(state.tab==="menu" && state.menus.length) wish = state.menus.map(function(id){ return menuById(id).name; });
   if(wish.length) conds.push(["ご希望", wish.join("、")]);
   if(state.visit) conds.push(["ご来店", state.visit==="first" ? "はじめて" : "来店したことがある"]);
   if(budget) conds.push(["ご予算", "1回 "+yen(budget)]);
@@ -1090,25 +1113,31 @@ function conditions(budget){
   return conds;
 }
 
-function showResult(){
-  var res = compute(), budget = res.budget;
-  var conds = conditions(budget);
-  $("conds").innerHTML = conds.map(function(c){ return '<span class="cond"><b>'+esc(c[0])+'</b>'+esc(c[1])+'</span>'; }).join("");
-
+function alertsHTML(sel, excluded, consultAll){
   var alerts = "";
-  var reviewSel = res.sel.filter(function(c){ return c.review || c.move || c.consultAll; });
+  var reviewSel = sel.filter(function(c){ return c.review || c.move || c.consultAll; });
   if(reviewSel.length){
     alerts += '<div class="alert"><h3>まずは、LINEでご相談ください</h3><p>次に当てはまる方は、施術できるかどうかをご予約の前にスタッフが確認します。'+
-      (res.consultAll ? "" : "下の候補は参考としてご覧ください。")+'</p><ul style="padding-left:1.2em;font-size:12.5px;margin-top:6px">'+
+      (consultAll ? "" : "下の内容は参考としてご覧ください。")+'</p><ul style="padding-left:1.2em;font-size:12.5px;margin-top:6px">'+
       reviewSel.map(function(c){ return '<li>'+esc(c.t)+'</li>'; }).join("")+'</ul></div>';
   }
-  if(res.excluded.length){
-    alerts += '<div class="alert plain"><h3>安全のため候補から外したメニュー</h3><p>'+esc(res.excluded.join("、"))+'</p></div>';
+  if(excluded.length){
+    alerts += '<div class="alert plain"><h3>安全のため候補から外したメニュー</h3><p>'+esc(excluded.join("、"))+'</p></div>';
   }
   if(state.checks.indexOf("minor")>=0){
     alerts += '<div class="alert plain"><h3>18歳未満の方へ</h3><p>施術には保護者の同意が必要です。</p></div>';
   }
-  $("alertBox").innerHTML = alerts;
+  return alerts;
+}
+
+function showResult(){
+  if(state.tab==="menu" && state.menus.length){ showCompare(); return; }
+  document.querySelector("#v-result .result-top h2").textContent = "美yondメソッドのご提案";
+  var res = compute(), budget = res.budget;
+  var conds = conditions(budget);
+  $("conds").innerHTML = conds.map(function(c){ return '<span class="cond"><b>'+esc(c[0])+'</b>'+esc(c[1])+'</span>'; }).join("");
+
+  $("alertBox").innerHTML = alertsHTML(res.sel, res.excluded, res.consultAll);
 
   var html = "", t = res.tiers;
   html += '<div class="sec-h"><h3>サロンでのケア</h3><span>松竹梅の3プラン</span></div>';
@@ -1128,27 +1157,127 @@ function showResult(){
   }
 
   var prods = computeProducts(res);
-  if(prods.tiers || prods.note){
-    html += '<div class="sec-h"><h3>ご自宅でのケア</h3><span>松竹梅の3プラン</span></div>';
-    html += '<p class="sec-note">サロンの攻めのケアで整えた状態を、ご自宅の守りのケアと内側からのケアで保ちます。</p>';
-    if(prods.tiers){
-      if(prods.tiers.matsu) html += productTierHTML("matsu", prods.tiers.matsu);
-      html += productTierHTML("take", [prods.tiers.take]);
-      if(prods.tiers.ume) html += productTierHTML("ume", [prods.tiers.ume]);
-    }
-    if(prods.note) html += '<p class="disclaimer">'+esc(prods.note)+'</p>';
-    if(prods.list.some(function(x){ return x.p.inner; })){
-      html += '<p class="disclaimer">※サプリ・ドリンク・お茶は食品で、医薬品ではありません。感じ方には個人差があります。体調やお薬に不安のある方は、医師にご相談ください。取り入れ方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
-    }else if(prods.list.length){
-      html += '<p class="disclaimer">※使い方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
-    }
-  }
+  html += productsSectionHTML(prods);
   $("list").innerHTML = html;
 
   lastMemo = buildMemo(conds, res.consultAll ? null : t, prods.tiers);
   $("memo").textContent = lastMemo;
   $("copied").textContent = "";
 
+  $("v-form").hidden = true;
+  $("v-result").hidden = false;
+  window.scrollTo({top:0, behavior:"smooth"});
+  postHeight(); postTop();
+}
+
+function productsSectionHTML(prods){
+  var html = "";
+  if(!(prods.tiers || prods.note)) return html;
+  html += '<div class="sec-h"><h3>ご自宅でのケア</h3><span>松竹梅の3プラン</span></div>';
+  html += '<p class="sec-note">サロンの攻めのケアで整えた状態を、ご自宅の守りのケアと内側からのケアで保ちます。</p>';
+  if(prods.tiers){
+    if(prods.tiers.matsu) html += productTierHTML("matsu", prods.tiers.matsu);
+    html += productTierHTML("take", [prods.tiers.take]);
+    if(prods.tiers.ume) html += productTierHTML("ume", [prods.tiers.ume]);
+  }
+  if(prods.note) html += '<p class="disclaimer">'+esc(prods.note)+'</p>';
+  if(prods.list.some(function(x){ return x.p.inner; })){
+    html += '<p class="disclaimer">※サプリ・ドリンク・お茶は食品で、医薬品ではありません。感じ方には個人差があります。体調やお薬に不安のある方は、医師にご相談ください。取り入れ方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
+  }else if(prods.list.length){
+    html += '<p class="disclaimer">※使い方は、ご来店時やLINEでスタッフがご案内します。価格は2026年10月時点のものです。</p>';
+  }
+  return html;
+}
+
+/* ===== メニューから選んだとき: 施術の比較・深掘り ===== */
+function minutesOf(m){ var n = parseInt(String(m.time).replace(/[^0-9]/g," ").trim().split(/\s+/)[0], 10); return isNaN(n) ? 999 : n; }
+function strengthsOf(m){
+  return Object.keys(m.s).filter(function(k){ return m.s[k]>=2; }).sort(function(a,b){ return m.s[b]-m.s[a]; }).slice(0,3).map(labelOf);
+}
+function compareCardHTML(m, sel, budget){
+  var pay = payFor(m), newP = state.visit==="first" && m.first, from = m.from ? "〜" : "";
+  var blocked = (m.ng||[]).some(function(x){ return state.checks.indexOf(x)>=0; });
+  var needCheck = sel.some(function(c){ return c.consultAll || (c.move && m[c.move]); });
+  var f = FEEL[m.id] || {t:[], x:""};
+  return '<article class="tier take">'+
+    '<span class="mcat">'+esc(m.cat)+'</span>'+
+    '<div class="mname serif" style="margin-top:4px">'+esc(m.name)+'</div>'+
+    (blocked ? '<p class="warnline">確認事項から、このメニューは受けられません。ほかのメニューをLINEでご相談ください。</p>' :
+      needCheck ? '<p class="warnline">確認事項から、施術できるかどうかをご予約の前にスタッフが確認します。</p>' : "")+
+    '<dl class="cmp">'+
+      '<dt>料金</dt><dd><span class="p">'+(newP ? '<small style="font-size:11px;color:var(--ink);font-family:inherit">ご新規様 </small>' : "")+yen(pay)+from+'</span>'+
+        (newP ? '<span class="reg">通常 '+yen(m.price)+from+'</span>' : "")+(budget ? budgetBadge(pay, budget) : "")+'</dd>'+
+      '<dt>所要時間</dt><dd>'+esc(m.time)+'</dd>'+
+      '<dt>実感</dt><dd><div class="feel-types">'+f.t.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div>'+esc(f.x)+'</dd>'+
+      '<dt>得意な<br>お悩み</dt><dd><div class="reasons">'+strengthsOf(m).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div></dd>'+
+      '<dt>施術の内容</dt><dd>'+esc(m.why)+'</dd>'+
+      '<dt>ダウン<br>タイム</dt><dd>'+esc(m.dtText || "ご来店時にご確認ください")+'</dd>'+
+      '<dt>注意点</dt><dd>'+esc(m.caution || "特になし（感じ方には個人差があります）")+'</dd>'+
+    '</dl></article>';
+}
+/* 2〜3つを比べるとき、違いが出る観点だけを「迷ったときの選び方」にする */
+function guideHTML(ms){
+  var g = [], names = function(arr){ return arr.map(function(m){ return m.name; }).join("、"); };
+  var pays = ms.map(payFor), minPay = Math.min.apply(null, pays);
+  if(pays.some(function(x){ return x!==minPay; })){
+    var c = ms.filter(function(m){ return payFor(m)===minPay; });
+    g.push(["費用を抑えて始めたいなら", names(c)+"（"+yen(minPay)+"）"]);
+  }
+  var mins = ms.map(minutesOf), minT = Math.min.apply(null, mins);
+  if(mins.some(function(x){ return x!==minT; })) g.push(["時間を短く済ませたいなら", names(ms.filter(function(m){ return minutesOf(m)===minT; }))]);
+  var dt0 = ms.filter(function(m){ return m.dt===0; });
+  if(dt0.length && dt0.length<ms.length) g.push(["当日から普段どおり過ごしたいなら", names(dt0)]);
+  var quick = ms.filter(function(m){ return (FEEL[m.id]||{t:[]}).t.indexOf("quick")>=0; });
+  if(quick.length && quick.length<ms.length) g.push(["1回で変化を感じたいなら", names(quick)]);
+  var base = ms.filter(function(m){ return (FEEL[m.id]||{t:[]}).t.indexOf("base")>=0; });
+  if(base.length && base.length<ms.length) g.push(["土台から変えていきたいなら", names(base)]);
+  var moist = ms.filter(function(m){ return m.moist; });
+  if(moist.length && moist.length<ms.length) g.push(["乾燥しやすい肌の毛穴ケアなら", names(moist)]);
+  var plug = ms.filter(function(m){ return m.plug; });
+  if(plug.length && plug.length<ms.length) g.push(["固く詰まった角栓をしっかり取りたいなら", names(plug)]);
+  var maxG = Math.max.apply(null, ms.map(function(m){ return m.gentle||0; }));
+  var gentle = ms.filter(function(m){ return (m.gentle||0)===maxG; });
+  if(maxG>=2 && gentle.length<ms.length) g.push(["肌が敏感な方は", names(gentle)]);
+  if(!g.length) return "";
+  return '<div class="method guide"><b>迷ったときの選び方</b><ul>'+g.slice(0,6).map(function(x){ return '<li>'+esc(x[0])+'<span>→ '+esc(x[1])+'</span></li>'; }).join("")+'</ul></div>';
+}
+/* 1つだけ選んだとき: 同じ種類・同じお悩みで比べられることが多いメニュー */
+function relatedHTML(m){
+  var top = Object.keys(m.s).sort(function(a,b){ return m.s[b]-m.s[a]; })[0];
+  var rel = MENUS.filter(function(x){ return x!==m && areaOf(x)===areaOf(m) && (FAMILY[x.id]===FAMILY[m.id] || (x.s[top]||0)>=2); }).slice(0,3);
+  if(!rel.length) return "";
+  return '<div class="sec-h"><h3>比べられることが多いメニュー</h3></div>'+
+    '<div class="empty">'+rel.map(function(x){
+      var f = FEEL[x.id] || {t:[]};
+      return '<div class="rel"><div><b>'+esc(x.name)+'</b><div class="feel-types" style="margin-top:4px">'+f.t.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div></div><span class="rp">'+yen(payFor(x))+(x.from?"〜":"")+'</span></div>';
+    }).join("")+'<p class="sec-note" style="margin:8px 0 0">「条件を変更する」から一緒に選ぶと、並べて比べられます。</p></div>';
+}
+function showCompare(){
+  var budget = budgetValue(), sel = selectedChecks();
+  var ms = state.menus.map(menuById);
+  var conds = [["比べるメニュー", ms.map(function(m){ return m.name; }).join("、")]];
+  if(state.visit) conds.push(["ご来店", state.visit==="first" ? "はじめて" : "来店したことがある"]);
+  if(budget) conds.push(["ご予算", "1回 "+yen(budget)]);
+  $("conds").innerHTML = conds.map(function(c){ return '<span class="cond"><b>'+esc(c[0])+'</b>'+esc(c[1])+'</span>'; }).join("");
+  var consultAll = sel.some(function(c){ return c.consultAll; });
+  $("alertBox").innerHTML = alertsHTML(sel, [], consultAll);
+
+  var html = '<div class="sec-h"><h3>'+(ms.length>1 ? "施術の比較" : "施術の詳しいご案内")+'</h3><span>'+ms.length+'つ</span></div>';
+  if(ms.length>1) html += guideHTML(ms);
+  html += ms.map(function(m){ return compareCardHTML(m, sel, budget); }).join("");
+  if(ms.length===1) html += relatedHTML(ms[0]);
+  if(ms.length>1) html += '<p class="sec-note">決めきれないときは、下の相談メモをLINEで送ってください。肌の状態を見ながら、一緒に決めます。</p>';
+
+  var picked = uniq([].concat.apply([], ms.map(function(m){ return Object.keys(m.s).filter(function(k){ return m.s[k]>=2; }); })));
+  var prods = computeProducts({sel:sel, consultAll:consultAll, picked:picked, fromText:[],
+    tiers:{take:{m:ms[0]}, matsu:ms.slice(1).map(function(m){ return {m:m}; }), ume:null}});
+  html += productsSectionHTML(prods);
+  $("list").innerHTML = html;
+  document.querySelector("#v-result .result-top h2").textContent = ms.length>1 ? "施術の比較" : "施術の詳しいご案内";
+
+  lastMemo = buildMemo(conds, null, prods.tiers).replace("この内容で相談・予約したいです。", ms.length>1 ? "どれが合うか相談したいです。" : "このメニューについて相談・予約したいです。");
+  $("memo").textContent = lastMemo;
+  $("copied").textContent = "";
   $("v-form").hidden = true;
   $("v-result").hidden = false;
   window.scrollTo({top:0, behavior:"smooth"});
