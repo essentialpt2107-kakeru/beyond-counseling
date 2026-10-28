@@ -133,6 +133,13 @@ main{max-width:620px;margin:0 auto;padding:20px 16px 48px}
 .checks li:before{content:"✓";position:absolute;left:4px;top:3px;color:var(--brand-deep);font-weight:700}
 .feel-short{font-size:14px;line-height:1.7;margin-top:8px}
 .feel-short b{color:var(--brand-dark)}
+.future{margin-top:10px;padding:12px 14px;border-radius:12px;background:#E9F8F7;border-left:4px solid var(--brand)}
+.future b{display:block;font-size:12.5px;color:var(--brand-dark);margin-bottom:3px}
+.future p{font-size:14.5px;line-height:1.75;font-family:"Noto Serif JP",serif}
+.pick-line{font-size:14px;line-height:1.6;margin-top:8px;font-weight:700}
+.pick-line:before{content:"▶ ";color:var(--brand-deep)}
+.val{font-size:13px;line-height:1.65;margin-top:8px;padding:8px 12px;border:1px dashed #E3B8A6;border-radius:10px;background:#FFF8F4}
+.val:before{content:"お得なポイント　";font-weight:700;color:var(--price)}
 .more summary{font-size:13.5px}
 .more .mm{margin-top:10px;font-size:13.5px;line-height:1.75}
 .more .mm h4{font-size:14px;margin:12px 0 4px;font-family:"Noto Serif JP",serif}
@@ -723,6 +730,83 @@ var FEEL = {
   brow:    {t:["quick"], x:"施術当日から眉の印象が変わります。次回の目安は、毛の伸び方を見てご案内します。"}
 };
 var FEEL_LABEL = {quick:"その日に実感しやすい", base:"続けて土台から整える"};
+/* 受けたあと・取り入れたあとの未来（fu）、同じ系統の中で選ぶ決め手（pk）、料金の納得ポイント（val：美yondの実際の料金から言えることだけ） */
+var FUTURE = {
+  esv10:   {fu:"鏡を見るたびに気になっていた毛穴が、少しずつ目立ちにくい肌へ。洗浄で終わらず、うるおいまで整えるので、乾燥しにくく化粧ノリのいい肌を目指せます。",
+            pk:"毛穴を根本から変えたい方、乾燥もしやすい方はこちら。",
+            val:"90分かけて、毛穴ケアと保湿ケアを1回で。ご新規様は通常15,000円が11,000円です。"},
+  solaspa: {fu:"施術を終えて鏡を見た瞬間、顔全体がワントーン明るく、つるんとした手ざわりに。大事な予定の前にも頼れるケアです。",
+            pk:"手軽に、定期的に毛穴をすっきりさせたい方はこちら。",
+            val:"60分9,800円。毛穴ケアのなかで、いちばん気軽に続けやすい価格です。"},
+  hydra:   {fu:"何をしても取れなかった固い角栓が取れて、指でなでたときのザラつきがすっきり。毛穴ケアを始めるスタートラインに立てます。",
+            pk:"長く続く固い角栓を、今日しっかり取りたい方はこちら。"},
+  ruby:    {fu:"夕方になっても崩れにくく、ファンデーションに頼りすぎない肌へ。皮脂やニキビに振り回されない毎日を、土台から目指すケアです。",
+            pk:"化粧崩れ・皮脂・ニキビを根本から立て直したい方はこちら。",
+            val:"ご新規様は通常18,000円が9,800円。本格的なハーブピーリングを、はじめての方も試しやすい価格で。"},
+  lactic:  {fu:"施術のあとそのままメイクして帰れるのに、肌はなめらかで明るい印象に。予定を空けずにピーリングを始められます。",
+            pk:"はじめてのピーリング、ダウンタイムを取れない方はこちら。",
+            val:"ご新規様は通常18,000円が9,800円。当日からメイクできます。"},
+  exosome: {fu:"季節の変わり目やストレスで荒れやすかった肌が、ゆらぎにくく落ち着いた状態へ。肌の調子で一日の気分が左右されない毎日を目指します。",
+            pk:"肌荒れをくり返す方、大人のゆらぎ肌が気になる方はこちら。"},
+  wiqo:    {fu:"ごわつきやくすみが気になっていた肌が、キメの整ったつるんとした質感へ。化粧ノリの変化を楽しみにできる肌を目指します。",
+            pk:"ごわつき・くすみ・化粧ノリを整えたい方はこちら。"},
+  electro: {fu:"乾燥でしぼんで見えていた肌が、内側から押し返すようなハリとうるおい感のある肌に。施術の日の夜から、触れたときの違いを楽しめます。",
+            pk:"乾燥やハリ不足に、美容液をしっかり届けたい方はこちら。"},
+  carboxy: {fu:"どんよりしていた印象が、すっきり明るい表情に。ほかの施術に組み合わせると、仕上がりの満足度が一段上がります。",
+            pk:"むくみっぽさ・どんより感をすっきりさせたい方、ほかの施術に足したい方はこちら。"},
+  meplus:  {fu:"最近ハリが足りない、メイクがのらないと感じていた肌が、ふっくらとうるおいに満ちた肌へ。続けるほど自信の持てる肌を育てていけます。",
+            pk:"はじめてのエイジングケアを、針を使わずに始めたい方はこちら。",
+            val:"幹細胞培養上清液とヒト型コラーゲンを、針を使わずに。ご新規様は通常18,000円が15,000円です。"},
+  lemonF:  {fu:"フェイスラインのもたつきがすっきりして、写真に写る横顔に自信が持てるように。小顔ケアの最初の一歩にぴったりです。",
+            pk:"まずはシンプルに小顔ケアを試したい方はこちら。"},
+  redF:    {fu:"1回目からすっきりした印象を感じやすく、続けるほど引き締まった輪郭が安定していきます。いつ撮られても気にならないフェイスラインを目指せます。",
+            pk:"小顔を一時的でなく、続けて安定させたい方はこちら。",
+            val:"ご新規様は通常18,000円が9,800円。段階的なケアをまとめて受けられます。"},
+  hifu:    {fu:"重たく下がって見えていた輪郭が、きゅっと上がった印象に。疲れて見られがちなお顔が、いきいきとした表情に変わります。",
+            pk:"たるみ・もたつき・ハリ感が気になる方はこちら。"},
+  stamp:   {fu:"あご下のもたつきがすっきりして、横顔とフェイスラインがシャープな印象に。1回10分なので、いつもの施術に足すだけで変化を楽しめます。",
+            pk:"あご下・フェイスラインをピンポイントで整えたい方はこちら。",
+            val:"5Push（10分）7,500円。50Push回数券（49,800円）なら1Pushあたり約996円です。"},
+  redB:    {fu:"ほぐす・温める・流すをくり返すことで、気になっていた部位のラインが少しずつ変わっていきます。着たい服を選べる体を目指せます。",
+            pk:"気になる部位を、続けて段階的に整えたい方はこちら。",
+            val:"ご新規様は通常25,000円が15,000円です。"},
+  lemonB:  {fu:"お腹・太もも・二の腕など、気になる部位がすっきりした印象に。ボディラインのケアを気軽に始められます。",
+            pk:"気になる部位を、まずはシンプルにケアしたい方はこちら。"},
+  perfect: {fu:"本気で体を変えたいと決めた日に。5つのケアを一度に受けられるので、1回目から変化を感じやすく、ゴールまでの道のりを最短で進められます。",
+            pk:"ひとつのケアでは物足りない、本気で痩せたい方はこちら。",
+            val:"単品で受けると、レッドショットボディ（25,000円）とスタンプ20Push（30,000円）だけでも55,000円分。そこに超音波ボディリフト・ラジオ波・キャビテーションまで入って、ご新規様は39,800円です。"},
+  rubyB:   {fu:"後ろ姿を見られても気にならない、なめらかな背中へ。背中の開いたドレスや水着を楽しめる自分を目指せます。",
+            pk:"背中・デコルテのニキビやざらつきを根本から整えたい方はこちら。",
+            val:"ご新規様は11,000円から始められます。"},
+  esv10B:  {fu:"自分では見えない背中の毛穴とくすみがすっきりして、後ろ姿に自信が持てるように。特別な日の前の仕上げにも。",
+            pk:"背中の毛穴・くすみを、うるおいを守りながらケアしたい方はこちら。"},
+  bodySolaspa: {fu:"背中の肌はつるんと明るく、体は軽く。肌のケアとリンパトリートメントを一度に受けられるので、施術後は見た目も気分もすっきりします。",
+            pk:"背中の肌と体のめぐり、両方を整えたい方はこちら。",
+            val:"肌ケアとリンパトリートメントを60分で。ご新規様は通常15,000円が12,000円です。"},
+  oil:     {fu:"重たかった体がふっと軽くなり、ぐっすり眠れた朝のような爽快感に。疲れをためこまない毎日のための、ごほうび時間です。",
+            pk:"とにかく疲れをリセットしたい方はこちら。"},
+  brow:    {fu:"すっぴんでも眉が整って見えるので、朝のメイク時間が短くなります。顔全体が垢抜けた印象に変わります。",
+            pk:"眉の形・左右差を整えて、毎朝のメイクをラクにしたい方はこちら。",
+            val:"ご新規様は通常7,500円が5,500円です。"}
+};
+/* 商品を取り入れたあとの毎日（サプリは健康食品のため、体への効き目ではなく暮らしの変化で書く） */
+var P_FUTURE = {
+  ye:        {fu:"サロンで整えた肌を、ご自宅でもそのまま守れます。次の施術まで、いい状態をキープしやすくなります。",
+              val:"施術後の肌を想定して美yondが開発。サロン会員様は10%OFFです。"},
+  nightmask: {fu:"塗って眠るだけで、翌朝ふっくらうるおった肌で目覚められる。忙しい日もスキンケアが1本で完結します。",
+              val:"1本で約2か月使えるので、1日あたり約120円です。"},
+  uv:        {fu:"朝これ1本で、紫外線対策と日中のスキンケアが終わります。外にいる時間が長い日も、日焼けを気にせず過ごせます。",
+              val:"約2か月分で4,950円、1日あたり約80円です。"},
+  pink:      {fu:"毎日10〜15分のケアで、唇などのデリケートな部位を、なめらかで健康的な印象へ。人に見せたくなるパーツを育てるホームケアです。"},
+  reset:     {fu:"外食や会食、甘いものが続く日も、食べる前のひと手間で安心して食事を楽しめる。我慢ではなく、続けられる習慣をつくれます。"},
+  lipo:      {fu:"おいしいレモン味だから、毎日ビタミンCを取り入れる習慣が苦になりません。日差しを浴びる日や忙しい日も、内側からのケアを途切れさせずに続けられます。",
+              val:"1包にビタミンC 1,500mg（レモン約75個分）。初回は通常9,720円が4,900円です。"},
+  spirulina: {fu:"野菜が足りない日も、1袋で緑黄色野菜の栄養を補える。食事を気にしすぎず、毎日を元気に過ごす土台になります。",
+              val:"1日3袋で約190円。お試し30袋（2,160円）から始められます。"},
+  bifidus:   {fu:"お腹のリズムを整える毎日の習慣に。1袋にビフィズス菌17億個、食物繊維はごぼうの約4倍で、乳製品が苦手な方でも続けやすい処方です。"},
+  genmyo:    {fu:"甘い飲み物やカフェインの代わりに、ほっとひと息つける一杯を。夜でもご家族とでも、安心して飲める習慣になります。"},
+  kouso:     {fu:"ファスティングで体と食生活をリセットして、新しい自分をスタート。オーナーも愛用しているので、進め方まで一緒に相談できます。"}
+};
 
 var CHECK_GROUPS = [
   {h:"受けられないメニューがあるもの", items:[
@@ -1202,6 +1286,12 @@ function productLine(x){
     '<div class="mname serif">'+esc(p.name)+'</div>'+
     '<div class="pprice">'+esc(p.price)+(p.priceNote ? '<small>'+esc(p.priceNote)+'</small>' : "")+'</div>';
 }
+function futureHTML(f, title, noPick){
+  if(!f) return "";
+  return '<div class="future"><b>'+title+'</b><p>'+esc(f.fu)+'</p></div>'+
+    (f.pk && !noPick ? '<p class="pick-line">'+esc(f.pk)+'</p>' : "")+
+    (f.val ? '<p class="val">'+esc(f.val)+'</p>' : "");
+}
 function productCardHTML(x, i){
   var p = x.p;
   return '<article class="tier rk'+(i===0 ? " rk1" : "")+'">'+
@@ -1211,7 +1301,7 @@ function productCardHTML(x, i){
     '<div class="pname serif">'+esc(p.name)+'</div>'+
     '<div class="prow"><span class="big" style="font-size:19px">'+esc(p.price)+'</span>'+(p.priceNote ? '<span class="sm">'+esc(p.priceNote)+'</span>' : "")+'</div>'+
     (x.why.length ? '<ul class="checks">'+x.why.slice(0,3).map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul>' : "")+
-    '<p class="feel-short">'+esc(firstSentence(p.desc))+'</p>'+
+    futureHTML(P_FUTURE[p.id], "取り入れたあとの毎日")+
     '<details class="more"><summary>くわしく見る</summary><div class="mm"><p>'+esc(p.desc)+'</p>'+(p.caution ? '<p class="caution-s">※'+esc(p.caution)+'</p>' : "")+'</div></details>'+
     '</article>';
 }
@@ -1288,7 +1378,7 @@ function planCardHTML(cls, badge, label, sub, rows, budget){
     body+
     feelTypesHTML(ms)+
     (tags.length ? '<ul class="checks">'+tags.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul>' : "")+
-    (f0 ? '<p class="feel-short"><b>実感の目安：</b>'+esc(firstSentence(f0.x))+'</p>' : "")+
+    ms.map(function(m){ var f = FUTURE[m.id]; return f ? (ms.length>1 ? '<p class="pick-line" style="margin-top:12px">'+esc(m.name)+'</p>' : "")+futureHTML(f, "受けたあとの未来", ms.length>1) : ""; }).join("")+
     moreHTML(ms)+'</article>';
 }
 
@@ -1410,7 +1500,7 @@ function summaryHTML(t, plist, consultAll){
   var name = function(rs){ return rs.map(function(r){ return esc(r.m.name); }).join("<br>＋ "); };
   var price = function(rs){ return yen(rs.reduce(function(a,r){ return a+r.pay; },0))+(rs.some(function(r){ return r.m.from; })?"〜":""); };
   var rows = [];
-  if(t.inB.length) rows.push(["ご予算内で<br>いちばん合う", name([t.inB[0]])+'<b>'+price([t.inB[0]])+'</b>']);
+  if(t.inB.length) rows.push(["ご予算内で", name([t.inB[0]])+'<b>'+price([t.inB[0]])+'</b>']);
   if(t.best) rows.push(["効果重視", name(t.best)+'<b>'+price(t.best)+'</b>']);
   if(t.addon) rows.push(["プラスワン", name(t.addon)+'<b>'+price(t.addon)+'</b>']);
   if(plist && plist.length) rows.push(["ご自宅で", esc(plist[0].p.name)+'<b>'+esc(plist[0].p.price)+'</b>']);
@@ -1452,8 +1542,10 @@ function compareCardHTML(m, sel, budget){
       '<dt>料金</dt><dd><span class="p">'+(newP ? '<small style="font-size:11px;color:var(--ink);font-family:inherit">ご新規様 </small>' : "")+yen(pay)+from+'</span>'+
         (newP ? '<span class="reg">通常 '+yen(m.price)+from+'</span>' : "")+(budget ? budgetBadge(pay, budget) : "")+'</dd>'+
       '<dt>所要時間</dt><dd>'+esc(m.time)+'</dd>'+
+      (FUTURE[m.id] ? '<dt>受けた<br>あとの<br>未来</dt><dd>'+esc(FUTURE[m.id].fu)+'</dd><dt>選ぶ<br>決め手</dt><dd><b>'+esc(FUTURE[m.id].pk)+'</b></dd>' : "")+
+      (FUTURE[m.id] && FUTURE[m.id].val ? '<dt>お得な<br>ポイント</dt><dd>'+esc(FUTURE[m.id].val)+'</dd>' : "")+
       '<dt>実感</dt><dd><div class="feel-types">'+f.t.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div>'+esc(f.x)+'</dd>'+
-      '<dt>得意な<br>お悩み</dt><dd><div class="reasons">'+strengthsOf(m).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div></dd>'+
+      (strengthsOf(m).length ? '<dt>得意な<br>お悩み</dt><dd><div class="reasons">'+strengthsOf(m).map(function(t){ return '<span>'+esc(t)+'</span>'; }).join("")+'</div></dd>' : "")+
       '<dt>施術の内容</dt><dd>'+esc(m.why)+'</dd>'+
       '<dt>ダウン<br>タイム</dt><dd>'+esc(m.dtText || "ご来店時にご確認ください")+'</dd>'+
       '<dt>注意点</dt><dd>'+esc(m.caution || "特になし（感じ方には個人差があります）")+'</dd>'+
@@ -1482,8 +1574,10 @@ function guideHTML(ms){
   var maxG = Math.max.apply(null, ms.map(function(m){ return m.gentle||0; }));
   var gentle = ms.filter(function(m){ return (m.gentle||0)===maxG; });
   if(maxG>=2 && gentle.length<ms.length) g.push(["肌が敏感な方は", names(gentle)]);
+  var pk = ms.filter(function(m){ return FUTURE[m.id]; }).map(function(m){ return [FUTURE[m.id].pk.replace(/はこちら。$/,"なら"), m.name]; });
+  g = pk.concat(g.slice(0, Math.max(2, 6-pk.length)));
   if(!g.length) return "";
-  return '<div class="method guide"><b>迷ったときの選び方</b><ul>'+g.slice(0,6).map(function(x){ return '<li>'+esc(x[0])+'<span>→ '+esc(x[1])+'</span></li>'; }).join("")+'</ul></div>';
+  return '<div class="method guide"><b>迷ったときの選び方</b><ul>'+g.slice(0,7).map(function(x){ return '<li>'+esc(x[0])+'<span>→ '+esc(x[1])+'</span></li>'; }).join("")+'</ul></div>';
 }
 /* 1つだけ選んだとき: 同じ種類・同じお悩みで比べられることが多いメニュー */
 function relatedHTML(m){
@@ -1493,7 +1587,7 @@ function relatedHTML(m){
   return '<div class="sec-h"><h3>比べられることが多いメニュー</h3></div>'+
     '<div class="empty">'+rel.map(function(x){
       var f = FEEL[x.id] || {t:[]};
-      return '<div class="rel"><div><b>'+esc(x.name)+'</b><div class="feel-types" style="margin-top:4px">'+f.t.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div></div><span class="rp">'+yen(payFor(x))+(x.from?"〜":"")+'</span></div>';
+      return '<div class="rel"><div><b>'+esc(x.name)+'</b><div class="feel-types" style="margin-top:4px">'+f.t.map(function(t){ return '<span class="feel-type '+t+'">'+FEEL_LABEL[t]+'</span>'; }).join("")+'</div>'+(FUTURE[x.id] ? '<div style="margin-top:4px">'+esc(FUTURE[x.id].pk)+'</div>' : "")+'</div><span class="rp">'+yen(payFor(x))+(x.from?"〜":"")+'</span></div>';
     }).join("")+'<p class="sec-note" style="margin:8px 0 0">「条件を変更する」から一緒に選ぶと、並べて比べられます。</p></div>';
 }
 function showCompare(){
