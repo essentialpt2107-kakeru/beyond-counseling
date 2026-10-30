@@ -804,6 +804,9 @@ var P_FUTURE = {
   spirulina: {fu:"野菜が足りない日も、1袋で緑黄色野菜の栄養を補える。食事を気にしすぎず、毎日を元気に過ごす土台になります。",
               val:"1日3袋で約190円。お試し30袋（2,160円）から始められます。"},
   bifidus:   {fu:"お腹のリズムを整える毎日の習慣に。1袋にビフィズス菌17億個、食物繊維はごぼうの約4倍で、乳製品が苦手な方でも続けやすい処方です。"},
+  f100:      {fu:"玄米ごはんを毎日続けるのは大変でも、1袋で玄米の栄養と食物繊維を手軽にプラスできる。食生活を見直したいときの、無理のないはじめの一歩になります。",
+              pk:"玄米酵素を、いちばんシンプルな形で手軽に続けたい方はこちら。",
+              val:"1日3袋で約190円。お試し30袋（2,160円）から始められます。"},
   genmyo:    {fu:"甘い飲み物やカフェインの代わりに、ほっとひと息つける一杯を。夜でもご家族とでも、安心して飲める習慣になります。"},
   kouso:     {fu:"ファスティングで体と食生活をリセットして、新しい自分をスタート。オーナーも愛用しているので、進め方まで一緒に相談できます。"}
 };
@@ -905,7 +908,7 @@ var PRODUCTS = [
   {id:"spirulina", line:"genmai", name:"ハイ・ゲンキ スピルリナ（90袋）", brand:"玄米酵素", inner:true, pick:true,
    price:"5,832円（税込）", priceNote:"お試し30袋 2,160円（税込）",
    desc:"玄米・胚芽・表皮を麹菌で発酵させた玄米酵素に、スピルリナをプラス。β-カロテン、ビタミンB群、鉄分、食物繊維などを含み、緑黄色野菜が不足しがちな方の毎日に。1日3袋で約190円、防腐剤・保存料・着色料は不使用です。",
-   life:{veg:3, eatout:2, irregular:2, sweets:1, overeat:1, tired:1, hc_inner:2}},
+   life:{veg:3, eatout:2, irregular:2, sweets:1, overeat:1, tired:1, stress:2, hc_inner:2}},
   {id:"bifidus", line:"genmai", name:"ハイ・ゲンキ ビフィズス 乳酸菌プラス（90袋）", brand:"玄米酵素", inner:true, pick:true,
    price:"11,664円（税込）",
    desc:"玄米酵素に、ビフィズス菌・植物性乳酸菌・オリゴ糖をプラス。1袋にビフィズス菌17億個、食物繊維はごぼうの約4倍です。乳製品由来の菌ではないので、乳製品アレルギーの方も取り入れやすい処方です。",
@@ -914,13 +917,20 @@ var PRODUCTS = [
    price:"5,400円（税込）",
    desc:"ハトムギ・クコ・三七人参など27種類の和漢草をブレンドしたお茶。カフェインやタンニンは検出されておらず、添加物も使っていないので、夜やご家族とも飲みやすい一杯です。マイボトルで持ち歩くのもおすすめ。",
    life:{drink:3, cold:2, sleep:1, hc_inner:1}},
+  /* 2026-10-30 追加（ビフィズスを高いと感じる方の代わり。お通じ・甘いもの。価格・内容は公式ショップより）
+     点数が並んだときは前に書いた商品が上に出るので、ビフィズス・玄妙茶より後ろに置いている */
+  {id:"f100", line:"genmai", name:"玄米酵素F100（90袋）", brand:"玄米酵素", inner:true,
+   price:"5,832円（税込）", priceNote:"お試し30袋 2,160円（税込）",
+   desc:"玄米と玄米の胚芽・表皮を麹菌で発酵させた、ハイ・ゲンキシリーズすべてのベースになる「原点」の玄米酵素です。名前の「F100」は、この玄米の発酵食品を100％使っていることから。食物繊維は玄米ごはんの約17倍で、1日6袋で約5gをとれます。1日3袋で約190円、防腐剤・保存料・着色料は不使用です。",
+   caution:"大豆を含む製品と同じ製造ラインでつくられています。",
+   life:{bowel:3, sweets:1}},
   {id:"kouso", line:"kouso", name:"酵素ドリンク 断食人間", brand:"発酵人間", inner:true,
    price:"15,000円（税込）",
    desc:"国産の野菜・果物106種類を発酵させた、ファスティング専用の酵素ドリンク。保存料・人工甘味料・白砂糖などは使っていません。オーナーもファスティングで愛用していて、進め方は美yondでもご相談いただけます。",
    life:{fasting:8, weight:4, overeat:2, hc_inner:1}, c:{slim:2}}
 ];
 /* 松竹梅の「梅」を決めるための、いちばん手軽に始められる価格 */
-var ENTRY = {uv:4950, ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900, spirulina:2160, bifidus:11664, genmyo:5400, kouso:15000};
+var ENTRY = {uv:4950, ye:4900, nightmask:7150, pink:15950, reset:8640, lipo:4900, spirulina:2160, bifidus:11664, genmyo:5400, f100:2160, kouso:15000};
 var BUDGETS = [5000,10000,15000,20000,30000];
 
 /* ===== 状態 ===== */
@@ -1219,21 +1229,24 @@ function menuPlans(rows, picked, subsSel){
 }
 
 /* ===== ホームケア・インナーケアの提案 ===== */
-/* ホームケアの優先順位（2026-10-26 かけるの指示）。生活習慣ごとに、左ほど上に出す。[ ] は同じ順位 */
+/* ホームケアの優先順位（2026-10-26 かけるの指示）。生活習慣ごとに、左ほど上に出す。[ ] は同じ順位
+   F100 は 2026-10-30 に、お通じと甘いものの2番目の順位に加えた（ほかの商品の点数が変わらないよう、同じ順位の [ ] に入れる）
+   ストレスが多い → スピルリナは 2026-10-30 かけるの了解（玄米酵素の担当の方の目安より） */
 var P_PRIORITY = {
   veg:["spirulina","lipo"],
   eatout:["reset","spirulina"],
   irregular:["spirulina","bifidus"],
-  sweets:["reset","spirulina"],
+  sweets:["reset",["spirulina","f100"]],
   overeat:["reset","kouso","spirulina"],
-  bowel:["bifidus","reset"],
+  bowel:["bifidus",["f100","reset"]],
   weight:["kouso","reset"],
   fasting:["kouso"],
   hc_inner:[["bifidus","kouso"],"spirulina"],
   aircon:["nightmask","ye"],
   hc_keep:["ye","nightmask"],
   sun:["uv"],
-  drink:["genmyo"], cold:["genmyo"]
+  drink:["genmyo"], cold:["genmyo"],
+  stress:["spirulina"]
 };
 function productPriorityBonus(id){
   var bonus = 0, hit = [];
