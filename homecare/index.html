@@ -147,8 +147,8 @@ var PRODUCTS = [
    for:["唇・デリケートゾーン"]},
   {type:"skin", brand:"ニチニチ製薬", name:"MK-116乳酸菌パック（10枚）",
    price:"4,950円（税込）",
-   desc:"ニチニチ製薬の乳酸菌「MK-116」を使ったパックです。使い方は来店時やLINEでご案内します。",
-   for:["サロンで整えた肌をキープ"]},
+   desc:"ニチニチ製薬の「MK-116乳酸菌パック」です。使い方や合う肌の状態は、ご来店時や公式LINEでご案内します。",
+   for:[]},
   {type:"inner", brand:"玄米酵素", name:"ハイ・ゲンキ スピルリナ（90袋）", pick:true,
    price:"5,832円（税込）", priceNote:"お試し30袋 2,160円（税込）",
    desc:"玄米・胚芽・表皮を麹菌で発酵させた玄米酵素に、スピルリナをプラス。β-カロテン、ビタミンB群、鉄分、食物繊維などを含み、緑黄色野菜が不足しがちな方の毎日に。1日3袋で約190円、防腐剤・保存料・着色料は不使用です。",
@@ -191,7 +191,7 @@ function card(p){
     (p.priceNote?'<div class="price-note">'+esc(p.priceNote)+'</div>':'')+
     '<p class="desc">'+esc(p.desc)+'</p>'+
     (p.caution?'<p class="caution">※'+esc(p.caution)+'</p>':'')+
-    '<div class="for">'+p.for.map(function(f){ return '<span>'+esc(f)+'</span>'; }).join("")+'</div>'+
+    (p.for.length?'<div class="for">'+p.for.map(function(f){ return '<span>'+esc(f)+'</span>'; }).join("")+'</div>':'')+
   '</article>';
 }
 
