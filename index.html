@@ -1192,7 +1192,8 @@ function compute(){
 /* ===== サロンのケアの出し方 =====
    ご予算内: いちばん合う順に3つまで
    ご予算を超えても合うもの: 「いちばん効果を感じやすいプラン」（予算を考えず、いちばん合うメニュー＋別の種類のケア）と
-   「プラスワンプラン」（ご予算内の1番目に、相性のよい手軽なケアをもうひとつ組み合わせる） */
+   「プラスワンプラン」（ご予算内の1番目に、相性のよい手軽なケアをもうひとつ組み合わせる）
+   ご予算内がないとき（2026-10-30 かけるの指示）: 合うメニューのうち、いちばんご予算に近い（安い）ものを「ご予算に近いご提案」に出す */
 function menuPlans(rows, picked, subsSel){
   if(!rows.length) return null;
   var max = rows[0].sc;
@@ -1225,7 +1226,13 @@ function menuPlans(rows, picked, subsSel){
     var add = adds.filter(function(a){ return !sameAsBest(a); })[0];
     if(add) addon = [base, add];
   }
-  return {inB:inB, best:best, addon:addon};
+  /* ご予算に近いご提案: 効果重視が同じメニュー1つだけのときは、重ねて出さない */
+  var near = null, cheapest = null;
+  if(!inB.length && cand.length){
+    cheapest = cand.slice().sort(function(a,b){ return a.pay-b.pay || b.sc-a.sc; })[0];
+    if(!(best && best.length===1 && best[0]===cheapest)) near = cheapest;
+  }
+  return {inB:inB, best:best, addon:addon, near:near, cheapest:cheapest};
 }
 
 /* ===== ホームケア・インナーケアの提案 ===== */
@@ -1262,7 +1269,7 @@ function productPriorityBonus(id){
 function computeProducts(res){
   if(res.consultAll) return {list:[], note:"妊娠中・授乳中の方のホームケア・インナーケアは、スタッフが個別にご案内します。"};
   var noInner = res.sel.some(function(c){ return c.noInner; });
-  var t = res.plans, top = t ? uniq((t.inB||[]).concat(t.best||[]).concat(t.addon||[])) : [];
+  var t = res.plans, top = t ? uniq((t.inB||[]).concat(t.near ? [t.near] : []).concat(t.best||[]).concat(t.addon||[])) : [];
   var faceTop = top.some(function(r){ return r.m.cat==="肌育・肌質改善" || r.m.cat==="小顔・リフトアップ"; });
   var peelTop = top.some(function(r){ return r.m.peel; });
   var concerns = res.picked.concat(res.fromText);
@@ -1430,6 +1437,17 @@ function alertsHTML(sel, excluded, consultAll){
   return alerts;
 }
 
+/* ご予算内に合うメニューがないときの案内（「見つかりませんでした」ではなく、いくらから受けられるかを伝える） */
+function noBudgetText(t, budget){
+  var c = t.cheapest;
+  /* 合うメニューがすべて条件（ダウンタイムなど）で大きく下がったときは、いくらからかを言えない */
+  if(!c) return "選んだ条件（ダウンタイムなど）をすべて満たすメニューはありません。"+
+    (t.best ? "下の「ご予算を超えても、合うもの」も参考に、" : "条件を変えるか、")+"LINEでご相談ください。";
+  var newP = state.visit==="first" && c.m.first;
+  return "1回 "+yen(budget)+"のご予算で受けられる、ご希望に合うメニューはありません。合うメニューは1回 "+yen(c.pay)+(newP ? "（ご新規様価格）" : "")+"からです。"+
+    (t.near ? "ご予算にいちばん近いメニューをご案内します。" : "下の「ご予算を超えても、合うもの」をご覧ください。");
+}
+
 function showResult(keepPlace){
   if(state.tab==="menu" && state.menus.length){ showCompare(); return; }
   document.querySelector("#v-result .result-top h2").textContent = "美yondメソッドのご提案";
@@ -1447,14 +1465,15 @@ function showResult(keepPlace){
     html += '<div class="sec-h"><h3>サロンでのケア</h3></div>';
     html += '<div class="empty">この条件に合う候補が見つかりませんでした。ご予算や条件を変えるか、LINEでご相談ください。</div>';
   }else{
-    html += '<div class="sec-h"><h3>ご予算内でのご提案</h3><span>ご予算 1回 '+yen(budget)+'</span></div>';
+    html += '<div class="sec-h"><h3>'+(t.near ? "ご予算に近いご提案" : "ご予算内でのご提案")+'</h3><span>ご予算 1回 '+yen(budget)+'</span></div>';
     if(res.consultOnly) html += '<p class="sec-note">はじめての方には、美yondがいちばん力を入れている肌質改善からご提案します。</p>';
     if(t.inB.length){
       html += t.inB.map(function(r,i){
         return planCardHTML(i===0 ? "rk rk1" : "rk", String(i+1), "", "", [r], budget);
       }).join("");
     }else{
-      html += '<div class="empty">ご予算内で合うメニューが見つかりませんでした。下の「ご予算を超えても、合うもの」をご覧ください。</div>';
+      html += '<div class="empty">'+noBudgetText(t, budget)+'</div>';
+      if(t.near) html += planCardHTML("rk", "ご予算にいちばん近い", "", "", [t.near], budget);
     }
     if(t.best || t.addon){
       html += '<div class="sec-h"><h3>ご予算を超えても、合うもの</h3></div>';
@@ -1514,6 +1533,7 @@ function summaryHTML(t, plist, consultAll){
   var price = function(rs){ return yen(rs.reduce(function(a,r){ return a+r.pay; },0))+(rs.some(function(r){ return r.m.from; })?"〜":""); };
   var rows = [];
   if(t.inB.length) rows.push(["ご予算内で", name([t.inB[0]])+'<b>'+price([t.inB[0]])+'</b>']);
+  else if(t.near) rows.push(["ご予算に近い", name([t.near])+'<b>'+price([t.near])+'</b>']);
   if(t.best) rows.push(["効果重視", name(t.best)+'<b>'+price(t.best)+'</b>']);
   if(t.addon) rows.push(["プラスワン", name(t.addon)+'<b>'+price(t.addon)+'</b>']);
   if(plist && plist.length) rows.push(["ご自宅で", esc(plist[0].p.name)+'<b>'+esc(plist[0].p.price)+'</b>']);
@@ -1650,7 +1670,7 @@ function buildMemo(conds, tiers, ptiers){
     if(tiers.inB.length){
       lines.push("ご予算内の候補：");
       tiers.inB.forEach(function(r,i){ lines.push("　"+(i+1)+". "+rowText([r])); });
-    }
+    }else if(tiers.near) lines.push("ご予算に近い候補："+rowText([tiers.near]));
     if(tiers.best) lines.push("効果を重視するなら："+rowText(tiers.best));
     if(tiers.addon) lines.push("プラスワンなら："+rowText(tiers.addon));
   }
