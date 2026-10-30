@@ -69,13 +69,14 @@ h2.sec{font-size:17px;color:var(--brand-dark);margin:26px 0 4px;letter-spacing:.
 .meta{flex:1;min-width:0}
 .brand{font-size:11.5px;letter-spacing:.08em;color:var(--brand-deep);font-weight:500}
 .card h3{font-size:16px;line-height:1.55;margin-top:2px}
-.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .badge{font-size:11px;font-weight:700;color:#fff;border-radius:4px;padding:2px 8px;line-height:1.5}
 .badge.staff{background:var(--price)}
 .badge.owner{background:var(--gold)}
 .lead{font-size:13px;font-weight:700;color:var(--brand-dark);margin-top:12px}
 .price{font-size:14.5px;font-weight:700;color:var(--price);margin-top:6px}
 .price-note{font-size:12px;color:var(--ink-sub)}
+.seg{display:inline-block}
 .desc{font-size:13.5px;margin-top:10px}
 .for{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
 .for span{font-size:11.5px;background:var(--brand-soft);color:var(--brand-dark);border-radius:999px;padding:2px 10px}
@@ -136,21 +137,22 @@ footer{text-align:center;font-size:11px;color:var(--ink-sub);padding:0 16px 32px
 
 /* 商品と価格は site/ai-shindan/index.html の PRODUCTS と同じ。どちらかを変えたらもう片方もそろえる
    type: skin（スキンケア）/ inner（インナーケア） / img: 写真（img/<img>.jpg、make_photos.py で作る）
-   owner: オーナー一押し / pick: スタッフおすすめ（文字を入れるとその文字で出す） / lead: 商品名の下のひとこと / for: こんな方に */
+   owner: オーナー一押し / pick: スタッフおすすめ（文字を入れるとその文字で出す） / lead: 商品名の下のひとこと / for: こんな方に
+   名前・価格の「|」: スマホで1行に入りきらないときに改行する位置の目印（画面には出ない。診断ページと見比べるときは「|」を除く） */
 var PRODUCTS = [
-  {type:"skin", img:"ye", brand:"Your Essential（美yondオリジナル）", name:"ペプチドリッチバリアローション・クリーム", owner:true,
-   price:"ローション 4,900円／クリーム 8,750円（税込）", priceNote:"サロン会員様は10%OFF",
+  {type:"skin", img:"ye", brand:"Your Essential（美yondオリジナル）", name:"ペプチドリッチバリア|ローション・クリーム", owner:true,
+   price:"ローション 4,900円／|クリーム 8,750円（税込）", priceNote:"サロン会員様は10%OFF",
    desc:"施術後のデリケートな肌を想定して、美yondが成分から開発したスキンケア。ペプチドと保湿成分をたっぷり配合し、とろみのある質感なのにベタつきません。香りはホワイトリリーの微香性。サロンの攻めのケアで整えた肌を、ご自宅で守ります。",
    for:["スキンケア選びに迷う","サロンで整えた肌をキープ","乾燥"]},
-  {type:"skin", img:"nightmask", brand:"LAÉSSE（ラエッセ）", name:"グラススキン ナイトマスク（50g）", pick:true,
+  {type:"skin", img:"nightmask", brand:"LAÉSSE（ラエッセ）", name:"グラススキン |ナイトマスク（50g）", pick:true,
    price:"7,150円（税込）",
    desc:"夜のスキンケアの最後に塗って眠るだけの高保湿ナイトマスク。7種の保湿成分に、ヒト幹細胞培養液などの美容成分を合わせています。クリームの代わりに使えて洗い流し不要、1本で約2か月使えます。",
    for:["エイジングケア","エアコンの中で乾燥しやすい"]},
-  {type:"skin", img:"uv", brand:"LAÉSSE（ラエッセ）", name:"グラススキン UVセラム（50g）",
+  {type:"skin", img:"uv", brand:"LAÉSSE（ラエッセ）", name:"グラススキン |UVセラム（50g）",
    price:"4,950円（税込）",
    desc:"紫外線対策と日中のスキンケアを同時にかなえるUV美容液。白浮きしにくく、ベタつきにくい軽やかな仕上がりで、メイク下地としても使えます。朝の使用で約2か月分です。",
    for:["屋外にいることが多い","くすみ"]},
-  {type:"skin", img:"pink", brand:"LAÉSSE（ラエッセ）", name:"ピンクトーンプログラム（3ステップセット）",
+  {type:"skin", img:"pink", brand:"LAÉSSE（ラエッセ）", name:"ピンクトーンプログラム|（3ステップセット）",
    price:"15,950円（税込）",
    desc:"唇などデリケートな部位のための3ステップのホームケア（ソフトクリアジェル→ピンクヴェールジェル→グローキーパー）。古い角質を整えてうるおいを与え、なめらかで健康的な印象へ。染料で色をつけるものではありません。1日10〜15分、毎日続けるケアです。",
    caution:"妊娠中・治療中の方は、お使いになる前に医師にご確認ください。",
@@ -163,7 +165,7 @@ var PRODUCTS = [
    price:"5,832円（税込）", priceNote:"お試し30袋 2,160円（税込）",
    desc:"玄米・胚芽・表皮を麹菌で発酵させた玄米酵素に、スピルリナをプラス。β-カロテン、ビタミンB群、鉄分、食物繊維などを含み、緑黄色野菜が不足しがちな方の毎日に。1日3袋で約190円、防腐剤・保存料・着色料は不使用です。",
    for:["野菜が足りない","食事が不規則","疲れやすい"]},
-  {type:"inner", img:"bifidus", brand:"玄米酵素", name:"ハイ・ゲンキ ビフィズス 乳酸菌プラス（90袋）", pick:true,
+  {type:"inner", img:"bifidus", brand:"玄米酵素", name:"ハイ・ゲンキ |ビフィズス |乳酸菌プラス（90袋）", pick:true,
    price:"11,664円（税込）",
    desc:"玄米酵素に、ビフィズス菌・植物性乳酸菌・オリゴ糖をプラス。1袋にビフィズス菌17億個、食物繊維はごぼうの約4倍です。乳製品由来の菌ではないので、乳製品アレルギーの方も取り入れやすい処方です。",
    for:["お通じが気になる","内側からのケア"]},
@@ -182,8 +184,8 @@ var PRODUCTS = [
    desc:"管理栄養士が開発した「食べる前」に取り入れる新習慣サプリ。長野県伊那地方の赤松炭に、α-リポ酸・ザクロ抽出物・クルクミン・マリアアザミなど7種の成分を組み合わせています。外食や会食が多い方、甘いものが好きな方の食事の時間に。",
    caution:"お薬を飲んでいる方は、時間を30分以上あけてお召し上がりください。",
    for:["外食・飲み会が多い","甘いもの・間食"]},
-  {type:"inner", img:"lipo", brand:"東京サプリメントラボ", name:"LIPO PLUS（リポプラス）",
-   price:"通常 9,720円 → 初回 4,980円（税込）", priceNote:"縛りなしの定期便 7,500円（税込）",
+  {type:"inner", img:"lipo", brand:"東京サプリメントラボ", name:"LIPO PLUS|（リポプラス）",
+   price:"通常 9,720円 → |初回 4,980円（税込）", priceNote:"縛りなしの定期便 |7,500円（税込）",
    desc:"1包にビタミンC 1,500mg（レモン約75個分）を配合した、リポソーム型のビタミンCサプリ。ビタミンCを脂質の膜で包んだ形にしています。おいしいレモン味の個包装で、水なしでも、お好みの飲み物に混ぜても。人工甘味料は使っていません。",
    for:["屋外にいることが多い","くすみ","ストレス"]},
   {type:"inner", img:"kouso", brand:"発酵人間", name:"酵素ドリンク 断食人間",
@@ -199,18 +201,25 @@ var SECTIONS = [
 
 function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
 
+// 「|」で区切ったまとまりごとに折り返す（1行に入りきらないときだけ、区切りの位置で改行する）
+function seg(s){
+  return String(s).split(/(\s*\|\s*)/).map(function(t, i){
+    return i % 2 ? (/\s/.test(t) ? " " : "") : '<span class="seg">'+esc(t)+'</span>';
+  }).join("");
+}
+
 function card(p){
   var badges = (p.owner?'<span class="badge owner">オーナー一押し</span>':'')+
     (p.pick?'<span class="badge staff">'+esc(p.pick === true ? "スタッフおすすめ" : p.pick)+'</span>':'');
   return '<article class="card" data-type="'+p.type+'">'+
+    (badges?'<div class="badges">'+badges+'</div>':'')+
     '<div class="top">'+
-      '<img class="ph" src="img/'+p.img+'.jpg" alt="'+esc(p.name)+'" width="480" height="480" loading="lazy">'+
+      '<img class="ph" src="img/'+p.img+'.jpg" alt="'+esc(p.name.replace(/\|/g, ""))+'" width="480" height="480" loading="lazy">'+
       '<div class="meta">'+
-        (badges?'<div class="badges">'+badges+'</div>':'')+
         '<div class="brand">'+esc(p.brand)+'</div>'+
-        '<h3>'+esc(p.name)+'</h3>'+
-        '<div class="price">'+esc(p.price)+'</div>'+
-        (p.priceNote?'<div class="price-note">'+esc(p.priceNote)+'</div>':'')+
+        '<h3>'+seg(p.name)+'</h3>'+
+        '<div class="price">'+seg(p.price)+'</div>'+
+        (p.priceNote?'<div class="price-note">'+seg(p.priceNote)+'</div>':'')+
       '</div>'+
     '</div>'+
     (p.lead?'<p class="lead">'+esc(p.lead)+'</p>':'')+
