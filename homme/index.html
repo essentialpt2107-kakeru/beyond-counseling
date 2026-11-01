@@ -167,6 +167,13 @@ section{padding:70px 0 0}
 .mc p{font-size:12.5px;color:#444;margin-top:6px;line-height:1.65}
 .mc .for{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--ink);color:#fff;font-size:11.5px;font-weight:700}
 .mc .for .mono{color:var(--teal);font-size:10px}
+/* 施術は「ソラスパ＋1つ」。ソラスパは毎回のベースなので、選ぶ4つとは分けてティールで示す */
+.mc.base{border:1.5px solid var(--teal);box-shadow:5px 5px 0 var(--teal);margin:8px 5px 0 0}
+.mc.base .top{background:var(--teal);color:#fff;border-bottom-color:var(--teal)}
+.mc.base .for{background:var(--teal)}
+.mc.base .for .mono{color:#fff}
+.plus{display:flex;align-items:center;gap:10px;margin:24px 0 0;font-size:12.5px;font-weight:700}
+.plus b{font-family:"Figtree";font-weight:900;font-size:34px;line-height:1;letter-spacing:-.02em}
 .hint{display:flex;justify-content:space-between;font-size:10.5px;color:var(--sub);margin-top:4px}
 .note{font-size:11.5px;color:var(--sub);margin-top:10px}
 
@@ -310,7 +317,7 @@ footer{text-align:center;padding:18px 20px 24px;font-size:11px;color:var(--sub)}
     <div class="sh"><span class="no">03</span><span class="mono"><span>HOW IT WORKS</span><span>YOU × US</span></span><h2>あなたがやるのは、2つだけ</h2></div>
     <div class="how">
       <div><span class="tag y">YOU</span><span class="n">1</span><h3>予約して、来る</h3><p>LINEで日にちを決めるだけ。手ぶらでOK。</p></div>
-      <div><span class="tag">US</span><span class="n">2</span><h3>肌を見て、施術を決める</h3><p>その日の肌に必要な施術を、プロが選んで行います。</p></div>
+      <div><span class="tag">US</span><span class="n">2</span><h3>肌を見て、施術を決める</h3><p>毎回のソラスパに、その日の肌に必要な施術を1つ、プロが選んで足します。</p></div>
       <div><span class="tag">US</span><span class="n">3</span><h3>家でやることも決めて渡す</h3><p>スキンケアと腸ケアの使い方まで、こちらで決めます。</p></div>
       <div><span class="tag y">YOU</span><span class="n">4</span><h3>渡されたものを使う</h3><p>朝晩のスキンケアと、毎日の食事に玄米酵素。それだけ。</p></div>
     </div>
@@ -332,16 +339,17 @@ footer{text-align:center;padding:18px 20px 24px;font-size:11px;color:var(--sub)}
   </section>
 
   <section>
-    <div class="sh"><span class="no">05</span><span class="mono"><span>TREATMENT</span><span>HM-01 — HM-05</span></span><h2>施術は、この5つから<br>プロが選ぶ</h2></div>
+    <div class="sh"><span class="no">05</span><span class="mono"><span>TREATMENT</span><span>BASE + 1</span></span><h2>施術は「ソラスパ＋1つ」<br>足す1つは、プロが選ぶ</h2></div>
+    <div class="mc base"><div class="top mono"><span>HM-00 / BASE</span><span>EVERY TIME</span></div><div class="bd"><div class="code">00</div><h3>ソラスパ毛穴ケア</h3><p>オゾンの泡で洗う、極上の洗顔。毛穴の汚れと黒ずみをすっきり落として、肌をととのえる。だから毎回、最初にやる。</p></div><div class="for"><span>毎回・すべての肌に</span><span class="mono">BASE</span></div></div>
+    <div class="plus"><b>+1</b><span>この4つから、その日の肌に合うものを1つ</span></div>
     <div class="swipe">
-      <div class="mc"><div class="top mono"><span>HM-01</span><span>FACIAL</span></div><div class="bd"><div class="code">01</div><h3>ソラスパ毛穴ケア</h3><p>オゾンの泡で、顔全体のざらつきと毛穴の黒ずみをすっきり。</p></div><div class="for"><span>毛穴・黒ずみ・ざらつき</span><span class="mono">FOR</span></div></div>
-      <div class="mc"><div class="top mono"><span>HM-02</span><span>FACIAL</span></div><div class="bd"><div class="code">02</div><h3>ハイドラ毛穴洗浄</h3><p>慢性的に詰まった固い角栓を、吸い出してリセット。</p></div><div class="for"><span>固く詰まった角栓</span><span class="mono">FOR</span></div></div>
-      <div class="mc"><div class="top mono"><span>HM-03</span><span>PEELING</span></div><div class="bd"><div class="code">03</div><h3>Rubyハーブピーリング</h3><p>天然ハーブで古い角質をオフ。くり返す肌荒れの土台から整える。</p></div><div class="for"><span>ニキビ・肌荒れ・テカり</span><span class="mono">FOR</span></div></div>
-      <div class="mc"><div class="top mono"><span>HM-04</span><span>PEELING</span></div><div class="bd"><div class="code">04</div><h3>乳酸菌ピーリング</h3><p>肌への負担が少なく、当日からいつも通り過ごしやすい。最初の1回に。</p></div><div class="for"><span>はじめての人に</span><span class="mono">FOR</span></div></div>
-      <div class="mc"><div class="top mono"><span>HM-05</span><span>LIFT</span></div><div class="bd"><div class="code">05</div><h3>超音波スタンプ</h3><p>あご下・フェイスラインのもたつきに。写真写りを変えたい人に。</p></div><div class="for"><span>フェイスライン・あご下</span><span class="mono">FOR</span></div></div>
+      <div class="mc"><div class="top mono"><span>HM-01</span><span>FACIAL</span></div><div class="bd"><div class="code">01</div><h3>ハイドラ毛穴洗浄</h3><p>慢性的に詰まった固い角栓を、吸い出してリセット。</p></div><div class="for"><span>固く詰まった角栓</span><span class="mono">FOR</span></div></div>
+      <div class="mc"><div class="top mono"><span>HM-02</span><span>PEELING</span></div><div class="bd"><div class="code">02</div><h3>Rubyハーブピーリング</h3><p>天然ハーブで古い角質をオフ。くり返す肌荒れの土台から整える。</p></div><div class="for"><span>ニキビ・肌荒れ・テカり</span><span class="mono">FOR</span></div></div>
+      <div class="mc"><div class="top mono"><span>HM-03</span><span>PEELING</span></div><div class="bd"><div class="code">03</div><h3>乳酸菌ピーリング</h3><p>肌への負担が少なく、当日からいつも通り過ごしやすい。最初の1回に。</p></div><div class="for"><span>はじめての人に</span><span class="mono">FOR</span></div></div>
+      <div class="mc"><div class="top mono"><span>HM-04</span><span>LIFT</span></div><div class="bd"><div class="code">04</div><h3>超音波スタンプ</h3><p>あご下・フェイスラインのもたつきに。写真写りを変えたい人に。</p></div><div class="for"><span>フェイスライン・あご下</span><span class="mono">FOR</span></div></div>
     </div>
-    <div class="hint mono"><span>5 ITEMS</span><span>SWIPE →</span></div>
-    <p class="note">※ どれを受けるかは、その日の肌を見て決めます。選ぶ必要はありません。</p>
+    <div class="hint mono"><span>4 ITEMS</span><span>SWIPE →</span></div>
+    <p class="note">※ 足す1つは当日の肌を見て決めます。選ぶ必要はありません。</p>
   </section>
 
   <section>
